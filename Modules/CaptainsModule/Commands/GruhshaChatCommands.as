@@ -6,14 +6,5 @@
 void RegisterGruhshaChatCommands(ChatCommandManager@ manager)
 {
 	//gruhsha commands
-	manager.RegisterCommand(SpecAllCommand());
-	manager.RegisterCommand(AppointCommand());
-	manager.RegisterCommand(DemoteCommand());
-	manager.RegisterCommand(PickPlayerCommand());
-	manager.RegisterCommand(ApproveTeamsCommand());
-	manager.RegisterCommand(SetBuilderLimitCommand());
-	manager.RegisterCommand(SetArcherLimitCommand());
-	manager.RegisterCommand(ToggleClassChangingOnShops());
 	manager.RegisterCommand(BindingsMenu());
-	manager.RegisterCommand(PreventVoicelineSpamming());
 }

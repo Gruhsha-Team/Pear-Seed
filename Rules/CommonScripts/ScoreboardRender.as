@@ -2,7 +2,6 @@
 #include "KIWI_Playercard.as";
 #include "Accolades.as";
 #include "ColoredNameToggleCommon.as";
-#include "ApprovedTeams.as";
 #include "RunnerHead.as";
 #include "pathway.as";
 #include "TranslationsSystem.as";
@@ -284,31 +283,6 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		}
 
 		GUI::DrawIcon(headTexture, headIndex, Vec2f(16, 16), tl + headOffset, headScale, headScale, teamIndex, headColor);
-
-		// Mark captain in scoreboard
-		if (getRules().get_string("team_"+teamIndex+"_leader")==username)
-		{
-			// set custom plate first
-			if (username == "kusaka79")
-				GUI::DrawIcon("CaptainMark/Custom/cm_kusaka.png", 0, Vec2f(33, 9), tl + Vec2f(-74, 0), 1.0f, 0);
-			else if (username == "TerminalHash")
-				GUI::DrawIcon("CaptainMark/Custom/cm_terminal.png", 0, Vec2f(33, 9), tl + Vec2f(-72, 0), 1.0f, 0);
-			else if (username == "Pnext")
-				GUI::DrawIcon("CaptainMark/Custom/cm_pnext.png", 0, Vec2f(33, 9), tl + Vec2f(-72, 0), 1.0f, 0);
-			else if (username == "egor0928931")
-				GUI::DrawIcon("CaptainMark/Custom/cm_egor.png", 0, Vec2f(35, 9), tl + Vec2f(-76, 0), 1.0f, 0);
-			else if (username == "Think_About")
-				GUI::DrawIcon("CaptainMark/Custom/cm_think.png", 0, Vec2f(31, 9), tl + Vec2f(-72, 0), 1.0f, 0);
-			else if (username == "Bohdanu")
-				GUI::DrawIcon("CaptainMark/Custom/cm_bohdanu.png", 0, Vec2f(34, 9), tl + Vec2f(-72, 0), 1.0f, 0);
-			// if player doesn't have custom plate - set default
-			else if (g_locale == "ru")
-				GUI::DrawIcon("CaptainMark/ru.png", 0, Vec2f(38, 9), tl + Vec2f(-84, 0), 1.0f, 0);
-			else if (g_locale == "de")
-				GUI::DrawIcon("CaptainMark/de.png", 0, Vec2f(38, 9), tl + Vec2f(-82, 0), 1.0f, 0);
-			else
-				GUI::DrawIcon("CaptainMark/en.png", 0, Vec2f(38, 9), tl + Vec2f(-82, 0), 1.0f, 0);
-		}
 
 		//have to calc this from ticks
 		s32 ping_in_ms = s32(p.getPing() * 1000.0f / 30.0f);
@@ -654,91 +628,6 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		int teamIndexSpectators = 200;
 		int teamIndexBlue = 0;
 		int teamIndexRed = 1;
-
-		bool localIsCaptain = localPlayer !is null && localPlayer.getUsername() == rules.get_string("team_"+localTeamNum+"_leader");
-		bool playerIsOur = localPlayer !is null && teamIndex == localTeamNum || localPlayer !is null && teamIndex == teamIndexSpectators;
-		bool playerIsNotLocal = localPlayer !is null && p !is localPlayer;
-
-
-		// picking buttons for captains/admins
-		if (controls.isKeyPressed(KEY_LSHIFT) &&
-			controls.isKeyPressed(KEY_LCONTROL)) {
-			if (isAdmin(localPlayer)) {
-				if(teamIndex == teamIndexSpectators) {
-					DrawPickButton(
-						Vec2f(tl.x + 400, br.y - 24),
-						Vec2f(tl.x + 450, br.y),
-						"BLUE", "blue", username
-					);
-					DrawPickButton(
-						Vec2f(tl.x + 450, br.y - 24),
-						Vec2f(tl.x + 500, br.y),
-						"RED", "red", username
-					);
-				} else if (teamIndex == teamIndexBlue) {
-					DrawPickButton(
-						Vec2f(tl.x + 400, br.y - 24),
-						Vec2f(tl.x + 450, br.y),
-						"SPEC", "spec", username
-					);
-					DrawPickButton(
-						Vec2f(tl.x + 450, br.y - 24),
-						Vec2f(tl.x + 500, br.y),
-						"RED", "red", username
-					);
-				} else if (teamIndex == teamIndexRed) {
-					DrawPickButton(
-						Vec2f(tl.x + 400, br.y - 24),
-						Vec2f(tl.x + 450, br.y),
-						"SPEC", "spec", username
-					);
-					DrawPickButton(
-						Vec2f(tl.x + 450, br.y - 24),
-						Vec2f(tl.x + 500, br.y),
-						"BLUE", "blue", username
-					);
-				} else {
-					DrawPickButton(
-						Vec2f(tl.x + 400, br.y - 24),
-						Vec2f(tl.x + 450, br.y),
-						"SPEC", "spec", username
-					);
-				}
-			} else if (localIsCaptain && playerIsOur && playerIsNotLocal) {
-				if (teamIndex == teamIndexSpectators) {
-					if (localTeamNum == teamIndexBlue) {
-						DrawPickButton(
-							Vec2f(tl.x + 400, br.y - 24),
-							Vec2f(tl.x + 450, br.y),
-							"PICK", "blue", username
-						);
-					} else if(localTeamNum == teamIndexRed) {
-						DrawPickButton(
-							Vec2f(tl.x + 400, br.y - 24),
-							Vec2f(tl.x + 450, br.y),
-							"PICK", "red", username
-						);
-					}
-				} else if (teamIndex != teamIndexSpectators) {
-					DrawPickButton(
-						Vec2f(tl.x + 400, br.y - 24),
-						Vec2f(tl.x + 450, br.y),
-						"spec", "spec", username
-					);
-				}
-			}
-		} else if ((localIsCaptain || isAdmin(localPlayer)) && (p is localPlayer)) {
-			GUI::DrawPane(
-				Vec2f(tl.x + 400, br.y - 24),
-				Vec2f(tl.x + 500, br.y),
-				SColor(0xffffffff)
-			);
-			GUI::DrawTextCentered(
-				"SHIFT+CTRL",
-				Vec2f(tl.x + 400 + (100.0f * 0.47f), br.y - (24.0f * 0.53f)),
-				SColor(0xffffffff)
-			);
-		}
 	}
 
 	// username copied text, goes at bottom to overlay above everything else
