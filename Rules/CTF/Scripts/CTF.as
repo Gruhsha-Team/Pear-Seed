@@ -286,66 +286,7 @@ shared class CTFSpawns : RespawnSystem
 
 	void AddPlayerToSpawn(CPlayer@ player)
 	{
-		//s32 tickspawndelay = s32(CTF_core.spawnTime);
-
-		// Dynamic respawn shit
-		s32 tickspawndelay = s32(getTicksASecond() * 7);
-
-		u32 counteg = 0;
-		for (int i=0; i<getPlayersCount(); ++i)
-		{
-			CPlayer@ p = getPlayer(i);
-
-			if (p !is null)
-			{
-				if (p.getTeamNum() == 0 || p.getTeamNum() == 1)
-				{
-					counteg++;
-				}
-			}
-		}
-
-		if (counteg <= 8)
-		{
-			tickspawndelay = s32(getTicksASecond() * 2);
-		}
-		else if (counteg <= 10)
-		{
-			tickspawndelay = s32(getTicksASecond() * 4);
-		}
-		else if (counteg <= 12)
-		{
-			tickspawndelay = s32(getTicksASecond() * 5);
-		}
-		else if (counteg <= 14)
-		{
-			tickspawndelay = s32(getTicksASecond() * 7);
-		}
-		else if (counteg <= 16)
-		{
-			tickspawndelay = s32(getTicksASecond() * 9);
-		}
-		else if (counteg >= 16)
-		{
-			tickspawndelay = s32(getTicksASecond() * 10);
-		}
-
-		if (getRules().hasTag("offi match"))
-		{
-		// Sudden Death Mode: increase respawn time, if we have stalemate
-			if (getGameTime() >= 1380 * getTicksASecond() && getGameTime() <= 1980 * getTicksASecond()) // 20 min
-			{
-				tickspawndelay = s32(getTicksASecond() * 12);
-			}
-			else if (getGameTime() >= 1980 * getTicksASecond() && getGameTime() <= 3780 * getTicksASecond()) // 30 min
-			{
-				tickspawndelay = s32(getTicksASecond() * 14);
-			}
-			else if (getGameTime() >= 3780 * getTicksASecond()) // 40 min
-			{
-				tickspawndelay = s32(getTicksASecond() * 16);
-			}
-		}
+		s32 tickspawndelay = s32(CTF_core.spawnTime);
 
 		CTFPlayerInfo@ info = cast < CTFPlayerInfo@ > (core.getInfoFromPlayer(player));
 
@@ -433,40 +374,6 @@ shared class CTFCore : RulesCore
 
 		s32 ticksToStart = gamestart + warmUpTime - getGameTime();
 		ctf_spawns.force = false;
-
-		// Change player classes to knight explicity
-		if (ticksToStart == 10 * 30 && rules.getCurrentState() != GAME)
-		{
-			for (int l = 0; l < getPlayersCount(); ++l)
-			{
-				CPlayer @p = getPlayer(l);
-				if (p !is null)
-				{
-					CBlob @b = p.getBlob();
-
-					if (b !is null)
-					{
-						string role = getRules().get_string("ROLE_" + p.getUsername());
-						int teamNum = p.getTeamNum();
-
-						if (b.getName() == "builder" && !(getRules().get_string("team_" + teamNum + "_leader") == p.getUsername()))
-						{
-							role = "knight";
-							CBlob@ test = server_CreateBlobNoInit(role);
-
-							if (test !is null)
-							{
-								test.setPosition(b.getPosition());
-								b.server_Die();
-								test.Init();
-								test.server_SetPlayer(p);
-								test.server_setTeamNum(p.getTeamNum());
-							}
-						}
-					}
-				}
-			}
-		}
 
 		if (ticksToStart <= 0 && (rules.isWarmup()))
 		{
