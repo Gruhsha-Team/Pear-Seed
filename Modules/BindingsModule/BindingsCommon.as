@@ -6,9 +6,8 @@ string SETTINGSFILE = "GRUHSHA_customizableplayersettings";
 
 string[] page_texts =
 {
-	Names::modbindsmenu,
-	Names::blocksmenu,
 	Names::emotemenu,
+	Names::blocksmenu,
 	Names::actionsmenu,
 	Names::settingsmenu
 };
@@ -16,17 +15,17 @@ string[] page_texts =
 string[][] button_texts =
 {
 	{
-		"GO HERE",
-		"DIG HERE",
-		"ATTACK",
-		"DANGER",
-		"RETREAT",
-		"HELP",
-		"KEG",
-		"WiT SENCE",
-		Names::tagwheel
-		//Names::emotewheelvanilla,
-		//Names::emotewheelsecond
+		Names::modbindemote + "1",
+		Names::modbindemote + "2",
+		Names::modbindemote + "3",
+		Names::modbindemote + "4",
+		Names::modbindemote + "5",
+		Names::modbindemote + "6",
+		Names::modbindemote + "7",
+		Names::modbindemote + "8",
+		Names::modbindemote + "9",
+		Names::emotewheelvanilla,
+		Names::emotewheelsecond
 	},
 	{
 		Names::stonebl,
@@ -42,19 +41,6 @@ string[][] button_texts =
 		Names::spikes
 	},
 	{
-		Names::modbindemote + "1",
-		Names::modbindemote + "2",
-		Names::modbindemote + "3",
-		Names::modbindemote + "4",
-		Names::modbindemote + "5",
-		Names::modbindemote + "6",
-		Names::modbindemote + "7",
-		Names::modbindemote + "8",
-		Names::modbindemote + "9",
-		Names::emotewheelvanilla,
-		Names::emotewheelsecond
-	},
-	{
 		Names::drillcommand,
 		Names::cancelarrowschargingcommand
 	}
@@ -63,15 +49,15 @@ string[][] button_texts =
 string[][] button_file_names =
 {
 	{
-		"tag1",
-		"tag2",
-		"tag3",
-		"tag4",
-		"tag5",
-		"tag6",
-		"tag7",
-		"tag8",
-		"tag_wheel",
+		"emote1",
+		"emote2",
+		"emote3",
+		"emote4",
+		"emote5",
+		"emote6",
+		"emote7",
+		"emote8",
+		"emote9",
 		"emote_wheel_vanilla",
 		"emote_wheel_two"
 	},
@@ -87,19 +73,6 @@ string[][] button_file_names =
 		"platform",
 		"shop",
 		"spikes"
-	},
-	{
-		"emote1",
-		"emote2",
-		"emote3",
-		"emote4",
-		"emote5",
-		"emote6",
-		"emote7",
-		"emote8",
-		"emote9",
-		"emote_wheel_vanilla",
-		"emote_wheel_two"
 	},
 	{
 		"take_out_drill",
@@ -1156,7 +1129,7 @@ class ClickableButtonTwo
 	}
 }
 
-u8 magic_number = 4;
+u8 magic_number = 3;
 
 class ClickableButtonGUI
 {
