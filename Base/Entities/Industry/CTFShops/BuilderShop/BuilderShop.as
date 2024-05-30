@@ -92,21 +92,11 @@ void onInit(CBlob@ this)
 
 void GetButtonsFor(CBlob@ this, CBlob@ caller)
 {
-	int P_Builders = 0;
-
-	for (u32 i = 0; i < getPlayersCount(); i++)
-	{
-		if (getPlayer(i).getScoreboardFrame() == 1 && getLocalPlayer().getTeamNum() == getPlayer(i).getTeamNum()) {P_Builders++;}
-	}
-
-	CRules@ rules = getRules();
-	bool disallow_class_change_on_shops = rules.get_bool("no_class_change_on_shop");
 	string disabled_class_changing_in_shops = getRules().get_string("disable_class_change_in_shops");
-	bool is_warmup = rules.get_bool("is_warmup");
 
 	if (!canSeeButtons(this, caller)) return;
 
-	if (caller.getConfig() == this.get_string("required class") || disallow_class_change_on_shops == true || disabled_class_changing_in_shops == "yes" || P_Builders >= rules.get_u8("builders_limit") && !is_warmup)
+	if (caller.getConfig() == this.get_string("required class") || disabled_class_changing_in_shops == "yes")
 	{
 		this.set_Vec2f("shop offset", Vec2f_zero);
 	}
