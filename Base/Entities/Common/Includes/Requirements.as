@@ -162,30 +162,13 @@ bool hasRequirements(CInventory@ inv1, CInventory@ inv2, CBitStream &inout bs, C
 
 				if (player1 !is null)
 				{
-					const u16 left = getRules().get_u16("barrier_x1");
-					const u16 right = getRules().get_u16("barrier_x2");
+					string needed = "personalwood_";
+					if (blobName == "mat_stone") needed = "personalstone_";
 
-					u8 team = player1.getTeamNum();
-
-					string needed = "teamwood";
-					if (blobName == "mat_stone") needed = "teamstone";
-
-					// dynamic requirements for building
-					if (player1.getBlob().getPosition().x >= left && player1.getBlob().getPosition().x <= right)
+					if (getRules().get_s32(needed + player1.getUsername()) < quantity)
 					{
-						if (getRules().get_s32(needed + team) < quantity * 1.2)
-						{
-							AddRequirement(missingBs, req, blobName, friendlyName, quantity);
-							has = false;
-						}
-					}
-					else
-					{
-						if (getRules().get_s32(needed + team) < quantity)
-						{
-							AddRequirement(missingBs, req, blobName, friendlyName, quantity);
-							has = false;
-						}
+						AddRequirement(missingBs, req, blobName, friendlyName, quantity);
+						has = false;
 					}
 				}
 			}
@@ -288,25 +271,11 @@ void server_TakeRequirements(CInventory@ inv1, CInventory@ inv2, CBitStream &ino
 
 				if (player1 !is null && isServer())
 				{
-					const u16 left = getRules().get_u16("barrier_x1");
-					const u16 right = getRules().get_u16("barrier_x2");
+					string needed = "personalwood_";
+					if (blobName == "mat_stone") needed = "personalstone_";
 
-					u8 team = player1.getTeamNum();
-
-					string needed = "teamwood";
-					if (blobName == "mat_stone") needed = "teamstone";
-
-					// dynamic requirements for building
-					if (player1.getBlob().getPosition().x >= left && player1.getBlob().getPosition().x <= right)
-					{
-						getRules().sub_s32(needed + team, quantity * 1.2);
-						getRules().Sync(needed + team, true);
-					}
-					else
-					{
-						getRules().sub_s32(needed + team, quantity);
-						getRules().Sync(needed + team, true);
-					}
+					getRules().sub_s32(needed + player1.getUsername(), quantity);
+					getRules().Sync(needed + player1.getUsername(), true);
 				}
 			}
 			else

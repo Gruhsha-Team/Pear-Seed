@@ -1506,10 +1506,8 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 
 							if (isServer() && this.getPlayer() !is null)
 							{
-								u8 team = this.getPlayer().getTeamNum();
-
-								getRules().add_s32("teamwood" + team, quantity);
-								getRules().Sync("teamwood" + team, true);
+								getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), quantity);
+								getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
 							}
 							/*CBlob@ wood = server_CreateBlobNoInit("mat_wood");
 							if (wood !is null)
@@ -1653,10 +1651,8 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 
 										if (isServer() && this.getPlayer() !is null)
 										{
-											u8 team = this.getPlayer().getTeamNum();
-
-											getRules().add_s32("teamstone" + team, quantity);
-											getRules().Sync("teamstone" + team, true);
+											getRules().add_s32("personalstone_" + this.getPlayer().getUsername(), quantity);
+											getRules().Sync("personalstone_" + this.getPlayer().getUsername(), true);
 										}
 
 										/*CBlob@ ore = server_CreateBlobNoInit("mat_stone");

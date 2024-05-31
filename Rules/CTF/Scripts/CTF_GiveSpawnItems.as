@@ -76,14 +76,19 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 		}
 	}
 
-	if (name == "builder" && !this.get_bool("is_warmup"))
+	if (name == "builder")
 	{
 		if (gametime > getCTFTimer(this, p, "builder"))
 		{
-			u8 team = p.getTeamNum();
 
 			int wood_amount = matchtime_wood_amount;
 			int stone_amount = matchtime_stone_amount;
+
+			if (this.isWarmup())
+			{
+				wood_amount = warmup_wood_amount;
+				stone_amount = warmup_stone_amount;
+			}
 
 			if (getGameTime() > lower_mats_timer * getTicksASecond())
 			{
@@ -91,11 +96,17 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 				stone_amount = lower_stone;
 			}
 
-			this.add_s32("teamwood" + team, wood_amount);
-			this.Sync("teamwood" + team, true);
+			if (this.get_s32("personalwood_" + p.getUsername()) < 2000)
+			{
+				this.add_s32("personalwood_" + p.getUsername(), wood_amount);
+				this.Sync("personalwood_" + p.getUsername(), true);
+			}
 
-			this.add_s32("teamstone" + team, stone_amount);
-			this.Sync("teamstone" + team, true);
+			if (this.get_s32("personalstone_" + p.getUsername()) < 2000)
+			{
+				this.add_s32("personalstone_" + p.getUsername(), stone_amount);
+				this.Sync("personalstone_" + p.getUsername(), true);
+			}
 
 			SetCTFTimer(this, p, gametime + (this.isWarmup() ? materials_wait_warmup : materials_wait)*getTicksASecond(), "builder");
 		}
@@ -113,24 +124,24 @@ void Reset(CRules@ this)
 
 	if (!isServer()) return;
 
-
+/*
 	this.set_s32("teamwood" + 0, 0);
 	this.Sync("teamwood" + 0, true);
-	this.set_s32("teamstone" + 0, 0);
-	this.Sync("teamstone" + 0, true);
-	//this.set_s32("teamgold" + 0, 0);
-	//this.Sync("teamgold" + 0, true);
+	this.set_s32("teamstone_" + 0, 0);
+	this.Sync("teamstone_" + 0, true);
+	this.set_s32("teamgold" + 0, 0);
+	this.Sync("teamgold" + 0, true);
 
 
 	this.set_s32("teamwood" + 1, 0);
 	this.Sync("teamwood" + 1, true);
 	this.set_s32("teamstone" + 1, 0);
 	this.Sync("teamstone" + 1, true);
-	//this.set_s32("teamgold" + 1, 0);
-	//this.Sync("teamgold" + 1, true);
+	this.set_s32("teamgold" + 1, 0);
+	this.Sync("teamgold" + 1, true);
+*/
 
-
-	/*for (uint i = 0; i < getPlayersCount(); ++i)
+	for (uint i = 0; i < getPlayersCount(); ++i)
 	{
 		CPlayer@ p = getPlayer(i);
 		if (p is null) continue;
@@ -143,15 +154,15 @@ void Reset(CRules@ this)
 
 		//this.set_s32("personalgold_" + p.getUsername(), 0);
 		//this.Sync("personalgold_" + p.getUsername(), true);
-	}*/
+	}
 }
 
-/*void onPlayerLeave( CRules@ this, CPlayer@ player )
+void onPlayerLeave( CRules@ this, CPlayer@ player )
 {
 	if (!isServer()) return;
 
 	ResetPlayerMats(this, player, player.getTeamNum());
-}*/
+}
 
 void onRestart(CRules@ this)
 {
@@ -163,7 +174,7 @@ void onInit(CRules@ this)
 	Reset(this);
 }
 
-/*void onPlayerChangedTeam(CRules@ this, CPlayer@ player, u8 oldteam, u8 newteam)
+void onPlayerChangedTeam(CRules@ this, CPlayer@ player, u8 oldteam, u8 newteam)
 {
 	ResetPlayerMats(this, player, oldteam);
 }
@@ -183,7 +194,7 @@ void ResetPlayerMats(CRules@ this, CPlayer@ player, u8 team)
 
 	//this.set_s32("personalgold_" + player.getUsername(), 0);
 	//this.Sync("personalgold_" + player.getUsername(), true);
-}*/
+}
 
 void onTick(CRules@ this)
 {
@@ -192,34 +203,20 @@ void onTick(CRules@ this)
 
 	s32 gametime = getGameTime();
 
-	if (this.getCurrentState() == WARMUP)
+	if ((gametime % 15) != 5)
+		return;
+
+	if (this.isWarmup()) 
 	{
-		if (getGameTime() == 60)
+		// during building time, give everyone resupplies no matter where they are
+		for (int i = 0; i < getPlayerCount(); i++) 
 		{
-			this.set_s32("teamwood" + 0, 6000);
-			this.Sync("teamwood" + 0, true);
-			this.set_s32("teamwood" + 1, 6000);
-			this.Sync("teamwood" + 1, true);
-
-			this.set_s32("teamstone" + 0, 4500);
-			this.Sync("teamstone" + 0, true);
-			this.set_s32("teamstone" + 1, 4500);
-			this.Sync("teamstone" + 1, true);
-		}
-
-		u32 pog = 30 * 177;
-
-		if (getGameTime() == pog && this.hasTag("offi match"))
-		{
-			this.set_s32("teamwood" + 0, 1000);
-			this.Sync("teamwood" + 0, true);
-			this.set_s32("teamwood" + 1, 1000);
-			this.Sync("teamwood" + 1, true);
-
-			this.set_s32("teamstone" + 0, 400);
-			this.Sync("teamstone" + 0, true);
-			this.set_s32("teamstone" + 1, 400);
-			this.Sync("teamstone" + 1, true);
+			CPlayer@ player = getPlayer(i);
+			CBlob@ blob = player.getBlob();
+			if (blob !is null) 
+			{
+				doGiveSpawnMats(this, player, blob);
+			}
 		}
 	}
 	else
@@ -260,6 +257,7 @@ void onTick(CRules@ this)
 		}
 	}
 
+
 	if (this.getCurrentState() == GAME) // automatic resupplies for builders
 	{
 		for (int i = 0; i < getPlayerCount(); i++)
@@ -278,7 +276,7 @@ void onTick(CRules@ this)
 // Reset timer in case player who joins has an outdated timer
 void onNewPlayerJoin(CRules@ this, CPlayer@ player)
 {
-	/*if (isServer())
+	if (isServer())
 	{
 		this.set_s32("personalwood_" + player.getUsername(), 0);
 		this.Sync("personalwood_" + player.getUsername(), true);
@@ -288,7 +286,7 @@ void onNewPlayerJoin(CRules@ this, CPlayer@ player)
 
 		//this.set_s32("personalgold_" + player.getUsername(), 0);
 		//this.Sync("personalgold_" + player.getUsername(), true);
-	}*/
+	}
 
 	s32 next_add_time = getGameTime() + (this.isWarmup() ? materials_wait_warmup : materials_wait) * getTicksASecond();
 

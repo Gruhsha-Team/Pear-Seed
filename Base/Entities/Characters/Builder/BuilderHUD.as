@@ -5,7 +5,6 @@
 #include "Requirements.as";
 #include "CommonBuilderBlocks.as";
 //#include "/Entities/Common/GUI/ActorHUDStartPos.as";
-//#include "MaterialTeamIndicatorHUD.as";
 #include "MaterialIndicatorHUD.as";
 #include "pathway.as";
 
@@ -83,7 +82,6 @@ void onRender(CSprite@ this)
 
 	// draw mats ui
 	DrawPersonalMats();
-	//DrawTeamMaterialsIndicator(); // old, we dont have teampool anymore
 
 	// draw coins
 

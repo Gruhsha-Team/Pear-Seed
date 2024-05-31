@@ -122,7 +122,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		GUI::DrawText(getTranslatedString("Tier"), Vec2f(br.x - tier_start, tl.y), SColor(0xffffffff));
 	}*/
 
-	//GUI::DrawText(Names::matssection, Vec2f(br.x - 600, tl.y), SColor(0xffffffff));
+	GUI::DrawText(Names::matssection, Vec2f(br.x - 680, tl.y), SColor(0xffffffff));
 
 	tl.y += stepheight * 0.5f;
 
@@ -625,9 +625,15 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		GUI::DrawText("" + assists, Vec2f(br.x - 120, tl.y), kdr_color);
 		GUI::DrawText("" + formatFloat(kills / Maths::Max(f32(deaths), 1.0f), "", 0, 2), Vec2f(br.x - 50, tl.y), kdr_color);
 
-		int teamIndexSpectators = 200;
-		int teamIndexBlue = 0;
-		int teamIndexRed = 1;
+		// matetials section
+		GUI::DrawText(getRules().get_s32("personalwood_" + username) + " ", Vec2f(br.x - 605, tl.y), SColor(0xffffffff));
+		GUI::DrawText("" " | ", Vec2f(br.x - 638, tl.y), SColor(0xffffffff));
+		GUI::DrawText(getRules().get_s32("personalstone_" + username) + " ", Vec2f(br.x - 670, tl.y), SColor(0xffffffff));
+
+		// icons for mats
+		GUI::DrawIcon("Materials.png", 25, Vec2f(16, 16), Vec2f(br.x - 625, tl.y), 0.50f, 0); // wood
+		GUI::DrawIcon("Materials.png", 24, Vec2f(16, 16), Vec2f(br.x - 688, tl.y), 0.50f, 0); // stone
+
 	}
 
 	// username copied text, goes at bottom to overlay above everything else
@@ -790,29 +796,6 @@ void onRenderScoreboard(CRules@ this)
 
 	Vec2f mousePos = controls.getMouseScreenPos();
 	bool left_side = mousePos.x<getScreenWidth()/2;
-
-	///////////////////////////////////////////////
-	// matetials section
-
-	// BLUE TEAM
-	GUI::DrawText(getRules().get_s32("teamwood" + 0) + " ", Vec2f(bluz_pane_br.x - 1032, bluz_pane_tl.y + 22), SColor(0xffffffff));
-	GUI::DrawText("" " | ", Vec2f(bluz_pane_br.x - 1065, bluz_pane_tl.y + 20), SColor(0xffffffff));
-	GUI::DrawText(getRules().get_s32("teamstone" + 0) + " ", Vec2f(bluz_pane_br.x - 1100, bluz_pane_tl.y + 22), SColor(0xffffffff));
-
-		// icons for mats
-	GUI::DrawIcon("Materials.png", 25, Vec2f(16, 16), Vec2f(bluz_pane_br.x - 1050, bluz_pane_tl.y + 20), 0.50f, 0); // wood
-	GUI::DrawIcon("Materials.png", 24, Vec2f(16, 16), Vec2f(bluz_pane_br.x - 1118, bluz_pane_tl.y + 20), 0.50f, 0); // stone
-
-	// RED TEAM
-	GUI::DrawText(getRules().get_s32("teamwood" + 1) + " ", Vec2f(redz_pane_br.x - 1032, redz_pane_tl.y + 22), SColor(0xffffffff));
-	GUI::DrawText("" " | ", Vec2f(redz_pane_br.x - 1065, redz_pane_tl.y + 20), SColor(0xffffffff));
-	GUI::DrawText(getRules().get_s32("teamstone" + 1) + " ", Vec2f(redz_pane_br.x - 1100, redz_pane_tl.y + 22), SColor(0xffffffff));
-
-		// icons for mats
-	GUI::DrawIcon("Materials.png", 25, Vec2f(16, 16), Vec2f(redz_pane_br.x - 1050, redz_pane_tl.y + 20), 0.50f, 0); // wood
-	GUI::DrawIcon("Materials.png", 24, Vec2f(16, 16), Vec2f(redz_pane_br.x - 1118, redz_pane_tl.y + 20), 0.50f, 0); // stone
-	///////////////////////////////////////////////
-
 
 	///////////////////////////////////////////////
 	// Player card section
