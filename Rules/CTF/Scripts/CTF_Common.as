@@ -14,10 +14,6 @@ const u32 lower_mats_timer = 900; // 15 min
 const int lower_wood = 175;
 const int lower_stone = 30;
 
-// Waffle: Materials for the entire team. Drop once at the start of the game
-const int crate_warmup_wood_amount = 2500;
-const int crate_warmup_stone_amount = 2000;
-
 //property
 const string SPAWN_ITEMS_TIMER_BUILDER = "CTF SpawnItems Builder:";
 const string SPAWN_ITEMS_TIMER_ARCHER  = "CTF SpawnItems Archer:";

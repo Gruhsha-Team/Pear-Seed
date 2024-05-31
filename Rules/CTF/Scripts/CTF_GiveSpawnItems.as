@@ -101,11 +101,19 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 				this.add_s32("personalwood_" + p.getUsername(), wood_amount);
 				this.Sync("personalwood_" + p.getUsername(), true);
 			}
+			else if (this.get_s32("personalwood_" + p.getUsername()) >= 2000)
+			{
+				return; // potential abuse fix
+			}
 
 			if (this.get_s32("personalstone_" + p.getUsername()) < 2000)
 			{
 				this.add_s32("personalstone_" + p.getUsername(), stone_amount);
 				this.Sync("personalstone_" + p.getUsername(), true);
+			}
+			else if (this.get_s32("personalstone_" + p.getUsername()) >= 2000)
+			{
+				return; // potential abuse fix
 			}
 
 			SetCTFTimer(this, p, gametime + (this.isWarmup() ? materials_wait_warmup : materials_wait)*getTicksASecond(), "builder");
@@ -124,23 +132,6 @@ void Reset(CRules@ this)
 
 	if (!isServer()) return;
 
-/*
-	this.set_s32("teamwood" + 0, 0);
-	this.Sync("teamwood" + 0, true);
-	this.set_s32("teamstone_" + 0, 0);
-	this.Sync("teamstone_" + 0, true);
-	this.set_s32("teamgold" + 0, 0);
-	this.Sync("teamgold" + 0, true);
-
-
-	this.set_s32("teamwood" + 1, 0);
-	this.Sync("teamwood" + 1, true);
-	this.set_s32("teamstone" + 1, 0);
-	this.Sync("teamstone" + 1, true);
-	this.set_s32("teamgold" + 1, 0);
-	this.Sync("teamgold" + 1, true);
-*/
-
 	for (uint i = 0; i < getPlayersCount(); ++i)
 	{
 		CPlayer@ p = getPlayer(i);
@@ -151,9 +142,6 @@ void Reset(CRules@ this)
 
 		this.set_s32("personalstone_" + p.getUsername(), 0);
 		this.Sync("personalstone_" + p.getUsername(), true);
-
-		//this.set_s32("personalgold_" + p.getUsername(), 0);
-		//this.Sync("personalgold_" + p.getUsername(), true);
 	}
 }
 
@@ -191,9 +179,6 @@ void ResetPlayerMats(CRules@ this, CPlayer@ player, u8 team)
 
 	this.set_s32("personalstone_" + player.getUsername(), 0);
 	this.Sync("personalstone_" + player.getUsername(), true);
-
-	//this.set_s32("personalgold_" + player.getUsername(), 0);
-	//this.Sync("personalgold_" + player.getUsername(), true);
 }
 
 void onTick(CRules@ this)
@@ -283,9 +268,6 @@ void onNewPlayerJoin(CRules@ this, CPlayer@ player)
 
 		this.set_s32("personalstone_" + player.getUsername(), 0);
 		this.Sync("personalstone_" + player.getUsername(), true);
-
-		//this.set_s32("personalgold_" + player.getUsername(), 0);
-		//this.Sync("personalgold_" + player.getUsername(), true);
 	}
 
 	s32 next_add_time = getGameTime() + (this.isWarmup() ? materials_wait_warmup : materials_wait) * getTicksASecond();
