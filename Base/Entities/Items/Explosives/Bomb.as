@@ -95,12 +95,12 @@ bool doesCollideWithBlob(CBlob@ this, CBlob@ blob)
 			return blob.getTeamNum() != this.getTeamNum();
 
 		//collide with shielded enemies
-		return blob.getTeamNum() != this.getTeamNum() && blob.hasTag("shielded") && blockAttack(blob, blob.getPosition() - this.getPosition(), 0.0f);
+		return (blob.getTeamNum() != this.getTeamNum() && blob.hasTag("shielded") && blockAttack(blob, blob.getPosition() - this.getPosition(), 0.0f));
 	}
 
 	string name = blob.getName();
 
-	if (name == "fishy" || name == "food" || name == "steak" || name == "grain" || name == "heart" || name == "saw")
+	if (name == "fishy" || name == "food" || name == "steak" || name == "grain" || name == "heart")
 	{
 		return false;
 	}
