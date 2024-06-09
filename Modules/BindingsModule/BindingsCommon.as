@@ -92,8 +92,6 @@ string[][] setting_texts =
 		Names::clusterfuck,
 		Names::drillzoneborders,
 		Names::annoyingnature,
-		Names::annoyingvoicelines,
-		Names::annoyingtags,
 		Names::customdpsounds,
 		Names::switchclasschanginginshop
 	}
@@ -110,8 +108,6 @@ string[][] setting_file_names =
 		"clusterfuck",
 		"drillzone_borders",
 		"annoying_nature",
-		"annoying_voicelines",
-		"annoying_tags",
 		"custom_death_and_pain_sounds",
 		"disable_class_change_in_shops"
 	}
@@ -153,14 +149,6 @@ string[][][] setting_options =
 		},
 		{
 			Descriptions::universaloff,       // BUSHES & LEAFS MUTE
-			Descriptions::universalon
-		},
-		{
-			Descriptions::universaloff,       // VOICELINES
-			Descriptions::universalon
-		},
-		{
-			Descriptions::universaloff,       // TAGS
 			Descriptions::universalon
 		},
 		{
