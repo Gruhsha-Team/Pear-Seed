@@ -253,7 +253,7 @@ bool Vehicle_AddLoadAmmoButton(CBlob@ this, CBlob@ caller, Vec2f &in offset = Ve
 		}
 		if(ammo == "mat_stone")
 		{
-			if(getRules().get_s32("teamstone" + caller.getTeamNum()) != 0)
+			if (getRules().get_s32("personalstone_" + caller.getPlayer().getUsername()) != 0)
 			{
 				CBitStream params;
 				const string msg = getTranslatedString("Load {ITEM}").replace("{ITEM}", "Stone");
