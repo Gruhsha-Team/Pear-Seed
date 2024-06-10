@@ -1254,47 +1254,6 @@ void onSwitch(CBitStream@ params)
 
 void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 {
-	if (cmd == this.getCommandID("make sparks") && isServer())
-	{
-		CPlayer@ callerp = getNet().getActiveCommandPlayer();
-		if (callerp is null) return;
-
-		CBlob@ caller = callerp.getBlob();
-		if (caller is null) return;
-
-		if (caller !is this) return;
-
-		Vec2f velocity;
-		if (!params.saferead_Vec2f(velocity)) return;
-
-		Vec2f hitpos;
-		if (!params.saferead_Vec2f(hitpos)) return;
-
-		shieldHit(0, velocity/2, hitpos - velocity/4);
-		//printf("ololo, im hitting block!_1");
-
-		this.SendCommand(this.getCommandID("make sparks client"), params);
-	}
-	else if (cmd == this.getCommandID("make sparks client") && isClient())
-	{
-		CPlayer@ callerp = getNet().getActiveCommandPlayer();
-		if (callerp is null) return;
-
-		CBlob@ caller = callerp.getBlob();
-		if (caller is null) return;
-
-		if (caller !is this) return;
-
-		Vec2f velocity;
-		if (!params.saferead_Vec2f(velocity)) return;
-
-		Vec2f hitpos;
-		if (!params.saferead_Vec2f(hitpos)) return;
-
-		shieldHit(0, velocity/2, hitpos - velocity/4);
-		//printf("ololo, im hitting block!_2");
-	}
-
 	if (cmd == this.getCommandID("switch") && isServer())
 	{
 		CPlayer@ callerp = getNet().getActiveCommandPlayer();
