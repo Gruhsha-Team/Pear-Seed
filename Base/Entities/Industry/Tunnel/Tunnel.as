@@ -2,8 +2,8 @@
 
 #include "TunnelCommon.as"
 
-// 180 seconds (3 min) alive
-s32 seconds_temporary_perhit = 36;
+s32 seconds_temporary_perhit = 36;			// 180 seconds (3 min) alive
+s32 seconds_temporary_perhit_less = 12;		// 60 seconds (1 min) alive
 f32 damage_temporary_perhit = 0.2f;
 
 void onInit(CBlob@ this)
@@ -13,9 +13,24 @@ void onInit(CBlob@ this)
 	const u16 left = getRules().get_u16("barrier_x1");
 	const u16 right = getRules().get_u16("barrier_x2");
 
-	if ((this.getPosition().x > left && this.getPosition().x < right && this.getTeamNum() == 0 || this.getTeamNum() == 1))
-	{
-		printf("Tunnel is temporary!");
+	if ((this.getPosition().x > left && this.getPosition().x < right && this.getTeamNum() == 0 || this.getPosition().x > left && this.getPosition().x < right && this.getTeamNum() == 1)) {
+		//printf("Tunnel is temporary!");
+
+		this.Tag("temporary");
+		this.Sync("temporary", true);
+
+		this.set_s32("breaktime", getGameTime());
+		this.Sync("breaktime", true);
+	} else if ((this.getPosition().x > left && this.getPosition().x > right && this.getTeamNum() == 0)) {
+		//printf("Tunnel is temporary in enemy zone!");
+
+		this.Tag("temporary");
+		this.Sync("temporary", true);
+
+		this.set_s32("breaktime", getGameTime());
+		this.Sync("breaktime", true);
+	} else if ((this.getPosition().x < left && this.getPosition().x < right && this.getTeamNum() == 1)) {
+		//printf("Tunnel is temporary in enemy zone!");
 
 		this.Tag("temporary");
 		this.Sync("temporary", true);
@@ -31,8 +46,20 @@ void onTick(CBlob@ this)
 
 	if (!this.hasTag("temporary")) return;
 
-	if (getGameTime() > seconds_temporary_perhit * getTicksASecond() + this.get_s32("breaktime"))
-	{
+	const u16 left = getRules().get_u16("barrier_x1");
+	const u16 right = getRules().get_u16("barrier_x2");
+
+	if (getGameTime() > seconds_temporary_perhit * getTicksASecond() + this.get_s32("breaktime")) {
+		this.set_s32("breaktime", getGameTime());
+		this.Sync("breaktime", true);
+
+		this.server_Hit(this, this.getPosition(), Vec2f(0, -1), this.getInitialHealth() * damage_temporary_perhit * 2.01, 0);
+	} else if (getGameTime() > seconds_temporary_perhit_less * getTicksASecond() + this.get_s32("breaktime") && (this.getPosition().x > right && this.getTeamNum() == 0)) {
+		this.set_s32("breaktime", getGameTime());
+		this.Sync("breaktime", true);
+
+		this.server_Hit(this, this.getPosition(), Vec2f(0, -1), this.getInitialHealth() * damage_temporary_perhit * 2.01, 0);
+	} else if (getGameTime() > seconds_temporary_perhit_less * getTicksASecond() + this.get_s32("breaktime") && (this.getPosition().x < left && this.getTeamNum() == 1)) {
 		this.set_s32("breaktime", getGameTime());
 		this.Sync("breaktime", true);
 
@@ -44,8 +71,8 @@ void onInit(CSprite@ this)
 {
 	CBlob@ blob = this.getBlob();
 	CSpriteLayer@ planks = this.addSpriteLayer("planks", this.getFilename() , 24, 24, blob.getTeamNum(), blob.getSkinNum());
-	if (planks !is null)
-	{
+
+	if (planks !is null) {
 		Animation@ anim = planks.addAnimation("default", 3, true);
 		anim.AddFrame(5);
 		planks.SetOffset(Vec2f(0, 0));
@@ -63,12 +90,9 @@ void onTick(CSprite@ this)
 	if (planks is null) return;
 
 	CBlob@[] list;
-	if (getTunnels(this.getBlob(), list))
-	{
+	if (getTunnels(this.getBlob(), list)) {
 		planks.SetVisible(false);
-	}
-	else
-	{
+	} else {
 		planks.SetVisible(true);
 	}
 }
@@ -76,11 +100,11 @@ void onTick(CSprite@ this)
 void onHealthChange(CBlob@ this, f32 oldHealth)
 {
 	CSprite@ sprite = this.getSprite();
-	if (sprite !is null)
-	{
+
+	if (sprite !is null) {
 		Animation@ destruction = sprite.getAnimation("destruction");
-		if (destruction !is null)
-		{
+
+		if (destruction !is null) {
 			f32 frame = Maths::Floor((this.getInitialHealth() - this.getHealth()) / (this.getInitialHealth() / sprite.animation.getFramesCount()));
 			sprite.animation.frame = frame;
 		}
