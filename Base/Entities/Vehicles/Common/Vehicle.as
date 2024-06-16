@@ -122,20 +122,20 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 
 		if (eligible_ammo_names[0] == "mat_stone")
 		{
-
+			CInventory@ inv = this.getInventory();
 			CBlob@ stone = server_CreateBlobNoInit("mat_stone");
 			stone.Tag('custom quantity');
 			stone.Init();
-			if (getRules().get_s32("personalstone_" + callerp.getUsername()) >= 250)
+			if (getRules().get_s32("personalstone_" + callerp.getUsername()) >= 250 && !inv.isFull())
 			{
-				stone.server_SetQuantity(250);
-				getRules().add_s32("personalstone_" + callerp.getUsername(), -250);
+				stone.server_SetQuantity(50);
+				getRules().sub_s32("personalstone_" + callerp.getUsername(), 50);
 				getRules().Sync("personalstone_" + callerp.getUsername(), true);
 			}
-			else
+			else if (!inv.isFull())
 			{
 				stone.server_SetQuantity(getRules().get_s32("personalstone_" + callerp.getUsername()));
-				getRules().add_s32("personalstone_" + callerp.getUsername(), -(getRules().get_s32("personalstone_" + callerp.getUsername())));
+				getRules().sub_s32("personalstone_" + callerp.getUsername(), (getRules().get_s32("personalstone_" + callerp.getUsername())));
 				getRules().Sync("personalstone_" + callerp.getUsername(), true);
 			}
 			ammos.push_back(stone);
