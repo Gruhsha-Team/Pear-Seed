@@ -267,14 +267,6 @@ void onTick(CBlob@ this)
 				return;
 			}
 
-			// disallow to use drill, when knight out of drill zone
-			if (holder.getConfig() == "knight" && ( (holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0) ))
-			{
-				this.set_bool(buzz_prop, false);
-				//printf("Go away!");
-				return;
-			}
-
 			//set funny sound under water
 			if (inwater)
 			{
@@ -580,20 +572,6 @@ void onRender(CSprite@ this)
 	bool hover = (mousePos - blobPos).getLength() < blob.getRadius() * 1.50f;
 
 	if (blob.isInInventory()) return;
-
-	if (holder !is null && holder.isMyPlayer() && holder.getBlob() !is null)
-	{
-		f32 left = getRules().get_u16("barrier_x1");
-		f32 right = getRules().get_u16("barrier_x2");
-
-		f32 holder_x = holder.getBlob().getPosition().x;
-
-		// Change cursor and play sound, when you can't drill outside zone
-		if (holder.getBlob().getConfig() == "knight" && ( (holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0) ) && holder.getBlob().isKeyJustPressed(key_action1) && isClient())
-		{
-			Sound::Play("NoAmmo.ogg");
-		}
-	}
 
 	Vec2f dim = Vec2f(402, 64);
 	Vec2f ul(getHUDX() - dim.x / 2.0f, getHUDY() - dim.y + 12);

@@ -90,7 +90,6 @@ string[][] setting_texts =
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
-		Names::drillzoneborders,
 		Names::annoyingnature,
 		Names::customdpsounds,
 		Names::switchclasschanginginshop
@@ -106,7 +105,6 @@ string[][] setting_file_names =
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
-		"drillzone_borders",
 		"annoying_nature",
 		"custom_death_and_pain_sounds",
 		"disable_class_change_in_shops"
@@ -141,10 +139,6 @@ string[][][] setting_options =
 		},
 		{
 			Descriptions::universaloff,       // CLUSTERFUCK
-			Descriptions::universalon
-		},
-		{
-			Descriptions::universaloff,       // DRILLZONE BORDERS
 			Descriptions::universalon
 		},
 		{
@@ -190,10 +184,6 @@ string[][][] setting_option_names =
 		},
 		{
 			"off",       // CLUSTERFUCK
-			"on"
-		},
-		{
-			"off",       // DRILLZONE BORDERS
 			"on"
 		},
 		{
