@@ -254,7 +254,7 @@ void onTick(CBlob@ this)
 			sprite.PlaySound("DrillOverheat.ogg");
 		}
 
-		if (isAllowedClass())
+		if (holder.getConfig() == "builder" || holder.getConfig() == "knight" || holder.getConfig() == "archer")
 		{
 			f32 left = getRules().get_u16("barrier_x1");
 			f32 right = getRules().get_u16("barrier_x2");
@@ -676,21 +676,4 @@ void DrawDrillHeat(CBlob@ this, Vec2f tl)
 	GUI::DrawRectangle(tl + Vec2f(4, 4), bar + Vec2f(4, 4), SColor(255, 59, 20, 6));
 	GUI::DrawRectangle(tl + Vec2f(6, 6), bar + Vec2f(2, 4), SColor(255, 183, 51, 51));
 	GUI::DrawRectangle(tl + Vec2f(6, 6), bar + Vec2f(2, 2), SColor(255, 183, 51, 51));
-}
-
-bool isAllowedClass (CBlob@ this)
-{
-	CPlayer@ player = this.getPlayer();
-	if (player is null) return false;
-	if (this is null) return false;
-
-	if (this !is null && this.getConfig() == "builder") {
-		return true;
-	} else if (this !is null && this.getConfig() == "knight") {
-		return true;
-	} else if (this !is null && this.getConfig() == "archer") {
-		return true;
-	}
-
-	return false;
 }
