@@ -90,6 +90,7 @@ string[][] setting_texts =
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
+		Names::grapplewhilecharging,
 		Names::annoyingnature,
 		Names::customdpsounds,
 		Names::switchclasschanginginshop
@@ -105,6 +106,7 @@ string[][] setting_file_names =
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
+		"grapple_with_charging",
 		"annoying_nature",
 		"custom_death_and_pain_sounds",
 		"disable_class_change_in_shops"
@@ -139,6 +141,10 @@ string[][][] setting_options =
 		},
 		{
 			Descriptions::universaloff,       // CLUSTERFUCK
+			Descriptions::universalon
+		},
+		{
+			Descriptions::universaloff,       // GRAPPLE WHILE CHARGING
 			Descriptions::universalon
 		},
 		{
@@ -184,6 +190,10 @@ string[][][] setting_option_names =
 		},
 		{
 			"off",       // CLUSTERFUCK
+			"on"
+		},
+		{
+			"off",       // GRAPPLE WHILE CHARGING
 			"on"
 		},
 		{
