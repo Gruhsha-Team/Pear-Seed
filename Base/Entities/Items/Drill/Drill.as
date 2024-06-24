@@ -22,8 +22,11 @@ const u8 high_damage_window = 40; // at how much heat before max drill deals inc
 const string last_drill_prop = "drill last active";
 
 const u8 heat_add = 7;
+const f32 heat_add_k = 8;
 const u8 heat_add_constructed = 2;
+const f32 heat_add_constructed_k = 2.3;
 const u8 heat_add_blob = 6;
+const f32 heat_add_blob_k = 6.9;
 const u8 heat_cool_amount = 2;
 
 const f32 heat_reduction_water = 0.5f;
@@ -444,15 +447,36 @@ void onTick(CBlob@ this)
 								{
 									if (hit_constructed)
 									{
-										heat += heat_add_constructed;
+										u8 adding = heat_add_constructed;
+
+										if (holder.getConfig() != "builder")
+										{
+											adding = heat_add_constructed_k;
+										}
+
+										heat += adding;
 									}
 									else if (hitblob)
 									{
-										heat += heat_add_blob;
+										u8 adding = heat_add_blob;
+
+										if (holder.getConfig() != "builder")
+										{
+											adding = heat_add_blob_k;
+										}
+
+										heat += adding;
 									}
 									else
 									{
-										heat += heat_add;
+										u8 adding = heat_add;
+
+										if (holder.getConfig() != "builder")
+										{
+											adding = heat_add_k;
+										}
+
+										heat += adding;
 									}
 								}
 								hitsomething = false;
@@ -577,7 +601,7 @@ void onRender(CSprite@ this)
 	Vec2f ul(getHUDX() - dim.x / 2.0f, getHUDY() - dim.y + 12);
 	Vec2f new_ul = ul + Vec2f(-10, -15);
 
-	if (holder !is null && holder.isLocal() && holder.getBlob().getConfig() != "archer")
+	if (holder !is null && holder.isLocal())
 	{
 		DrawDrillHeat(blob, new_ul);
 	}
