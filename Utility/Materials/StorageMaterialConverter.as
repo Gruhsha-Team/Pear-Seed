@@ -51,7 +51,10 @@ void onTick(CBlob@ this)
 
                         getRules().add_s32("personalstone_" + p.getUsername(), stone_count / builders_blue.length);
                         getRules().Sync("personalstone_" + p.getUsername(), true);
-                        inv.server_RemoveItems("mat_stone", stone_count);
+                        //inv.server_RemoveItems("mat_stone", stone_count); // dont working with onRemoveFromInventory hook???
+
+                        this.server_PutOutInventory(item);
+                        item.server_Die();
                     }
 
                     this.SendCommand(this.getCommandID("play convert sound"));
@@ -62,7 +65,10 @@ void onTick(CBlob@ this)
 
                         getRules().add_s32("personalstone_" + p.getUsername(), stone_count / builders_red.length);
                         getRules().Sync("personalstone_" + p.getUsername(), true);
-                        inv.server_RemoveItems("mat_stone", stone_count);
+                        //inv.server_RemoveItems("mat_stone", stone_count); // dont working with onRemoveFromInventory hook???
+
+                        this.server_PutOutInventory(item);
+                        item.server_Die()
                     }
 
                     this.SendCommand(this.getCommandID("play convert sound"));
@@ -75,7 +81,10 @@ void onTick(CBlob@ this)
 
                         getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), wood_count / builders_blue.length);
                         getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
-                        inv.server_RemoveItems("mat_wood", wood_count);
+                        //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
+
+                        this.server_PutOutInventory(item);
+                        item.server_Die()
                     }
 
                 this.SendCommand(this.getCommandID("play convert sound"));
@@ -86,7 +95,10 @@ void onTick(CBlob@ this)
 
                         getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), wood_count / builders_red.length);
                         getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
-                        inv.server_RemoveItems("mat_wood", wood_count);
+                        //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
+
+                        this.server_PutOutInventory(item);
+                        item.server_Die()
                     }
 
                 this.SendCommand(this.getCommandID("play convert sound"));
