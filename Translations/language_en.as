@@ -61,6 +61,9 @@ namespace en
 	d_togglesoundschattexton				= "Annoying sounds is muted for you, ",
 	d_togglesoundschattextoff				= "Annoying sounds is unmuted for you, ",
 
+	// ScoreboardCommon.as
+	d_oldstatstooltip						= "Hold \"Shift\" to see stats from previous match",
+
 	// ScoreboardRender.as
 	d_currentversiontext					= "Current version: ",
 
@@ -91,6 +94,7 @@ namespace en
 	n_blocksmenu							= "Blocks",
 	n_actionsmenu							= "Actions",
 	n_settingsmenu							= "Settings",
+	n_vsettingsmenu							= "Visual/Sound\n Settings",
 	n_tagwheel								= "Tag Wheel",
 	n_emotewheelvanilla						= "Vanilla Emote Wheel",
 	n_emotewheelsecond						= "Mod Emote Wheel",
@@ -111,6 +115,7 @@ namespace en
 		// Actions
 	n_drillcommand							= "Take out drill",
 	n_cancelarrowschargingcommand			= "Cancel bow charging",
+	n_activateorthrowbomb					= "Activate/throw bomb (Builder)",
 
 		// Settings
 	n_buildmode								= "Build Mode",
@@ -126,6 +131,11 @@ namespace en
 	n_annoyingtags							= "Sounds from tags",
 	n_customdpsounds						= "Custom death/pain sounds",
 	n_switchclasschanginginshop				= "Disable class changing in shops",
+	n_drillknight							= "Drill autopickup (Knight)",
+	n_drillbuilder							= "Drill autopickup (Builder)",
+	n_drillarcher							= "Drill autopickup (Archer)",
+	n_bombbuilder							= "Bomb autopickup (Builder)",
+	n_bombarcher							= "Bomb autopickup (Archer)",
 
 		// Other
 	n_pressdelete							= "Choose a bind and press [DELETE] to remove key",
@@ -136,6 +146,7 @@ namespace en
 	// KIWI_Playercard.as
 	n_medalsn								= "Medals",
 	n_partipin								= "Participation",
+	n_clanbadgetext							= "This player consist in guild",
 
 	// ScoreboardCommon.as
 	n_modsettingsbutton						= " Settings",

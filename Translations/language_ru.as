@@ -61,6 +61,9 @@ namespace ru
 	d_togglesoundschattexton				= "Надоедливые звуки войслайнов выключены, ",
 	d_togglesoundschattextoff				= "Надоедливые звуки войслайнов включены, ",
 
+	// ScoreboardCommon.as
+	d_oldstatstooltip						= "Зажми клавишу \"Shift\", чтобы увидеть статистику прошлого матча",
+
 	// ScoreboardRender.as
 	d_currentversiontext					= "Текущая версия: ",
 
@@ -91,6 +94,7 @@ namespace ru
 	n_blocksmenu							= "Блоки",
 	n_actionsmenu							= "Действия",
 	n_settingsmenu							= "Настройки",
+	n_vsettingsmenu							= "Настройки визуала\n и звуков",
 	n_tagwheel								= "Колесо меток",
 	n_emotewheelvanilla						= "Ванильное колесо эмоций",
 	n_emotewheelsecond						= "Модовое колесо эмоций",
@@ -111,6 +115,7 @@ namespace ru
 		// Actions
 	n_drillcommand							= "Достать/Убрать дрель",
 	n_cancelarrowschargingcommand			= "Перестать заряжать лук",
+	n_activateorthrowbomb					= "Активация бомбы (Строитель)",
 
 		// Settings
 	n_buildmode								= "Режим строительства",
@@ -126,6 +131,11 @@ namespace ru
 	n_annoyingtags							= "Звуки меток",
 	n_customdpsounds						= "Кастомные звуки смерти/боли",
 	n_switchclasschanginginshop				= "Выкл. смену класса в магазинах",
+	n_drillknight							= "Автоподбор дрели (Рыцарь)",
+	n_drillbuilder							= "Автоподбор дрели (Строитель)",
+	n_drillarcher							= "Автоподбор дрели (Лучник)",
+	n_bombbuilder							= "Автоподбор бомб (Строитель)",
+	n_bombarcher							= "Автоподбор бомб (Лучник)",
 
 		// Other
 	n_pressdelete							= "Выбери клавишу и нажми [DELETE] для очистки хоткея!",
@@ -136,6 +146,7 @@ namespace ru
 	// KIWI_Playercard.as
 	n_medalsn								= "Медали",
 	n_partipin								= "Участие",
+	n_clanbadgetext							= "Этот игрок состоит в гильдии",
 
 	// ScoreboardCommon.as
 	n_modsettingsbutton						= "Настройки",

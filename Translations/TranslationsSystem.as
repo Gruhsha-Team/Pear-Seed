@@ -60,6 +60,9 @@ namespace Descriptions
 	togglesoundschattexton			= Translate(en::d_togglesoundschattexton+"\\"+ru::d_togglesoundschattexton),
 	togglesoundschattextoff			= Translate(en::d_togglesoundschattextoff+"\\"+ru::d_togglesoundschattextoff),
 
+	// ScoreboardCommon.as
+	oldstatstooltip					= Translate(en::d_oldstatstooltip+"\\"+ru::d_oldstatstooltip),
+
 	// ScoreboardRender.as
 	currentversiontext				= Translate(en::d_currentversiontext+"\\"+ru::d_currentversiontext),
 
@@ -92,6 +95,7 @@ namespace Names
 	blocksmenu		  	      	 		= Translate(en::n_blocksmenu+"\\"+ru::n_blocksmenu),
 	actionsmenu		  	      	 		= Translate(en::n_actionsmenu+"\\"+ru::n_actionsmenu),
 	settingsmenu		  	      	 	= Translate(en::n_settingsmenu+"\\"+ru::n_settingsmenu),
+	vsettingsmenu		  	      	 	= Translate(en::n_vsettingsmenu+"\\"+ru::n_vsettingsmenu),
 	tagwheel		  	       			= Translate(en::n_tagwheel+"\\"+ru::n_tagwheel),
 	emotewheelvanilla		  	       	= Translate(en::n_emotewheelvanilla+"\\"+ru::n_emotewheelvanilla),
 	emotewheelsecond		  	       	= Translate(en::n_emotewheelsecond+"\\"+ru::n_emotewheelsecond),
@@ -112,6 +116,7 @@ namespace Names
 		// Actions
 	drillcommand		  	      		= Translate(en::n_drillcommand+"\\"+ru::n_drillcommand),
 	cancelarrowschargingcommand			= Translate(en::n_cancelarrowschargingcommand+"\\"+ru::n_cancelarrowschargingcommand),
+	activateorthrowbomb					= Translate(en::n_activateorthrowbomb+"\\"+ru::n_activateorthrowbomb),
 
 		// Settings
 	buildmode		  	      			 = Translate(en::n_buildmode+"\\"+ru::n_buildmode),
@@ -127,6 +132,11 @@ namespace Names
 	annoyingtags		 	 	      	 = Translate(en::n_annoyingtags+"\\"+ru::n_annoyingtags),
 	customdpsounds		 	 	      	 = Translate(en::n_customdpsounds+"\\"+ru::n_customdpsounds),
 	switchclasschanginginshop			 = Translate(en::n_switchclasschanginginshop+"\\"+ru::n_switchclasschanginginshop),
+	drillknight							 = Translate(en::n_drillknight+"\\"+ru::n_drillknight),
+	drillbuilder			 			 = Translate(en::n_drillbuilder+"\\"+ru::n_drillbuilder),
+	drillarcher							 = Translate(en::n_drillarcher+"\\"+ru::n_drillarcher),
+	bombbuilder							 = Translate(en::n_bombbuilder+"\\"+ru::n_bombbuilder),
+	bombarcher							 = Translate(en::n_bombarcher+"\\"+ru::n_bombarcher),
 
 		// Other
 	pressdelete		  	       			= Translate(en::n_pressdelete+"\\"+ru::n_pressdelete),
@@ -137,6 +147,7 @@ namespace Names
 	// KIWI_Playercard.as
 	medalsn		  	       				= Translate(en::n_medalsn+"\\"+ru::n_medalsn),
 	partipin		  	       			= Translate(en::n_partipin+"\\"+ru::n_partipin),
+	clanbadgetext		  	       		= Translate(en::n_clanbadgetext+"\\"+ru::n_clanbadgetext),
 
 	// ScoreboardCommon.as
 	modsettingsbutton	  	       		= Translate(en::n_modsettingsbutton+"\\"+ru::n_modsettingsbutton),

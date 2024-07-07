@@ -15,6 +15,7 @@ void onInit(CRules@ this)
 
 	ResetRuleBindings();
 	ResetRuleSettings();
+	ResetRuleVSettings();
 
 	if (isClient())
 	{
@@ -42,8 +43,71 @@ void onInit(CRules@ this)
 		ConfigFile sfile;
 		ConfigFile sfile2;
 
+		// FUNCTIONAL SETTINGS
 		if (sfile.loadFile(BINDINGSDIR + SETTINGSFILE)) // file exists
-		{ 
+		{
+			printf("Settings file exists.");
+
+			if (!sfile.exists("grapple_with_charging"))
+			{
+				sfile.add_string("grapple_with_charging", "yes");
+			}
+
+			if (!sfile.exists("disable_class_change_in_shops"))
+			{
+				sfile.add_string("disable_class_change_in_shops", "no");
+			}
+
+			if (!sfile.exists("pickdrill_knight"))
+			{
+				sfile.add_string("pickdrill_knight", "yes");
+			}
+
+			if (!sfile.exists("pickdrill_builder"))
+			{
+				sfile.add_string("pickdrill_builder", "yes");
+			}
+
+			if (!sfile.exists("pickdrill_archer"))
+			{
+				sfile.add_string("pickdrill_archer", "yes");
+			}
+
+			if (!sfile.exists("pickbomb_builder"))
+			{
+				sfile.add_string("pickdrill_builder", "yes");
+			}
+
+			if (!sfile.exists("pickbomb_archer"))
+			{
+				sfile.add_string("pickdrill_archer", "yes");
+			}
+		}
+		else // default settings
+		{
+			sfile.add_string("grapple_with_charging", "yes");
+			sfile.add_string("disable_class_change_in_shops", "no");
+			sfile.add_string("pickdrill_knight", "yes");
+			sfile.add_string("pickdrill_builder", "yes");
+			sfile.add_string("pickdrill_archer", "yes");
+			sfile.add_string("pickbomb_builder", "yes");
+			sfile.add_string("pickbomb_archer", "yes");
+
+			printf("Creating local settings file with default values for Gruhsha.");
+		}
+
+		if(!sfile.saveFile(SETTINGSFILE + ".cfg"))
+		{	
+			print("Failed to save GRUHSHA_customizableplayersettings.cfg");
+		}
+		else
+		{
+			print("Successfully saved GRUHSHA_customizableplayersettings.cfg");
+		}
+
+		// VISUAL/SOUND SETTINGS
+		if (sfile2.loadFile(BINDINGSDIR + VSETTINGSFILE)) // file exists
+		{
 			printf("Settings file exists.");
 
 			if (!sfile.exists("camera_sway"))
@@ -71,11 +135,6 @@ void onInit(CRules@ this)
 				sfile.add_string("clusterfuck", "on");
 			}
 
-			if (!sfile.exists("drillzone_borders"))
-			{
-				sfile.add_string("drillzone_borders", "on");
-			}
-
 			if (!sfile.exists("annoying_nature"))
 			{
 				sfile.add_string("annoying_nature", "on");
@@ -95,42 +154,35 @@ void onInit(CRules@ this)
 			{
 				sfile.add_string("custom_death_and_pain_sounds", "on");
 			}
-
-			if (!sfile.exists("disable_class_change_in_shops"))
-			{
-				sfile.add_string("disable_class_change_in_shops", "no");
-			}
 		}
 		else // default settings
 		{
 			sfile.add_string("blockbar_hud", "yes");
-			//sfile.add_string("build_mode", "vanilla"); // rip
 			sfile.add_string("camera_sway", "5");
 			sfile.add_string("body_tilting", "on");
 			sfile.add_string("head_rotating", "on");
 			sfile.add_string("clusterfuck", "on");
-			sfile.add_string("drillzone_borders", "on");
 			sfile.add_string("annoying_nature", "on");
 			sfile.add_string("annoying_voicelines", "on");
 			sfile.add_string("annoying_tags", "on");
 			sfile.add_string("custom_death_and_pain_sounds", "on");
-			sfile.add_string("disable_class_change_in_shops", "no");
 
-			printf("Creating local settings file with default values for Gruhsha.");
+			printf("Creating local visual and sound settings file with default values for Gruhsha.");
 		}
 
-		if(!sfile.saveFile(SETTINGSFILE + ".cfg"))
-		{	
-			print("Failed to save GRUHSHA_customizableplayersettings.cfg");
+		if (!sfile2.saveFile(VSETTINGSFILE + ".cfg"))
+		{
+			print("Failed to save GRUHSHA_visualandsoundsettings.cfg");
 		}
 		else
 		{
-			print("Successfully saved GRUHSHA_customizableplayersettings.cfg");
+			print("Successfully saved GRUHSHA_visualandsoundsettings.cfg");
 		}
 	}
 
 	LoadFileBindings();
 	LoadFileSettings();
+	LoadFileVSettings();
 
 	InitMenu();
 }
@@ -175,6 +227,12 @@ void onTick(CRules@ this)
 		ResetRuleSettings();
 		LoadFileSettings();
 	} 
+
+	if (getGameTime() % 30 == 0 && !this.get_bool("loadedvsettings"))
+	{
+		ResetRuleVSettings();
+		LoadFileVSettings();
+	}
 
 	if (controls !is null)
 	{
@@ -270,7 +328,7 @@ void onTick(CRules@ this)
 
 Vec2f MENU_SIZE = Vec2f(1000, 700);
 Vec2f ENTRY_SIZE = Vec2f(900, 30);
-Vec2f PAGE_BUTTON_SIZE = Vec2f(150, 60);
+Vec2f PAGE_BUTTON_SIZE = Vec2f(150, 40);
 
 void InitMenu()
 {
@@ -381,6 +439,56 @@ void InitMenu()
 		GUI.settings.push_back(bts);
 	}
 
+	u16 vsetting_index = 0;
+
+	for (int i=0; i<vsetting_texts.length; ++i)
+	{
+		ClickableButtonFive[] bts;
+
+		for (int g=0; g<vsetting_texts[i].length; ++g)
+		{
+			ClickableButtonFive button;
+			{
+				//button.m_clickable_origin = center + Vec2f(5, i * 40);
+				//button.m_clickable_size = Vec2f(200, 40);
+
+				button.cmd_id = getRules().getCommandID("s buttonclick");
+				button.cmd_subid = vsetting_index;
+
+				++vsetting_index;
+
+				button.m_text = vsetting_texts[i][g];
+				button.m_i = i;
+				button.m_g = g;
+				button.m_text_position = button.m_clickable_origin + Vec2f(4, 0);
+
+				for (int h=0; h<vsetting_options[i][g].length; ++h)
+				{
+					button.m_hovereds.push_back(false);
+
+					//if (getRules().get_string(setting_file_names[i][g]) == setting_option_names[i][g][h])
+					if (false)
+					{
+						button.m_selecteds.push_back(true);
+						button.m_state.push_back(ClickableButtonStates::Selected);
+					}
+					else
+					{
+						button.m_selecteds.push_back(false);
+						button.m_state.push_back(ClickableButtonStates::None);
+					}
+
+
+					button.possible_options.push_back(vsetting_options[i][g][h]);
+				}
+			}
+
+			bts.push_back(button);
+		}
+
+		GUI.vsettings.push_back(bts);
+	}
+
 	// Page Buttons
 
 	for (int i=0; i<page_texts.length; ++i)
@@ -400,4 +508,142 @@ void InitMenu()
 	}
 
 	@BindingGUI = GUI;
+}
+
+void onCommand( CRules@ this, u8 cmd, CBitStream @params )
+{
+	if (cmd == this.getCommandID("p buttonclick"))
+	{
+		return;
+		bool selected = params.read_bool();
+		u16 id = params.read_u16();
+		string username = params.read_string();
+
+		if (getLocalPlayer().getUsername() != username) return;
+
+		for (int i=0; i<BindingGUI.page_buttons.length; ++i)
+		{
+			if (i != id)
+				BindingGUI.page_buttons[i].m_selected = false;
+		}
+
+		for (int i=0; i<BindingGUI.buttons.length; ++i)
+		{
+			for (int g=0; g<BindingGUI.buttons[i].length; ++g)
+			{
+				BindingGUI.buttons[i][g].m_selected = false;
+			}
+		}
+
+		BindingGUI.current_page = id;
+
+		//printf("hi, id: " + id);
+	}
+
+	if (cmd == this.getCommandID("b buttonclick"))
+	{
+		bool selected = params.read_bool();
+		u16 id = params.read_u16();
+		string username = params.read_string();
+
+		if (getLocalPlayer().getUsername() != username) return;
+
+		u16 binding_index = 0;
+
+		for (int i=0; i<BindingGUI.buttons.length; ++i)
+		{
+			for (int g=0; g<BindingGUI.buttons[i].length; ++g)
+			{
+				if (binding_index != id)
+					BindingGUI.buttons[i][g].m_selected = false;
+
+				binding_index++;
+			}
+		}
+
+		//printf("hi, id: " + id);
+	}
+
+	if (cmd == this.getCommandID("sync drill autopickup") && isServer()) {
+		u8 action; // class: 1 knight 2 builder 3 archer
+		if (!params.saferead_u8(action)) return;
+
+		bool yes;
+		if (!params.saferead_bool(yes)) return;
+
+		string autopick = "yes";
+		if (!yes) autopick = "no";
+
+		CPlayer@ player = getNet().getActiveCommandPlayer();
+		if (player is null) return;
+
+		if (action == 1) {
+			getRules().set_string(player.getUsername() + "pickdrill_knight", autopick);
+		} else if (action == 2) {
+			getRules().set_string(player.getUsername() + "pickdrill_builder", autopick);
+		} else if (action == 3) {
+			getRules().set_string(player.getUsername() + "pickdrill_archer", autopick);
+		}
+
+		this.SendCommand(this.getCommandID("sync drill autopickup client"), params);
+	} else 	if (cmd == this.getCommandID("sync drill autopickup client") && isClient()) {
+		u8 action; // class: 1 knight 2 builder 3 archer
+		if (!params.saferead_u8(action)) return;
+
+		bool yes;
+		if (!params.saferead_bool(yes)) return;
+
+		string autopick = "yes";
+		if (!yes) autopick = "no";
+
+		CPlayer@ player = getNet().getActiveCommandPlayer();
+		if (player is null) return;
+
+		if (action == 1) {
+			getRules().set_string(player.getUsername() + "pickdrill_knight", autopick);
+		} else if (action == 2) {
+			getRules().set_string(player.getUsername() + "pickdrill_builder", autopick);
+		} else if (action == 3) {
+			getRules().set_string(player.getUsername() + "pickdrill_archer", autopick);
+		}
+
+	} else if (cmd == this.getCommandID("sync bomb autopickup") && isServer()) {
+		u8 action; // class: 1 knight 2 builder 3 archer
+		if (!params.saferead_u8(action)) return;
+
+		bool yes;
+		if (!params.saferead_bool(yes)) return;
+
+		string autopick = "yes";
+		if (!yes) autopick = "no";
+
+		CPlayer@ player = getNet().getActiveCommandPlayer();
+		if (player is null) return;
+
+		if (action == 2) {
+			getRules().set_string(player.getUsername() + "pickbomb_builder", autopick);
+		} else if (action == 3) {
+			getRules().set_string(player.getUsername() + "pickbomb_archer", autopick);
+		}
+
+		this.SendCommand(this.getCommandID("sync bomb autopickup client"), params);
+	} else if (cmd == this.getCommandID("sync bomb autopickup client") && isClient()) {
+		u8 action; // class: 1 knight 2 builder 3 archer
+		if (!params.saferead_u8(action)) return;
+
+		bool yes;
+		if (!params.saferead_bool(yes)) return;
+
+		string autopick = "yes";
+		if (!yes) autopick = "no";
+
+		CPlayer@ player = getNet().getActiveCommandPlayer();
+		if (player is null) return;
+
+		if (action == 2) {
+			getRules().set_string(player.getUsername() + "pickbomb_builder", autopick);
+		} else if (action == 3) {
+			getRules().set_string(player.getUsername() + "pickbomb_archer", autopick);
+		}
+	}
 }

@@ -68,7 +68,7 @@ void onTick(CBlob@ this)
                         //inv.server_RemoveItems("mat_stone", stone_count); // dont working with onRemoveFromInventory hook???
 
                         this.server_PutOutInventory(item);
-                        item.server_Die()
+                        item.server_Die();
                     }
 
                     this.SendCommand(this.getCommandID("play convert sound"));
@@ -84,7 +84,7 @@ void onTick(CBlob@ this)
                         //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
 
                         this.server_PutOutInventory(item);
-                        item.server_Die()
+                        item.server_Die();
                     }
 
                 this.SendCommand(this.getCommandID("play convert sound"));
@@ -98,7 +98,7 @@ void onTick(CBlob@ this)
                         //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
 
                         this.server_PutOutInventory(item);
-                        item.server_Die()
+                        item.server_Die();
                     }
 
                 this.SendCommand(this.getCommandID("play convert sound"));

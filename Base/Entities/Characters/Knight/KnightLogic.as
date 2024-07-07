@@ -89,8 +89,6 @@ void onInit(CBlob@ this)
 	this.set("onCycle handle", @controls_cycle);
 
 	this.addCommandID("activate/throw bomb");
-	this.addCommandID("make sparks");
-	this.addCommandID("make sparks client");
 
 	this.push("names to activate", "keg");
 	this.push("names to activate", "satchel");
@@ -119,6 +117,7 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 	{
 		player.SetScoreboardVars("ScoreboardIcons.png", 3, Vec2f(16, 16));
 	}
+
 }
 
 
@@ -1443,6 +1442,7 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 						}
 						continue;
 					}
+					if (!canHit(this, rayb)) continue;
 
 					f32 temp_damage = damage;
 					

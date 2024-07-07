@@ -299,7 +299,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 			GUI::GetTextDimensions(clantag, clantag_actualsize);
 			GUI::DrawText(clantag, tl + Vec2f(name_buffer, 0), SColor(0xff888888));
 
-			if (clantag.toUpper() == "MINECULT") {
+			/*if (clantag.toUpper() == "MINECULT") {
 				GUI::DrawIcon("Sprites/clan_badges.png", 0, Vec2f(16, 16), Vec2f(br.x, tl.y), 0.5f, teamIndex);
 			} else if (clantag.toUpper() == "TTOGAD") {
 				GUI::DrawIcon("Sprites/clan_badges.png", 1, Vec2f(16, 16), Vec2f(br.x, tl.y), 0.5f, 0);
@@ -313,7 +313,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 				GUI::DrawIcon("Sprites/clan_badges.png", 5, Vec2f(16, 16), Vec2f(br.x, tl.y), 0.5f, 0);
 			} else if (clantag.toUpper() == "BUTTERMINA" || clantag.toUpper() == "BUTTERCULT") {
 				GUI::DrawIcon("Sprites/clan_badges.png", 6, Vec2f(16, 16), Vec2f(br.x, tl.y), 0.5f, teamIndex);
-			}
+			}*/
 
 			// recolor clantag for TerminalHash
 			if (username == "TerminalHash") {
@@ -600,6 +600,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		{
 			OldPlayerStatsCore@ old_player_stats_core;
 			rules.get(OLD_PLAYER_STATS_CORE, @old_player_stats_core);
+
 			if (old_player_stats_core !is null)
 			{
 				OldPlayerStats@ old_player_stats;
@@ -612,6 +613,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 					@old_player_stats = OldPlayerStats();
 					old_player_stats_core.stats.set(username, @old_player_stats);
 				}
+
 				kills   = old_player_stats.kills;
 				deaths  = old_player_stats.deaths;
 				assists = old_player_stats.assists;
@@ -925,6 +927,7 @@ void onRestart(CRules@ this)
 	// Waffle: Reset scoreboard
 	OldPlayerStatsCore@ old_player_stats_core;
 	this.get(OLD_PLAYER_STATS_CORE, @old_player_stats_core);
+
 	for (u8 i = 0; i < getPlayerCount(); i++)
 	{
 		CPlayer@ player = getPlayer(i);
@@ -938,6 +941,7 @@ void onRestart(CRules@ this)
 		{
 			string player_name = player.getUsername();
 			OldPlayerStats@ old_player_stats;
+
 			if (old_player_stats_core.stats.exists(player_name))
 			{
 				old_player_stats_core.stats.get(player_name, @old_player_stats);
