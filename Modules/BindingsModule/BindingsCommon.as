@@ -189,8 +189,6 @@ string[][] vsetting_texts =
 		Names::headrotating,
 		Names::clusterfuck,
 		Names::annoyingnature,
-		Names::annoyingvoicelines,
-		Names::annoyingtags,
 		Names::customdpsounds
 	}
 };
@@ -241,14 +239,6 @@ string[][][] vsetting_options =
 			Descriptions::universalon
 		},
 		{
-			Descriptions::universaloff,       // VOICELINES
-			Descriptions::universalon
-		},
-		{
-			Descriptions::universaloff,       // TAGS
-			Descriptions::universalon
-		},
-		{
 			Descriptions::universaloff,       // DEATH AND PAIN
 			Descriptions::universalon
 		}
@@ -283,14 +273,6 @@ string[][][] vsetting_option_names =
 		},
 		{
 			"off",       // BUSHES & LEAFS MUTE
-			"on"
-		},
-		{
-			"off",       // VOICELINES
-			"on"
-		},
-		{
-			"off",       // TAGS
 			"on"
 		},
 		{
