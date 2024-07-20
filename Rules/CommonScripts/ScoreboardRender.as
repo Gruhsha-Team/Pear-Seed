@@ -865,7 +865,7 @@ void onRenderScoreboard(CRules@ this)
 	ScoreboardField(
 		Vec2f(screenWidth - tl.x - 200, 115 - scrollOffset),
 		Vec2f(screenWidth - tl.x,       115 - scrollOffset + 40),
-		Descriptions::currentversiontext + mod_version + "\n(3.1) PLAYTEST"
+		Descriptions::currentversiontext + mod_version + "\n(3.2) PLAYTEST"
 	);
 	LinkButton(
 		Vec2f(screenWidth - tl.x - 275, 115 - scrollOffset),
@@ -919,6 +919,7 @@ void onInit(CRules@ this)
 	// Waffle: Keep old stats
 	OldPlayerStatsCore@ old_player_stats_core = OldPlayerStatsCore();
 	this.set(OLD_PLAYER_STATS_CORE, @old_player_stats_core);
+
 	onRestart(this);
 }
 
@@ -1099,5 +1100,5 @@ void LinkButton(Vec2f tl, Vec2f br, const string&in text, const string&in websit
 void ScoreboardField(Vec2f tl, Vec2f br, const string&in text)
 {
 	GUI::DrawPane(tl, br, 0xffcfcfcf);
-	GUI::DrawTextCentered(text, Vec2f(tl.x + ((br.x - tl.x) * 0.50f), tl.y + ((br.y - tl.y) * 0.50f)), 0xffffffff);
+ 	GUI::DrawTextCentered(text, Vec2f(tl.x + ((br.x - tl.x) * 0.50f), tl.y + ((br.y - tl.y) * 0.50f)), 0xffffffff);
 }

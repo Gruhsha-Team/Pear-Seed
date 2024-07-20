@@ -93,8 +93,14 @@ namespace ru
 	n_emotemenu								= "Эмоции",
 	n_blocksmenu							= "Блоки",
 	n_actionsmenu							= "Действия",
+	n_archernmb								= "Магазин лучника\n (бинды)",
+	n_buildernmb							= "Магазин строителя\n (бинды)",
+	n_knightnmb								= "Магазин рыцаря\n (бинды)",
+	n_quartersnmb							= "Магазин еды\n (бинды)",
+	n_vehiclenmb							= "Магазин машин\n (бинды)",
+	n_boatnmb								= "Магазин лодок\n (бинды)",
 	n_settingsmenu							= "Настройки",
-	n_vsettingsmenu							= "Настройки визуала\n и звуков",
+	n_vsettingsmenu							= "Настройки визуа-\n ла и звуков",
 	n_tagwheel								= "Колесо меток",
 	n_emotewheelvanilla						= "Ванильное колесо эмоций",
 	n_emotewheelsecond						= "Модовое колесо эмоций",
@@ -117,14 +123,67 @@ namespace ru
 	n_cancelarrowschargingcommand			= "Перестать заряжать лук",
 	n_activateorthrowbomb					= "Активация бомбы (Строитель)",
 
+		// NoMenuBuying Binds
+			// Knight Shop
+	n_bombnmb								= "Бомба",
+	n_waterbombnmb							= "Водная бомба",
+	n_minenmb								= "Мина",
+	n_kegnmb								= "Кега",
+	n_drillnmb								= "Бур",
+	n_satchelnmb							= "Взрывпакет",
+
+			// Builder Shop
+	n_drillbnmb								= "Бур",
+	n_spongebnmb							= "Губка",
+	n_bucketwnmb							= "Ведро с водой",
+	n_bouldernmb							= "Булыжник",
+	n_lanternnmb							= "Фонарь",
+	n_bucketnnmb							= "Ведро",
+	n_trampolinenmb							= "Батут",
+	n_sawnmb								= "Пила",
+	n_cratewoodnmb							= "Ящик (за дерево)",
+	n_cratecoinsnmb							= "Ящик (за монеты)",
+
+			// Archer Shop
+	n_arrowsnmb								= "Стрелы",
+	n_waterarrowsnmb						= "Водные стрелы",
+	n_firearrowsnmb							= "Огненные стрелы",
+	n_bombarrowsnmb							= "Стрелы-бомбы",
+	n_blockarrowsnmb						= "Стрелы-блоки",
+
+			// Quarters
+	n_beernmb								= "Квас",
+	n_mealnmb								= "Борщ",
+	n_eggnmb								= "Яйцо",
+	n_burgernmb								= "Пирожок с грушей",
+	n_pearnmb								= "Груша",
+	n_sleepnmb								= "Спать",
+
+			// Vehicle Shop
+	n_catapultnmb							= "Катапульта",
+	n_ballistanmb							= "Баллиста",
+	n_outpostnmb							= "Аванпост",
+	n_boltsnmb								= "Болты для баллисты",
+	n_shellsnmb								= "Взрывные болты для баллисты",
+
+			// Boat Shop
+	n_dinghynmb								= "Шлюпка",
+	n_longboatnmb							= "Большая лодка",
+	n_warboatnmb							= "Военная лодка",
+
 		// Settings
 	n_buildmode								= "Режим строительства",
 	n_blockbar								= "Включить панель с блоками",
+	n_dsewnmb								= "NoMenuBuying-фича без эмоций",
+	n_shownomenubuyingpan					= "Включить NoMenuBuying панель",
+	n_nomenubuyingset						= "NoMenuBuying-фича",
+	n_nomenubuyingboldarset					= "NoMenuBuying-фича (Строитель)",
 	n_camerasw								= "Покачивание камеры (По-умол. 5)",
 	n_bodytilt								= "Иммерсивное поведение тела",
 	n_headrotating							= "Поворот головы в сторону курсора",
 	n_clusterfuck							= "Отображение частиц и кусков",
-	n_drillzoneborders						= "Границы зоны дриллинга",
+	n_clusterfuck_blood						= "Отображение крови",
+	n_clusterfuck_smoke						= "Отображение дыма",
 	n_grapplewhilecharging					= "Использовать крюк при стрельбе",
 	n_annoyingnature						= "Звук от кустов и листьев",
 	n_annoyingvoicelines					= "Звуки войслайнов",

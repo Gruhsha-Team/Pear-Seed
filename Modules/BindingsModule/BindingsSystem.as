@@ -30,6 +30,89 @@ void onInit(CRules@ this)
 			printf("Creating local bindings file for Gruhsha.");
 		}
 
+		// default values for binds:
+		// knight shop
+		if (!file.exists("k_bomb$1")) file.add_s32("k_bomb$1", 49);
+		if (!file.exists("k_bomb$2")) file.add_s32("k_bomb$2", -1);
+		if (!file.exists("k_waterbomb$1")) file.add_s32("k_waterbomb$1", 50);
+		if (!file.exists("k_waterbomb$2")) file.add_s32("k_waterbomb$2", -1);
+		if (!file.exists("k_mine$1")) file.add_s32("k_mine$1", 51);
+		if (!file.exists("k_mine$2")) file.add_s32("k_mine$2", -1);
+		if (!file.exists("k_keg$1")) file.add_s32("k_keg$1", 52);
+		if (!file.exists("k_keg$2")) file.add_s32("k_keg$2", -1);
+		if (!file.exists("k_drill$1")) file.add_s32("k_drill$1", 53);
+		if (!file.exists("k_drill$2")) file.add_s32("k_drill$2", -1);
+		if (!file.exists("k_satchel$1")) file.add_s32("k_satchel$1", 54);
+		if (!file.exists("k_satchel$2")) file.add_s32("k_satchel$2", -1);
+
+		// builder shop
+		if (!file.exists("b_drill$1")) file.add_s32("b_drill$1", 49);
+		if (!file.exists("b_drill$2")) file.add_s32("b_drill$2", -1);
+		if (!file.exists("b_sponge$1")) file.add_s32("b_sponge$1", 50);
+		if (!file.exists("b_sponge$2")) file.add_s32("b_sponge$2", -1);
+		if (!file.exists("b_bucketw$1")) file.add_s32("b_bucketw$1", 51);
+		if (!file.exists("b_bucketw$2")) file.add_s32("b_bucketw$2", -1);
+		if (!file.exists("b_boulder$1")) file.add_s32("b_boulder$1", 52);
+		if (!file.exists("b_boulder$2")) file.add_s32("b_boulder$2", -1);
+		if (!file.exists("b_lantern$1")) file.add_s32("b_lantern$1", 53);
+		if (!file.exists("b_lantern$2")) file.add_s32("b_lantern$2", -1);
+		if (!file.exists("b_bucketn$1")) file.add_s32("b_bucketn$1", 54);
+		if (!file.exists("b_bucketn$2")) file.add_s32("b_bucketn$2", -1);
+		if (!file.exists("b_trampoline$1")) file.add_s32("b_trampoline$1", 55);
+		if (!file.exists("b_trampoline$2")) file.add_s32("b_trampoline$2", -1);
+		if (!file.exists("b_saw$1")) file.add_s32("b_saw$1", 56);
+		if (!file.exists("b_saw$2")) file.add_s32("b_saw$2", -1);
+		if (!file.exists("b_crate_wood$1")) file.add_s32("b_crate_wood$1", 57);
+		if (!file.exists("b_crate_wood$1")) file.add_s32("b_crate_wood$2", -1);
+		if (!file.exists("b_crate_coins$1")) file.add_s32("b_crate_coins$1", 48);
+		if (!file.exists("b_crate_coins$1")) file.add_s32("b_crate_coins$2", -1);
+
+		// archer shop
+		if (!file.exists("a_arrows$1")) file.add_s32("a_arrows$1", 49);
+		if (!file.exists("a_arrows$2")) file.add_s32("a_arrows$2", -1);
+		if (!file.exists("a_waterarrows$1")) file.add_s32("a_waterarrows$1", 50);
+		if (!file.exists("a_waterarrows$2")) file.add_s32("a_waterarrows$2", -1);
+		if (!file.exists("a_firearrows$1")) file.add_s32("a_firearrows$1", 51);
+		if (!file.exists("a_firearrows$2")) file.add_s32("a_firearrows$2", -1);
+		if (!file.exists("a_bombarrows$1")) file.add_s32("a_bombarrows$1", 52);
+		if (!file.exists("a_bombarrows$2")) file.add_s32("a_bombarrows$2", -1);
+		if (!file.exists("a_blockarrows$1")) file.add_s32("a_blockarrows$1", 53);
+		if (!file.exists("a_blockarrows$2")) file.add_s32("a_blockarrows$2", -1);
+
+		// kfc
+		if (!file.exists("kfc_beer$1")) file.add_s32("kfc_beer$1", 49);
+		if (!file.exists("kfc_beer$2")) file.add_s32("kfc_beer$2", -1);
+		if (!file.exists("kfc_meal$1")) file.add_s32("kfc_meal$1", 50);
+		if (!file.exists("kfc_meal$2")) file.add_s32("kfc_meal$2", -1);
+		if (!file.exists("kfc_egg$1")) file.add_s32("kfc_egg$1", 51);
+		if (!file.exists("kfc_egg$2")) file.add_s32("kfc_egg$2", -1);
+		if (!file.exists("kfc_burger$1")) file.add_s32("kfc_burger$1", 52);
+		if (!file.exists("kfc_burger$2")) file.add_s32("kfc_burger$2", -1);
+		if (!file.exists("kfc_pear$1")) file.add_s32("kfc_pear$1", 53);
+		if (!file.exists("kfc_pear$2")) file.add_s32("kfc_pear$2", -1);
+		if (!file.exists("kfc_sleep$1")) file.add_s32("kfc_sleep$1", 54);
+		if (!file.exists("kfc_sleep$2")) file.add_s32("kfc_sleep$2", -1);
+
+		// vehicle shop
+		if (!file.exists("vehicle_catapult$1")) file.add_s32("vehicle_catapult$1", 49);
+		if (!file.exists("vehicle_catapult$2")) file.add_s32("vehicle_catapult$2", -1);
+		if (!file.exists("vehicle_ballista$1")) file.add_s32("vehicle_ballista$1", 50);
+		if (!file.exists("vehicle_ballista$2")) file.add_s32("vehicle_ballista$2", -1);
+		if (!file.exists("vehicle_outpost$1")) file.add_s32("vehicle_outpost$1", 51);
+		if (!file.exists("vehicle_outpost$2")) file.add_s32("vehicle_outpost$2", -1);
+		if (!file.exists("vehicle_bolts$1")) file.add_s32("vehicle_bolts$1", 52);
+		if (!file.exists("vehicle_bolts$2")) file.add_s32("vehicle_bolts$2", -1);
+		if (!file.exists("vehicle_shells$1")) file.add_s32("vehicle_shells$1", 53);
+		if (!file.exists("vehicle_shells$2")) file.add_s32("vehicle_shells$2", -1);
+
+		// boat shop
+		if (!file.exists("boat_dinghy$1")) file.add_s32("boat_dinghy$1", 49);
+		if (!file.exists("boat_dinghy$2")) file.add_s32("boat_dinghy$2", -1);
+		if (!file.exists("boat_longboat$1")) file.add_s32("boat_longboat$1", 50);
+		if (!file.exists("boat_longboat$2")) file.add_s32("boat_longboat$2", -1);
+		if (!file.exists("boat_warboat$1")) file.add_s32("boat_warboat$1", 51);
+		if (!file.exists("boat_warboat$2")) file.add_s32("boat_warboat$2", -1);
+
 		if(!file.saveFile(BINDINGSFILE + ".cfg"))
 		{
 			print("Failed to save GRUHSHA_playerbindings.cfg");
@@ -82,6 +165,16 @@ void onInit(CRules@ this)
 			{
 				sfile.add_string("pickdrill_archer", "yes");
 			}
+
+			if (!sfile.exists("nomenubuying"))
+			{
+				sfile.add_string("nomenubuying", "no");
+			}
+
+			if (!sfile.exists("nomenubuying_b"))
+			{
+				sfile.add_string("nomenubuying_b", "no");
+			}
 		}
 		else // default settings
 		{
@@ -92,6 +185,8 @@ void onInit(CRules@ this)
 			sfile.add_string("pickdrill_archer", "yes");
 			sfile.add_string("pickbomb_builder", "yes");
 			sfile.add_string("pickbomb_archer", "yes");
+			sfile.add_string("nomenubuying", "no");
+			sfile.add_string("nomenubuying_b", "no");
 
 			printf("Creating local settings file with default values for Gruhsha.");
 		}
@@ -120,6 +215,16 @@ void onInit(CRules@ this)
 				sfile.add_string("blockbar_hud", "yes");
 			}
 
+			if (!sfile.exists("shownomenupanel"))
+			{
+				sfile.add_string("shownomenupanel", "yes");
+			}
+
+			if (!sfile.exists("dse_while_using_nomenu_buying"))
+			{
+				sfile.add_string("dse_while_using_nomenu_buying", "yes");
+			}
+
 			if (!sfile.exists("body_tilting"))
 			{
 				sfile.add_string("body_tilting", "on");
@@ -133,6 +238,16 @@ void onInit(CRules@ this)
 			if (!sfile.exists("clusterfuck"))
 			{
 				sfile.add_string("clusterfuck", "on");
+			}
+
+			if (!sfile.exists("clusterfuck_blood"))
+			{
+				sfile.add_string("clusterfuck_blood", "on");
+			}
+
+			if (!sfile.exists("clusterfuck_smoke"))
+			{
+				sfile.add_string("clusterfuck_smoke", "on");
 			}
 
 			if (!sfile.exists("annoying_nature"))
@@ -158,10 +273,14 @@ void onInit(CRules@ this)
 		else // default settings
 		{
 			sfile.add_string("blockbar_hud", "yes");
+			sfile.add_string("shownomenupanel", "yes");
+			sfile.add_string("dse_while_using_nomenu_buying", "yes");
 			sfile.add_string("camera_sway", "5");
 			sfile.add_string("body_tilting", "on");
 			sfile.add_string("head_rotating", "on");
 			sfile.add_string("clusterfuck", "on");
+			sfile.add_string("clusterfuck_blood", "on");
+			sfile.add_string("clusterfuck_smoke", "on");
 			sfile.add_string("annoying_nature", "on");
 			sfile.add_string("annoying_voicelines", "on");
 			sfile.add_string("annoying_tags", "on");
@@ -328,7 +447,7 @@ void onTick(CRules@ this)
 
 Vec2f MENU_SIZE = Vec2f(1000, 700);
 Vec2f ENTRY_SIZE = Vec2f(900, 30);
-Vec2f PAGE_BUTTON_SIZE = Vec2f(150, 40);
+Vec2f PAGE_BUTTON_SIZE = Vec2f(130, 40);
 
 void InitMenu()
 {

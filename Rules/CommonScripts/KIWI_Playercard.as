@@ -3,7 +3,8 @@
 #include "HeadCommon.as"
 #include "TranslationsSystem.as"
 
-Vec2f playerCardDims(256, 198+102);
+//Vec2f playerCardDims(256, 198+102);
+Vec2f playerCardDims(256, 198+62);
 Vec2f hovered_icon_pos();
 
 int hovered_accolade = -1;
@@ -37,21 +38,17 @@ void makePlayerCard(CPlayer@ player, Vec2f pos)
 	string charname = player.getCharacterName();
 	string clantag = player.getClantag();
 
-	string head_file;
-	int head_frame;
-
-	// head stuff
-	if (player.getBlob() is null) {
-		head_frame = getHeadSpecs(player, head_file);
-	} else {
-		head_frame = player.getBlob().get_s32("head index");
-		head_file = player.getBlob().get_string("head texture");
-	}
-
 	//main pane
 	Vec2f paneDims = playerCardDims;
 	Vec2f topLeft = pos;//-Vec2f(paneDims.x/2+32,-8);
 	Vec2f botRight = topLeft+Vec2f(paneDims.x,paneDims.y);
+
+	Vec2f head_icon_tl = topLeft + Vec2f((16+6)*-2, + 32);
+	bool draw_head = true;
+
+	if (draw_head)
+		GUI::DrawPane(head_icon_tl, head_icon_tl + Vec2f(120, (16+6)*2));
+
 	GUI::DrawPane(topLeft, botRight);
 
 	Vec2f paneGap(0, 3);
@@ -144,12 +141,11 @@ void makePlayerCard(CPlayer@ player, Vec2f pos)
 	int tier = player.getSupportTier();
 	if (draw_tier && !player.isBot())
 	{
-
 		if (tier > 0)
 		{
 			int tier_icon_start = -1;
 			Vec2f icon_pos = topLeft+Vec2f(charnameDims.x+16, usernameTopLeft.y+4);
-			Vec2f tier_icon_pos = Vec2f(portraitTopLeft.x,portraitBotRight.y)+Vec2f(4, 8);
+			Vec2f tier_icon_pos = Vec2f(portraitTopLeft.x,portraitBotRight.y)+Vec2f(36, 8);
 			GUI::DrawIcon("TierBadges", tier_icon_start + tier, Vec2f(16, 16), tier_icon_pos, 1.0f, player.getTeamNum());
 
 			if (mousePos.x > tier_icon_pos.x -4 && mousePos.x < tier_icon_pos.x + 24 && mousePos.y < tier_icon_pos.y + 24 && mousePos.y > tier_icon_pos.y -4)
@@ -158,7 +154,6 @@ void makePlayerCard(CPlayer@ player, Vec2f pos)
 				hovered_icon_pos = tier_icon_pos;
 			}
 		}
-
 	}
 
 	if (acc !is null)
@@ -372,7 +367,7 @@ void makePlayerCard(CPlayer@ player, Vec2f pos)
 
 			int years_frame_start = 10;
 
-			if(show_years)
+			if (show_years)
 			{
 				f32 scale = 1.0f;
 				int number_gap = 16*scale;
@@ -388,22 +383,28 @@ void makePlayerCard(CPlayer@ player, Vec2f pos)
 				tens_frame = years_frame_start + (age / 10) + decimal_frame_shift;
 				units_frame = years_frame_start + (age % 10);
 
-				Vec2f tens_icon_pos = Vec2f(age_icon_pos.x - (number_gap - 8*scale), age_icon_pos.y);
+				Vec2f tens_icon_pos = Vec2f(age_icon_pos.x - (number_gap - 8 * scale), age_icon_pos.y);
 				Vec2f units_icon_pos = Vec2f(tens_icon_pos.x + number_gap, tens_icon_pos.y);
 				//if (age>=10)
 				//	tens_icon_pos.y += units_epic_y_offset;
 
-				if (age>=10)
+				if (age >= 10) {
 					GUI::DrawIcon("AgeBadges", tens_frame+outline_frame_shift, Vec2f(16, 16), tens_icon_pos, scale, 0);
-				GUI::DrawIcon("AgeBadges", units_frame+outline_frame_shift, Vec2f(16, 16), units_icon_pos, scale, 0);
+					GUI::DrawIcon("AgeBadges", units_frame+outline_frame_shift, Vec2f(16, 16), units_icon_pos, scale, 0);
+				} else {
+					GUI::DrawIcon("AgeBadges", units_frame+outline_frame_shift, Vec2f(16, 16), units_icon_pos - Vec2f(8, 0), scale, 0);
+				}
 
-				if (age>=10)
+				if (age >= 10) {
 					GUI::DrawIcon("AgeBadges", tens_frame, Vec2f(16, 16), tens_icon_pos, scale, 0);
-				GUI::DrawIcon("AgeBadges", units_frame, Vec2f(16, 16), units_icon_pos, scale, 0);
+					GUI::DrawIcon("AgeBadges", units_frame, Vec2f(16, 16), units_icon_pos, scale, 0);
+				} else {
+					GUI::DrawIcon("AgeBadges", units_frame, Vec2f(16, 16), units_icon_pos - Vec2f(8, 0), scale, 0);
+				}
 			}
 			else
 			{
-				GUI::DrawIcon("AgeBadges", age_icon_start + icon, Vec2f(16, 16), age_icon_pos+Vec2f(8, 0), 1.0f, player.getTeamNum());
+				GUI::DrawIcon("AgeBadges", age_icon_start + icon, Vec2f(16, 16), age_icon_pos, 1.0f, player.getTeamNum());
 			}
 
 			if (mousePos.x > age_icon_pos.x -4 && mousePos.x < age_icon_pos.x + 24 && mousePos.y < age_icon_pos.y + 24 && mousePos.y > age_icon_pos.y -4)
@@ -426,14 +427,32 @@ void makePlayerCard(CPlayer@ player, Vec2f pos)
 		}
 	}
 
+	if (draw_head) {
+		string head_file;
+		int head_frame;
+
+		if (player.getBlob() is null) {
+			head_frame = getHeadSpecs(player, head_file);
+		} else {
+			head_frame = player.getBlob().get_s32("head index");
+			head_file = player.getBlob().get_string("head texture");
+		}
+
+		Vec2f head_dims(16,16);
+		f32 head_icon_scale = 1.0f;
+		Vec2f head_icon_pos = Vec2f(portraitTopLeft.x,portraitBotRight.y)+Vec2f(2, 40);
+		head_icon_pos = head_icon_tl + head_dims/2 + Vec2f(0, -2);
+		GUI::DrawIcon(head_file, head_frame+(getGameTime()%90<60?(getGameTime()%90<40?1:2):0), head_dims, head_icon_pos, head_icon_scale, head_icon_scale, player.getTeamNum(), SColor(0xaaffffff));
+	}
+
 	// head panel
-	f32 head_icon_scale = 1.0f;
-	Vec2f headFrameTopLeft(usernameTopLeft.x, usernamePaneDims.y+sideGap.y+24);
-	Vec2f headFrameBotRight = Vec2f(botRight.x-headFrameTopLeft.x, topLeft.y+headFrameTopLeft.y+usernamePaneDims.y+16);
-	Vec2f head_icon_pos = Vec2f(agePaneTopLeft.x+70, portraitBotRight.y+120);
+	//f32 head_icon_scale = 1.0f;
+	//Vec2f headFrameTopLeft(usernameTopLeft.x, usernamePaneDims.y+sideGap.y+24);
+	//Vec2f headFrameBotRight = Vec2f(botRight.x-headFrameTopLeft.x, topLeft.y+headFrameTopLeft.y+usernamePaneDims.y+16);
+	//Vec2f head_icon_pos = Vec2f(agePaneTopLeft.x+70, portraitBotRight.y+120);
 	//GUI::DrawPane(topLeft+headFrameTopLeft, headFrameBotRight, SColor(0xff777777));
-	//GUI::DrawIcon(head_file, 0, Vec2f(64,16), head_icon_pos, head_icon_scale, head_icon_scale, SColor(0xaaffffff));
-	GUI::DrawIcon(head_file, head_icon_pos, head_icon_scale);
+	//GUI::DrawIcon(head_file, head_frame, Vec2f(64,16), head_icon_pos, head_icon_scale, head_icon_scale, player.getTeamNum(), SColor(0xFFFFFFFF));
+	//GUI::DrawIcon(head_file, head_icon_pos, head_icon_scale);
 
 	// Clan Badges
 	f32 clan_badge_icon_scale = 1.0f;

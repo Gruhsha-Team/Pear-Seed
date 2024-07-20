@@ -93,6 +93,12 @@ namespace en
 	n_emotemenu								= "Emotes",
 	n_blocksmenu							= "Blocks",
 	n_actionsmenu							= "Actions",
+	n_archernmb								= "Archer Shop\n (binds)",
+	n_buildernmb							= "Builder Shop\n (binds)",
+	n_knightnmb								= "Knight Shop\n (binds)",
+	n_quartersnmb							= "Quarters\n (binds)",
+	n_vehiclenmb							= "Vehicle Shop\n (binds)",
+	n_boatnmb								= "Boat Shop\n (binds)",
 	n_settingsmenu							= "Settings",
 	n_vsettingsmenu							= "Visual/Sound\n Settings",
 	n_tagwheel								= "Tag Wheel",
@@ -117,14 +123,67 @@ namespace en
 	n_cancelarrowschargingcommand			= "Cancel bow charging",
 	n_activateorthrowbomb					= "Activate/throw bomb (Builder)",
 
+		// NoMenuBuying Binds
+			// Knight Shop
+	n_bombnmb								= "Bomb",
+	n_waterbombnmb							= "Water Bomb",
+	n_minenmb								= "Mine",
+	n_kegnmb								= "Keg",
+	n_drillnmb								= "Drill",
+	n_satchelnmb							= "Satchel",
+
+			// Builder Shop
+	n_drillbnmb								= "Drill",
+	n_spongebnmb							= "Sponge",
+	n_bucketwnmb							= "Bucket with water",
+	n_bouldernmb							= "Boulder",
+	n_lanternnmb							= "Lantern",
+	n_bucketnnmb							= "Bucket",
+	n_trampolinenmb							= "Trampoline",
+	n_sawnmb								= "Saw",
+	n_cratewoodnmb							= "Crate (wood)",
+	n_cratecoinsnmb							= "Crate (coins)",
+
+			// Archer Shop
+	n_arrowsnmb								= "Arrows",
+	n_waterarrowsnmb						= "Water Arrows",
+	n_firearrowsnmb							= "Fire Arrows",
+	n_bombarrowsnmb							= "Bomb Arrows",
+	n_blockarrowsnmb						= "Block Arrows",
+
+			// Quarters
+	n_beernmb								= "Kvass",
+	n_mealnmb								= "Borsch",
+	n_eggnmb								= "Egg",
+	n_burgernmb								= "Pear Tart",
+	n_pearnmb								= "Pear",
+	n_sleepnmb								= "Sleep",
+
+			// Vehicle Shop
+	n_catapultnmb							= "Catapult",
+	n_ballistanmb							= "Ballista",
+	n_outpostnmb							= "Outpost",
+	n_boltsnmb								= "Ballista Bolts",
+	n_shellsnmb								= "Ballista Shells",
+
+			// Boat Shop
+	n_dinghynmb								= "Dinghy",
+	n_longboatnmb							= "Long Boat",
+	n_warboatnmb							= "War Boat",
+
 		// Settings
 	n_buildmode								= "Build Mode",
 	n_blockbar								= "Show block bar HUD",
+	n_dsewnmb								= "NoMenuBuying-feature without emotes",
+	n_shownomenubuyingpan					= "Show NoMenuBuying panel",
+	n_nomenubuyingset						= "NoMenuBuying-feature",
+	n_nomenubuyingboldarset					= "NoMenuBuying-feature (Builder)",
 	n_camerasw								= "Camera Sway (DEFAULT: 5)",
 	n_bodytilt								= "Immersive body behaviour",
 	n_headrotating							= "Turning head toward the cursor",
 	n_clusterfuck							= "Toggle particles and gibs",
-	n_drillzoneborders						= "Drill Zone Borders",
+	n_clusterfuck_blood						= "Toggle blood",
+	n_clusterfuck_smoke						= "Toggle smoke",
 	n_grapplewhilecharging					= "Use grapple while charging",
 	n_annoyingnature						= "Sounds from bushes and tree leafs",
 	n_annoyingvoicelines					= "Sounds from voicelines",

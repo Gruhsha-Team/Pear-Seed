@@ -11,7 +11,13 @@ string[] page_texts =
 	Names::blocksmenu,
 	Names::actionsmenu,
 	Names::settingsmenu,
-	Names::vsettingsmenu
+	Names::vsettingsmenu,
+	Names::knightnmb,
+	Names::archernmb,
+	Names::buildernmb,
+	Names::quartersnmb,
+	Names::vehiclenmb,
+	Names::boatnmb
 };
 
 string[][] button_texts =
@@ -46,6 +52,59 @@ string[][] button_texts =
 		Names::drillcommand,
 		Names::cancelarrowschargingcommand,
 		Names::activateorthrowbomb
+	},
+	{
+		"Go away"								// TECHNICAL LINE DONT TOUCH PLEASE
+	},
+	{
+		"Why you fucking reading this???"		// TECHNICAL LINE DONT TOUCH PLEASE
+	},
+	{							// KNIGHT SHOP
+		Names::bombnmb,
+		Names::waterbombnmb,
+		Names::minenmb,
+		Names::kegnmb,
+		Names::drillnmb,
+		Names::satchelnmb
+	},
+	{							// ARCHER SHOP
+		Names::arrowsnmb,
+		Names::waterarrowsnmb,
+		Names::firearrowsnmb,
+		Names::bombarrowsnmb,
+		Names::blockarrowsnmb
+	},
+	{							// BUILDER SHOP
+		Names::drillbnmb,
+		Names::spongebnmb,
+		Names::bucketwnmb,
+		Names::bouldernmb,
+		Names::lanternnmb,
+		Names::bucketnnmb,
+		Names::trampolinenmb,
+		Names::sawnmb,
+		Names::cratewoodnmb,
+		Names::cratecoinsnmb
+	},
+	{							// QUARTERS
+		Names::beernmb,
+		Names::mealnmb,
+		Names::eggnmb,
+		Names::burgernmb,
+		Names::pearnmb,
+		Names::sleepnmb
+	},
+	{							// VEHICLE SHOP
+		Names::catapultnmb,
+		Names::ballistanmb,
+		Names::outpostnmb,
+		Names::boltsnmb,
+		Names::shellsnmb
+	},
+	{							// BOAT SHOP
+		Names::dinghynmb,
+		Names::longboatnmb,
+		Names::warboatnmb
 	}
 };
 
@@ -81,6 +140,59 @@ string[][] button_file_names =
 		"take_out_drill",
 		"cancel_charging",
 		"activate_or_throw_bomb"
+	},
+	{
+		"go away"								// TECHNICAL LINE DONT TOUCH PLEASE
+	},
+	{
+		"why you fucking reading this???"		// TECHNICAL LINE DONT TOUCH PLEASE
+	},
+	{
+		"k_bomb",
+		"k_waterbomb",
+		"k_mine",
+		"k_keg",
+		"k_drill",
+		"k_satchel"
+	},
+	{
+		"a_arrows",
+		"a_waterarrows",
+		"a_firearrows",
+		"a_bombarrows",
+		"a_blockarrows"
+	},
+	{
+		"b_drill",
+		"b_sponge",
+		"b_bucketw",
+		"b_boulder",
+		"b_lantern",
+		"b_bucketn",
+		"b_trampoline",
+		"b_saw",
+		"b_crate_wood",
+		"b_crate_coins"
+	},
+	{
+		"kfc_beer",
+		"kfc_meal",
+		"kfc_egg",
+		"kfc_burger",
+		"kfc_pear",
+		"kfc_sleep"
+	},
+	{
+		"vehicle_catapult",
+		"vehicle_ballista",
+		"vehicle_outpost",
+		"vehicle_bolts",
+		"vehicle_shells",
+	},
+	{
+		"boat_dinghy",
+		"boat_longboat",
+		"boat_warboat"
 	}
 };
 
@@ -94,7 +206,9 @@ string[][] setting_texts =
 		Names::drillbuilder,
 		Names::drillarcher,
 		Names::bombbuilder,
-		Names::bombarcher
+		Names::bombarcher,
+		Names::nomenubuyingset,
+		Names::nomenubuyingboldarset
 	}
 };
 
@@ -107,7 +221,9 @@ string[][] setting_file_names =
 		"pickdrill_builder",
 		"pickdrill_archer",
 		"pickbomb_builder",
-		"pickbomb_archer"
+		"pickbomb_archer",
+		"nomenubuying",
+		"nomenubuying_b",
 	}
 };
 
@@ -140,6 +256,14 @@ string[][][] setting_options =
 		},
 		{
 			Descriptions::universalno, // 10	BOMB AUTOPICKUP FOR ARCHER
+			Descriptions::universalyes // 20
+		},
+		{
+			Descriptions::universalno, // 10	NO MENU BUYING
+			Descriptions::universalyes // 20
+		},
+		{
+			Descriptions::universalno, // 10	NO MENU BUYING (BOLDAR)
 			Descriptions::universalyes // 20
 		}
 	}
@@ -175,6 +299,14 @@ string[][][] setting_option_names =
 		{
 			"no", // 10    BOMB AUTOPICKUP FOR ARCHER
 			"yes" // 20
+		},
+		{
+			"no", // 10    NO MENU BUYING
+			"yes" // 20
+		},
+		{
+			"no", // 10    NO MENU BUYING (BOLDAR)
+			"yes" // 20
 		}
 	}
 };
@@ -184,10 +316,14 @@ string[][] vsetting_texts =
 {
 	{
 		Names::blockbar,
+		Names::shownomenubuyingpan,
+		Names::dsewnmb,
 		Names::camerasw,
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
+		Names::clusterfuck_blood,
+		Names::clusterfuck_smoke,
 		Names::annoyingnature,
 		Names::customdpsounds
 	}
@@ -197,10 +333,14 @@ string[][] vsetting_file_names =
 {
 	{
 		"blockbar_hud",
+		"shownomenupanel",
+		"dse_while_using_nomenu_buying",
 		"camera_sway",
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
+		"clusterfuck_blood",
+		"clusterfuck_smoke",
 		"annoying_nature",
 		"annoying_voicelines",
 		"annoying_tags",
@@ -213,6 +353,14 @@ string[][][] vsetting_options =
 	{
 		{
 			Descriptions::universalno, // 10	BLOCKBAR ON HUD
+			Descriptions::universalyes // 20
+		},
+		{
+			Descriptions::universalno, // 10	SHOW NOMENU BUYING PANEL
+			Descriptions::universalyes // 20
+		},
+		{
+			Descriptions::universalno, // 10	DONT SHOW EMOTES WHILE USING NOMENU BUYING
 			Descriptions::universalyes // 20
 		},
 		{
@@ -235,6 +383,14 @@ string[][][] vsetting_options =
 			Descriptions::universalon
 		},
 		{
+			Descriptions::universaloff,       // CLUSTERFUCK BLOOD
+			Descriptions::universalon
+		},
+		{
+			Descriptions::universaloff,       // CLUSTERFUCK SMOKE
+			Descriptions::universalon
+		},
+		{
 			Descriptions::universaloff,       // BUSHES & LEAFS MUTE
 			Descriptions::universalon
 		},
@@ -250,6 +406,14 @@ string[][][] vsetting_option_names =
 	{
 		{
 			"no", // 10    BLOCKBAR
+			"yes" // 20
+		},
+		{
+			"no", // 10    SHOW NOMENU BUYING PANEL
+			"yes" // 20
+		},
+		{
+			"no", // 10    DONT SHOW EMOTES WHILE USING NOMENU BUYING
 			"yes" // 20
 		},
 		{
@@ -269,6 +433,14 @@ string[][][] vsetting_option_names =
 		},
 		{
 			"off",       // CLUSTERFUCK
+			"on"
+		},
+		{
+			"off",       // CLUSTERFUCK BLOOD
+			"on"
+		},
+		{
+			"off",       // CLUSTERFUCK SMOKE
 			"on"
 		},
 		{
@@ -1289,6 +1461,22 @@ class ClickableButtonTwo
 				params.ResetBitIndex();
 				//getRules().SendCommand(cmd_id, params);
 				fakeCommand(getRules(), cmd_id, @params);
+
+				BindingGUI.current_page = cmd_subid;
+
+				for (int i=0; i<BindingGUI.page_buttons.length; ++i)
+				{
+					if (i != cmd_subid)
+						BindingGUI.page_buttons[i].m_selected = false;
+				}
+
+				for (int i=0; i<BindingGUI.buttons.length; ++i)
+				{
+					for (int g=0; g<BindingGUI.buttons[i].length; ++g)
+					{
+						BindingGUI.buttons[i][g].m_selected = false;
+					}
+				}
 			}
 		}
 		else
@@ -1536,7 +1724,7 @@ class ClickableButtonGUI
 		GUI::SetFont("menu");
 
 		Vec2f start_offset = Vec2f(50, 600);
-		Vec2f start_offset_p = Vec2f(30, 600);
+		Vec2f start_offset_p = Vec2f(70, 550);
 
 		closebutton.Render(m_clickable_origin + Vec2f(1000 - 40, 0), Vec2f(40, 40));
 
@@ -1555,7 +1743,12 @@ class ClickableButtonGUI
 		{
 			page_buttons[i].Render(m_clickable_origin + start_offset_p, page_button_size);
 
-			start_offset_p += Vec2f(page_button_size.x + 10, 0);
+			start_offset_p += Vec2f(page_button_size.x + 15, 0);
+
+			if (i == 5)
+			{
+				start_offset_p = Vec2f(70, 600);
+			}
 		}
 
 		if (current_page == magic_number_v)
@@ -1602,7 +1795,7 @@ class ClickableButtonGUI
 		u8 scale = screen_height / 720.0;
 
 		Vec2f start_offset = Vec2f(50, 600);
-		Vec2f start_offset_p = Vec2f(30, 600);
+		Vec2f start_offset_p = Vec2f(70, 550);
 
 		closebutton.Update(m_clickable_origin + Vec2f(1000 - 40, 0), Vec2f(40, 40));
 
@@ -1617,11 +1810,16 @@ class ClickableButtonGUI
 			localbuttonsize = ENTRY_SIZE2;
 		}
 
-		for (int i=0; i<page_buttons.length; ++i)
+		for (int i = 0; i < page_buttons.length; ++i)
 		{
 			page_buttons[i].Update(m_clickable_origin + start_offset_p, page_button_size);
 
-			start_offset_p += Vec2f(page_button_size.x + 10, 0);
+			start_offset_p += Vec2f(page_button_size.x + 15, 0);
+
+			if (i == 5)
+			{
+				start_offset_p = Vec2f(70, 600);
+			}
 		}
 
 		if (current_page == magic_number_v)

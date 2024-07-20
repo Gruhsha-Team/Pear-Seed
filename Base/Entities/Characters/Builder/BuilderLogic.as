@@ -143,6 +143,10 @@ void onTick(CBlob@ this)
 
 			if (!thrown)
 			{
+				// dont activate keg and satchel via this
+				if (carried.getConfig() == "keg") return;
+				if (carried.getConfig() == "satchel") return;
+
 				client_SendThrowOrActivateCommand(this);
 				SetFirstAvailableBomb(this);
 			}
@@ -265,8 +269,8 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 		return;
 	}
 
-	Vec2f pos(gridmenu.getUpperLeftPosition().x + 0.5f * (gridmenu.getLowerRightPosition().x - gridmenu.getUpperLeftPosition().x),
-	          gridmenu.getUpperLeftPosition().y - 350);
+	Vec2f pos(gridmenu.getUpperLeftPosition().x - 0.8f * (gridmenu.getLowerRightPosition().x - gridmenu.getUpperLeftPosition().x),
+	          gridmenu.getUpperLeftPosition().y + 48);
 	CGridMenu@ menu = CreateGridMenu(pos, this, Vec2f(bombTypeNames.length, 2), getTranslatedString("Current bomb"));
 	u8 weaponSel = this.get_u8("bomb type");
 
