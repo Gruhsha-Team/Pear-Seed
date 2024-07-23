@@ -105,6 +105,24 @@ void Blend(CBlob@ this, CBlob@ tobeblended)
 		return;
 	}
 
+    CPlayer@ player = null;
+
+    CPlayer@[] builders_blue;
+    CPlayer@[] builders_red;
+
+    // calculating amount of players in classes
+    for (u32 i = 0; i < getPlayersCount(); i++) {
+        CPlayer@ p = getPlayer(i);
+		if (p is null) continue;
+
+        if (getPlayer(i).getBlob() is null) continue;
+
+        if (getPlayer(i).getBlob().getName() == "builder") {
+            if (getPlayer(i).getTeamNum() == 0) builders_blue.push_back(p);
+            else if (getPlayer(i).getTeamNum() == 1) builders_red.push_back(p);
+        }
+    }
+
 	tobeblended.Tag("sawed");
 
 	if ((tobeblended.getName() == "waterbomb" || tobeblended.getName() == "bomb") && tobeblended.hasTag("activated"))
@@ -116,12 +134,28 @@ void Blend(CBlob@ this, CBlob@ tobeblended)
 	{
 		if (isServer())
 		{
-			CPlayer@ p = getPlayerByUsername(tobeblended.get_string("lastdamageplayer"));
+			if (this.getTeamNum() == 0 && builders_blue.length > 0) { // BLUE TEAM
+				for (int i = 0; i < builders_blue.length; ++i) {
+					CPlayer@ p = builders_blue[i];
+					if (p is null) continue;
 
-			if (p !is null && getGameTime() - tobeblended.get_u32("lastdamagetime") <= 30 * getTicksASecond())
-			{
-				getRules().add_s32("personalwood_" + p.getUsername(), 50);
-				getRules().Sync("personalwood_" + p.getUsername(), true);
+					if (p !is null)
+					{
+						getRules().add_s32("personalwood_" + p.getUsername(), 50 / 2);
+						getRules().Sync("personalwood_" + p.getUsername(), true);
+					}
+				}
+			} else if (this.getTeamNum() == 1 && builders_red.length > 0) { // RED TEAM
+				for (int i = 0; i < builders_red.length; ++i) {
+					CPlayer@ p = builders_red[i];
+					if (p is null) continue;
+
+					if (p !is null)
+					{
+						getRules().add_s32("personalwood_" + p.getUsername(), 50 / 2);
+						getRules().Sync("personalwood_" + p.getUsername(), true);
+					}
+				}
 			}
 		}
 
