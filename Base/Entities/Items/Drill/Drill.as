@@ -22,11 +22,11 @@ const u8 high_damage_window = 40; // at how much heat before max drill deals inc
 const string last_drill_prop = "drill last active";
 
 const u8 heat_add = 7;
-const f32 heat_add_k = 8;
+const f32 heat_add_k = 9;
 const u8 heat_add_constructed = 2;
-const f32 heat_add_constructed_k = 2.3;
+const f32 heat_add_constructed_k = 3.5;
 const u8 heat_add_blob = 6;
-const f32 heat_add_blob_k = 6.9;
+const f32 heat_add_blob_k = 7;
 const u8 heat_cool_amount = 2;
 
 const f32 heat_reduction_water = 0.5f;
