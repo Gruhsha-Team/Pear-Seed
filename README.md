@@ -1,6 +1,6 @@
 # ![grusha](Base/Sprites/Common/grusha.png) Pear Seed ![grusha](Base/Sprites/Common/grusha.png)
 
-![Static Badge](https://img.shields.io/badge/version-1.0.0-%23ad7fa8?style=plastic)
+![Static Badge](https://img.shields.io/badge/version-1.0.1-%23ad7fa8?style=plastic)
 
 Pear Seed - это мод для King Arthur's Gold, приводящий в порядок (на субъективный взгляд автора) баланс ванильного CTF-режима игры. Является отдельной частью от мода Gruhsha CTF или проще говоря - одним из "семечек".
 

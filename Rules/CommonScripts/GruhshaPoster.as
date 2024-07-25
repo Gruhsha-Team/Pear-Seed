@@ -67,14 +67,20 @@ void onRender(CRules@ this)
     
     Vec2f middle(getDriver().getScreenWidth() / 2.0f, getDriver().getScreenHeight() / 2.0f);
 
-	const string tutorial_image = "GruhshaPoster.png";
-
 	if(showtut)
 	{
 		if (resolution_scale >= 2)
-			GUI::DrawIcon(tutorial_image, Vec2f(middle.x - 800, middle.y - 510), 0.5f);
-		else 
-			GUI::DrawIcon(tutorial_image, Vec2f(middle.x - 400, middle.y - 255), 0.25f);
+			if (g_locale == "ru") {
+				GUI::DrawIcon("GruhshaPoster_ru.png", Vec2f(middle.x - 800, middle.y - 510), 0.5f);
+			} else {
+				GUI::DrawIcon("GruhshaPoster.png", Vec2f(middle.x - 800, middle.y - 510), 0.5f);
+			}
+		else
+			if (g_locale == "ru") {
+				GUI::DrawIcon("GruhshaPoster_ru.png", Vec2f(middle.x - 400, middle.y - 255), 0.25f);
+			} else {
+				GUI::DrawIcon("GruhshaPoster.png", Vec2f(middle.x - 400, middle.y - 255), 0.25f);
+			}
 	}
 
 	CControls@ controls = getControls();
