@@ -660,6 +660,10 @@ bool playerAllowedToUse(string username) {
         return true;
     } else if (username == "Biurza") {
         return true;
+    } else if (username == "MookMook") {
+        return true;
+    } else if (username == "sealord") {
+        return true;
     }
 
     return false;
