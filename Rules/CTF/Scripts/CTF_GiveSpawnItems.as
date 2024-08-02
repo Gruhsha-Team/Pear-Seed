@@ -60,21 +60,18 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 	s32 gametime = getGameTime();
 	string name = b.getName();
 
-	if (name == "archer") 
-	{
-		if (gametime > getCTFTimer(this, p, "archer")) 
-		{
+	/*if (name == "archer")  {
+		if (gametime > getCTFTimer(this, p, "archer"))  {
 			CInventory@ inv = b.getInventory();
-			if (inv.isInInventory("mat_arrows", 30)) 
-			{
+
+			if (inv.isInInventory("mat_arrows", 30))  {
 				return; // don't give arrows if they have 30 already
 			}
-			else if (SetMaterials(b, "mat_arrows", 30)) 
-			{
+			else if (SetMaterials(b, "mat_arrows", 30))  {
 				SetCTFTimer(this, p, gametime + (this.isWarmup() ? materials_wait_warmup : materials_wait)*getTicksASecond(), "archer");
 			}
 		}
-	}
+	}*/
 
 	if (name == "builder")
 	{
@@ -127,7 +124,7 @@ void Reset(CRules@ this)
 	for (uint i = 0; i < getPlayersCount(); ++i) 
 	{
 		SetCTFTimer(this, getPlayer(i), 0, "builder");
-		SetCTFTimer(this, getPlayer(i), 0, "archer");
+		//SetCTFTimer(this, getPlayer(i), 0, "archer");
 	}
 
 	if (!isServer()) return;
@@ -211,7 +208,7 @@ void onTick(CRules@ this)
 		getBlobsByName("outpost",	@spots);
 		getBlobsByName("warboat",	 @spots);
 		getBlobsByName("buildershop", @spots);
-		getBlobsByName("archershop",  @spots);
+		//getBlobsByName("archershop",  @spots);
 		// getBlobsByName("knightshop",  @spots);
 		for (uint step = 0; step < spots.length; ++step)
 		{
@@ -242,7 +239,6 @@ void onTick(CRules@ this)
 		}
 	}
 
-
 	if (this.getCurrentState() == GAME) // automatic resupplies for builders
 	{
 		for (int i = 0; i < getPlayerCount(); i++)
@@ -272,9 +268,10 @@ void onNewPlayerJoin(CRules@ this, CPlayer@ player)
 
 	s32 next_add_time = getGameTime() + (this.isWarmup() ? materials_wait_warmup : materials_wait) * getTicksASecond();
 
-	if (next_add_time < getCTFTimer(this, player, "builder") || next_add_time < getCTFTimer(this, player, "archer"))
+	//if (next_add_time < getCTFTimer(this, player, "builder") || next_add_time < getCTFTimer(this, player, "archer"))
+	if (next_add_time < getCTFTimer(this, player, "builder"))
 	{
 		SetCTFTimer(this, player, getGameTime(), "builder");
-		SetCTFTimer(this, player, getGameTime(), "archer");
+		//SetCTFTimer(this, player, getGameTime(), "archer");
 	}
 }
