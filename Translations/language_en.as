@@ -71,9 +71,9 @@ namespace en
 	d_totaltext								= "Total ",
 
 	// Quarters.as
-	d_beertext								= "A cup of refreshing kvass.",
-	d_mealtext								= "A rich and delicious borsch.",
-	d_burgertext							= "Pear tart on the go for a quick snack.",
+	d_beertext								= "A cup of refreshing beer.",
+	d_mealtext								= "A rich and delicious meal.",
+	d_burgertext							= "Burger on the go for a quick snack.",
 	d_peartext								= "A juicy and sweet pear.",
 	d_sleeptext								= "Sleep. Free!",
 
@@ -152,10 +152,10 @@ namespace en
 	n_blockarrowsnmb						= "Block Arrows",
 
 			// Quarters
-	n_beernmb								= "Kvass",
-	n_mealnmb								= "Borsch",
+	n_beernmb								= "Beer",
+	n_mealnmb								= "Meal",
 	n_eggnmb								= "Egg",
-	n_burgernmb								= "Pear Tart",
+	n_burgernmb								= "Burger",
 	n_pearnmb								= "Pear",
 	n_sleepnmb								= "Sleep",
 
@@ -215,13 +215,10 @@ namespace en
 	n_matssection							= "Materials",
 
 	// Quarters.as
-	n_beeritem								= "Kvass - 1 Heart",
-	//n_beeritem								= "Beer - 1 Heart",
-	n_mealitem								= "Borsch - Full Health",
-	//n_mealitem								= "Meal - Full Health",
+	n_beeritem								= "Beer - 1 Heart",
+	n_mealitem								= "Meal - Full Health",
 	n_eggitem								= "Egg - Full Health",
-	n_burgeritem							= "Pear Tart - Full Health",
-	//n_burgeritem							= "Burger - Full Health",
+	n_burgeritem							= "Burger - Full Health",
 	n_pearitem								= "Pear - 2 Hearts",
 	n_sleepaction							= "Sleep",
 

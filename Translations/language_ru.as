@@ -71,9 +71,9 @@ namespace ru
 	d_totaltext								= "Всего ",
 
 	// Quarters.as
-	d_beertext								= "Кружка освежающего кваса.",
-	d_mealtext								= "Нажористый и вкусный борщ.",
-	d_burgertext							= "Пирожок с грушами с собой в дорогу.",
+	d_beertext								= "Кружка освежающего пива.",
+	d_mealtext								= "Питательный мясной обед.",
+	d_burgertext							= "Бургер с собой в дорогу.",
 	d_peartext								= "Сочная и сладкая груша.",
 	d_sleeptext								= "Прилечь поспать. Бесплатно!",
 
@@ -215,13 +215,10 @@ namespace ru
 	n_matssection							= "Материалы",
 
 	// Quarters.as
-	n_beeritem								= "Квас - 1 Сердце",
-	//n_beeritem								= "Пиво - 1 Сердце",
-	n_mealitem								= "Борщ - Полное здоровье",
-	//n_mealitem								= "Мясное блюдо - Полное здоровье",
+	n_beeritem								= "Пиво - 1 Сердце",
+	n_mealitem								= "Мясное блюдо - Полное здоровье",
 	n_eggitem								= "Яйцо - Полное здоровье",
-	n_burgeritem							= "Пирожок с грушами - Полное здоровье",
-	//n_burgeritem							= "Бургер - Полное здоровье",
+	n_burgeritem							= "Бургер - Полное здоровье",
 	n_pearitem								= "Груша - 2 Сердца",
 	n_sleepaction							= "Лечь спать",
 
