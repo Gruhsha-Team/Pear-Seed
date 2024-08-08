@@ -49,6 +49,7 @@ namespace ArrowType
 		fire,
 		bomb,
 		block,
+		stoneblock,
 		count
 	};
 }
@@ -59,6 +60,7 @@ namespace BombType
 	{
 		bomb = 0,
 		water,
+		sticky,
 		count
 	};
 }
@@ -211,21 +213,24 @@ const string[] arrowTypeNames = { "mat_arrows",
                                   "mat_waterarrows",
                                   "mat_firearrows",
                                   "mat_bombarrows",
-								  "mat_blockarrows"
+								  "mat_blockarrows",
+								  "mat_stoneblockarrows"
                                 };
 
 const string[] arrowNames = { "Regular arrows",
                               "Water arrows",
                               "Fire arrows",
                               "Bomb arrow",
-                              "Block arrows"
+                              "Wooden Block arrows",
+                              "Stone Block Arrows"
                             };
 
 const string[] arrowIcons = { "$Arrow$",
                               "$WaterArrow$",
                               "$FireArrow$",
                               "$BombArrow$",
-                              "$BlockArrow$"
+                              "$BlockArrow$",
+                              "$StoneBlockArrow$"
                             };
 
 

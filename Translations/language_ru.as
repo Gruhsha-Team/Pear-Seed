@@ -21,6 +21,7 @@ namespace ru
 
 	// ArcherShop.as
 	d_woodenarrowdesc						= "Ставит деревянный блок на месте приземления.",
+	d_stonearrowdesc						= "Ставит каменный блок на месте приземления.",
 
 	// BindingsCommon.as
 	d_modbindplaceholder					= "пусто",
@@ -82,7 +83,8 @@ namespace ru
 	//////////////////////////////////////////////////////////
 
 	// ArcherShop.as
-	n_woodenarrow							= "Стрела-блок",
+	n_woodenarrow							= "Стрела-блок (дерево)",
+	n_stonearrow							= "Стрела-блок (камень)",
 	n_bombarrow								= "Стрела-бомба",
 
 	//BindingsCommon.as
