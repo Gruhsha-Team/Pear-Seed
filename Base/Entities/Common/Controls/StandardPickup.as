@@ -21,6 +21,7 @@ void onInit(CBlob@ this)
 	AddIconToken("$filled_bucket$", "Bucket.png", Vec2f(16, 16), 1);
 	AddIconToken("$blockarrows$", "blockarrows_icon.png", Vec2f(16, 16), 0);
 	AddIconToken("$stoneblockarrows$", "stoneblockarrows_icon.png", Vec2f(15, 16), 0);
+	AddIconToken("$stickybombs$", "StickyBomb.png", Vec2f(16, 16), 0);
 
 	// setup pickup menu wheel
 	WheelMenu@ menu = get_wheel_menu("pickup");
@@ -37,7 +38,14 @@ void onInit(CBlob@ this)
 		const PickupWheelOption[] waterbomb_options = {PickupWheelOption("waterbomb", 1), PickupWheelOption("mat_waterbombs", 0)};
 		menu.add_entry(PickupWheelMenuEntry("Water Bomb", "$mat_waterbombs$", waterbomb_options, Vec2f(0, -6.0f)));
 
+		const PickupWheelOption[] stickybomb_options = {PickupWheelOption("stickybomb", 1), PickupWheelOption("mat_stickybombs", 0)};
+		menu.add_entry(PickupWheelMenuEntry("Sticky Bomb", "$stickybombs$", stickybomb_options, Vec2f(0, -4.0f)));
+
+		const PickupWheelOption[] icebomb_options = {PickupWheelOption("icebomb", 1), PickupWheelOption("mat_icebombs", 0)};
+		menu.add_entry(PickupWheelMenuEntry("Ice Bomb", "$mat_icebombs$", icebomb_options, Vec2f(0, -6.0f)));
+
 		menu.add_entry(PickupWheelMenuEntry("Mine", "$mine$", "mine"));
+		menu.add_entry(PickupWheelMenuEntry("Golden Mine", "$golden_mine$", "golden_mine"));
 
 		// archer stuff
 		menu.add_entry(PickupWheelMenuEntry("Arrows", "$mat_arrows$", "mat_arrows", Vec2f(0, -8.0f)));
@@ -146,7 +154,7 @@ void onTick(CBlob@ this)
 				if (ap.getOccupied() !is null && ap.name != "PICKUP")
 				{
 					CBitStream params;
-					params.write_u16(ap.getOccupied().getNetworkID());
+					params.write_netid(ap.getOccupied().getNetworkID());
 					this.SendCommand(this.getCommandID("detach"), params);
 					this.set_bool("release click", false);
 					break;
@@ -217,7 +225,7 @@ void onTick(CBlob@ this)
 					{
 						// NOTE: optimisation: use selected-option-blobs-in-radius
 						@closest = @GetBetterAlternativePickupBlobs(blobsInRadius, closest);
-						client_Pickup(this, closest);
+						server_Pickup(this, this, closest);
 					}
 				}
 			}
@@ -252,11 +260,19 @@ void onTick(CBlob@ this)
 		{
 			if (this.get_bool("release click"))
 			{
-				CBlob@[]@ closestBlobs;
-				this.get("closest blobs", @closestBlobs);
-				if (closestBlobs.length > 0)
+				if (prevBlob !is null && (getRules().get_string("item_pickup") == "new"))
 				{
-					client_Pickup(this, closestBlobs[0]);
+					//printf("serverside pickup " + prevBlob.getName());
+					server_Pickup(this, this, prevBlob);
+				}
+				else
+				{
+					CBlob@[]@ closestBlobs;
+					this.get("closest blobs", @closestBlobs);
+					if (closestBlobs.length > 0)
+					{
+						server_Pickup(this, this, closestBlobs[0]);
+					}
 				}
 			}
 			ClearPickupBlobs(this);
@@ -382,7 +398,7 @@ f32 getPriorityPickupScale(CBlob@ this, CBlob@ b)
 		}
 
 		// Military stuff we don't want to pick up when in the same team and always considered lit
-		if (name == "mine" || name == "bomb" || name == "waterbomb")
+		if (name == "mine" || name == "bomb" || name == "waterbomb" || name == "golden_mine")
 		{
 			// Make an exception to the team rule: when the explosive is the holder's
 			bool mine = b.getDamageOwnerPlayer() is this.getPlayer();
@@ -394,7 +410,7 @@ f32 getPriorityPickupScale(CBlob@ this, CBlob@ b)
 
 		// Kegs, really matters when lit (exploding)
 		// But we still want a high priority so bombjumping with kegs is easier
-		if (name == "keg" || name == "bomb")
+		if (name == "keg" )
 		{
 			return exploding ? factor_very_important : factor_military_important;
 		}
@@ -450,9 +466,9 @@ f32 getPriorityPickupScale(CBlob@ this, CBlob@ b)
 
 		const bool knight = (thisname == "knight");
 
-		if (name == "mat_bombs" || name == "mat_waterbombs")
+		if (name == "mat_bombs" || name == "mat_waterbombs" || name == "mat_stickybombs")
 		{
-			return knight ? factor_resource_useful_rare : factor_resource_useful;
+			return knight ? factor_resource_useful : factor_resource_boring;
 		}
 
 		const bool archer = (thisname == "archer");
@@ -463,9 +479,9 @@ f32 getPriorityPickupScale(CBlob@ this, CBlob@ b)
 			return archer && !this.hasBlob("mat_arrows", 15) ? factor_resource_useful : factor_resource_boring;
 		}
 
-		if (name == "mat_waterarrows" || name == "mat_firearrows" || name == "mat_bombarrows")
+		if (name == "mat_waterarrows" || name == "mat_firearrows" || name == "mat_bombarrows" || name == "mat_blockarrows" || name == "mat_stoneblockarrows")
 		{
-			return archer ? factor_resource_useful_rare : factor_resource_useful;
+			return archer ? factor_resource_useful_rare : factor_resource_boring;
 		}
 	}
 
@@ -514,7 +530,7 @@ CBlob@ getClosestAimedBlob(CBlob@ this, CBlob@[] available)
 		float cursorDistance = (this.getAimPos() - current.getPosition()).Length();
 
 		float radius = current.getRadius();
-		if (radius > 3.0f && cursorDistance > radius * (current.hasTag("dead") ? 0.5f : 1.5f)) // corpses don't count unless you really try to aim at one
+		if (radius > 3.0f && cursorDistance > current.getRadius() * (current.hasTag("dead") ? 0.5f : 1.5f)) // corpses don't count unless you really try to aim at one
 		{
 			continue;
 		}
@@ -670,21 +686,73 @@ void onInit(CSprite@ this)
 	this.getCurrentScript().runFlags |= Script::tick_myplayer;
 }
 
+
+CBlob@ prevBlob;
+
 void onRender(CSprite@ this)
 {
 	CBlob@ blob = this.getBlob();
+	if (blob is null || !blob.isMyPlayer()) return;
 
+	Vec2f aimpos = blob.getAimPos();
 
-	// render item held when in inventory
+	CBlob@ aimblob = getMap().getBlobAtPosition(aimpos);
 
-	if (blob.isKeyPressed(key_inventory))
+	CBlob@[] aimbloblist;
+	CBlob@ closestblob;
+	f32 aimblobdist = 320.0f;
+	if (getMap().getBlobsInRadius(aimpos, 32.0, aimbloblist))
 	{
-		CBlob @pickBlob = blob.getCarriedBlob();
-
-		if (pickBlob !is null)
+		for (int i=0; i<aimbloblist.length; ++i)
 		{
-			pickBlob.RenderForHUD((blob.getAimPos() + Vec2f(0.0f, 8.0f)) - blob.getPosition() , RenderStyle::normal);
+			CBlob@ cb = aimbloblist[i];
+			if ((aimpos - cb.getPosition()).Length() < aimblobdist && cb.canBePickedUp(blob))
+			{
+				@closestblob = cb;
+				aimblobdist = (aimpos - cb.getPosition()).Length();
+				//printf("hi " + aimblobdist);
+			}
 		}
+	}
+
+	if (getRules().get_string("item_pickup") == "new") {
+		if (getRules().get_string("visual_item_pick") != "off") {
+			if (closestblob !is null && closestblob.canBePickedUp(blob)) {
+				@prevBlob = closestblob;
+				f32 distance_to_blob = (closestblob.getPosition() - blob.getPosition()).Length();
+
+				if (distance_to_blob > blob.getRadius() * 0.5 + 25.0f + closestblob.getRadius() || getMap().rayCastSolid(closestblob.getPosition(), blob.getPosition())) {
+					GUI::DrawCircle(getDriver().getScreenPosFromWorldPos(closestblob.getPosition()), closestblob.getRadius() * 4, SColor(255, 255, 55, 55));
+					GUI::DrawCircle(getDriver().getScreenPosFromWorldPos(closestblob.getPosition()), closestblob.getRadius() * 4 + 2.0, SColor(255, 255, 55, 55));
+					GUI::DrawCircle(getDriver().getScreenPosFromWorldPos(closestblob.getPosition()), closestblob.getRadius() * 4 + 4.0, SColor(255, 255, 55, 55));
+					//closestblob.RenderForHUD(Vec2f(0, 0), 0, SColor(45, 155, 50, 50), RenderStyle::outline_front);
+				} else if (distance_to_blob <= blob.getRadius() * 0.5 + 25.0f + closestblob.getRadius() && !getMap().rayCastSolid(closestblob.getPosition(), blob.getPosition())) {
+					GUI::DrawCircle(getDriver().getScreenPosFromWorldPos(closestblob.getPosition()), closestblob.getRadius() * 4, SColor(255, 55, 255, 55));
+					GUI::DrawCircle(getDriver().getScreenPosFromWorldPos(closestblob.getPosition()), closestblob.getRadius() * 4 + 2.0, SColor(255, 55, 255, 55));
+					GUI::DrawCircle(getDriver().getScreenPosFromWorldPos(closestblob.getPosition()), closestblob.getRadius() * 4 + 4.0, SColor(255, 55, 255, 55));
+					//closestblob.RenderForHUD(Vec2f(0, 0), 0, SColor(45, 50, 155, 50), RenderStyle::outline_front);
+				}
+			}
+		} else {
+			if (blob.isKeyPressed(key_pickup) && closestblob !is null && (getRules().get_string("item_pickup") == "new")) {
+				f32 distance_to_blob = (closestblob.getPosition() - blob.getPosition()).Length();
+				Vec2f dimensions;
+
+				if (closestblob !is null && (distance_to_blob <= blob.getRadius() * 0.5 + 25.0f + closestblob.getRadius() && !getMap().rayCastSolid(closestblob.getPosition(), 	blob.getPosition()))) {
+					closestblob.RenderForHUD(RenderStyle::outline_front);
+					closestblob.RenderForHUD(RenderStyle::additive);
+
+					GUI::SetFont("menu");
+
+					string invName = getTranslatedString(closestblob.getInventoryName());
+					GUI::GetTextDimensions(invName, dimensions);
+					GUI::DrawText(invName, getDriver().getScreenPosFromWorldPos(closestblob.getPosition() - Vec2f(0, -closestblob.getHeight() / 2)) - Vec2f(dimensions.x / 2, -8.0f), color_white);
+				}
+			}
+		}
+
+	// Fully disable vanilla behaviour of pickups, if we using new pickup mode
+		return;
 	}
 
 	if (blob.isKeyPressed(key_pickup))

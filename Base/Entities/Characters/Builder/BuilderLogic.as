@@ -96,14 +96,14 @@ void onTick(CBlob@ this)
 	{
 		Pickaxe(this);
 		if (this.isKeyJustPressed(key_action3)) {
-			CBlob@ carried = this.getCarriedBlob();
+			/*CBlob@ carried = this.getCarriedBlob();
 
 			if (carried is null || !carried.hasTag("temp blob")) {
 				client_SendThrowOrActivateCommand(this);
 			}
 		}
 
-		if (b_KeyJustPressed("activate_or_throw_bomb")) {
+		if (b_KeyJustPressed("activate_or_throw_bomb")) {*/
 			CBlob@ carried = this.getCarriedBlob();
 			bool holding = carried !is null;// && carried.hasTag("exploding");
 
@@ -143,9 +143,22 @@ void onTick(CBlob@ this)
 
 			if (!thrown)
 			{
+				// wtf???
+				if (carried is null) return;
+
+				// dont "activate" temp blobs like ladders or doors
+				if ((carried is null || carried.hasTag("temp blob")) &&
+					(
+						carried.getConfig() == "ladder" ||
+						carried.getConfig() == "stone_door" ||
+						carried.getConfig() == "wooden_door" ||
+						carried.getConfig() == "wooden_platform"
+					)
+				) return;
+
 				// dont activate keg and satchel via this
-				if (carried !is null && carried.getConfig() == "keg") return;
-				if (carried !is null && carried.getConfig() == "satchel") return;
+				//if (carried !is null && carried.getConfig() == "keg") return;
+				//if (carried !is null && carried.getConfig() == "satchel") return;
 
 				client_SendThrowOrActivateCommand(this);
 				SetFirstAvailableBomb(this);
@@ -560,7 +573,7 @@ void Pickaxe(CBlob@ this)
 		{
 			CBitStream params;
 			params.write_u16(hitdata.blobID);
-			params.write_Vec2f(hitdata.tilepos);
+			params.write_Vec2f(tilepos);
 			this.SendCommand(this.getCommandID("pickaxe"), params);
 
 			// for smaller delay
@@ -725,7 +738,7 @@ bool canHit(CBlob@ this, CBlob@ b, Vec2f tpos, bool extra = true)
 class QueuedHit
 {
 	u16 blobID;
-    Vec2f tilepos;
+	Vec2f tilepos;
 	int scheduled_tick;
 }
 
@@ -901,7 +914,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 		{
 			QueuedHit queued_hit;
 			queued_hit.blobID = blobID;
-            queued_hit.tilepos = tilepos;
+			queued_hit.tilepos = tilepos;
 			queued_hit.scheduled_tick = SPI.last_pickaxed + delay;
 			this.set("queued pickaxe", @queued_hit);
 			return;
@@ -1046,31 +1059,33 @@ void onDetach(CBlob@ this, CBlob@ detached, AttachmentPoint@ attachedPoint)
 	if (detached.hasTag("temp blob"))
 	{
 		detached.Untag("temp blob");
-		
+
 		if (!detached.hasTag("temp blob placed"))
 		{
 			detached.server_Die();
 			return;
 		}
 
-		uint i = this.get_u8("buildblob");
-		if (i >= 0 && i < blocks[PAGE].length)
+		const u8 i = this.get_u8("buildblob");
+		if (i >= blocks[PAGE].length) return;
+
+		BuildBlock@ b = blocks[PAGE][i];
+		if (b.name == detached.getName())
 		{
-			BuildBlock@ b = blocks[PAGE][i];
-			if (b.name == detached.getName())
+			this.set_u8("buildblob", 255);
+			this.set_TileType("buildtile", 0);
+
+			if (isServer())
 			{
-				this.set_u8("buildblob", 255);
-				this.set_TileType("buildtile", 0);
-
 				CInventory@ inv = this.getInventory();
-
 				CBitStream missing;
-				if (hasRequirements(inv, b.reqs, missing, not b.buildOnGround))
+				if (hasRequirements(inv, b.reqs, missing, !b.buildOnGround))
 				{
 					server_TakeRequirements(inv, b.reqs);
 				}
 				// take out another one if in inventory
 				server_BuildBlob(this, blocks[PAGE], i);
+				this.Sync("buildblob", true);
 			}
 		}
 	}

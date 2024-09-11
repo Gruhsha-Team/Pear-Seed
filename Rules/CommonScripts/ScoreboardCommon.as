@@ -13,6 +13,11 @@ f32 getKDR(CPlayer@ p)
 	return p.getKills() / Maths::Max(f32(p.getDeaths()), 1.0f);
 }
 
+f32 getKPM(CPlayer@ p)
+{
+	return p.getKills() / Maths::Max(f32(getRules().get_s32("play_time" + p.getUsername()) / 60.0), 1.0f);
+}
+
 SColor getNameColour(CPlayer@ p)
 {
 	SColor c;
@@ -21,6 +26,10 @@ SColor getNameColour(CPlayer@ p)
 	bool customColor = false;
 
 	string username = p.getUsername();
+
+	if (username == "TerminalHash" || username == "kusaka79") {
+		customColor = true;
+	}
 
 	// set custom color for rolas
 	if (p.isDev() && showColor && !customColor) {
@@ -34,10 +43,8 @@ SColor getNameColour(CPlayer@ p)
 	}
 	// set custom color for some players
 	else if (username == "TerminalHash") {
-		customColor = true;
 		c = SColor(0xff75507b);
 	} else if (username == "kusaka79") {
-		customColor = true;
 		c = SColor(0xff000000);
 	} 
 	// set default color for other

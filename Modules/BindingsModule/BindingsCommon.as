@@ -12,13 +12,13 @@ string[] page_texts =
 	Names::emotemenu,
 	Names::actionsmenu,
 	Names::settingsmenu,
-	Names::vsettingsmenu
-	/*Names::knightnmb,
+	Names::vsettingsmenu,
+	Names::knightnmb,
 	Names::archernmb,
 	Names::buildernmb,
 	Names::quartersnmb,
 	Names::vehiclenmb,
-	Names::boatnmb*/
+	Names::boatnmb
 };
 
 string[][] button_texts =
@@ -63,9 +63,10 @@ string[][] button_texts =
 	{
 		Names::drillcommand,
 		Names::cancelarrowschargingcommand,
-		Names::activateorthrowbomb
-	}
-	/*{
+		Names::markbuildercommand
+		//Names::activateorthrowbomb
+	},
+	{
 		"Go away"								// TECHNICAL LINE DONT TOUCH PLEASE
 	},
 	{
@@ -84,7 +85,8 @@ string[][] button_texts =
 		Names::waterarrowsnmb,
 		Names::firearrowsnmb,
 		Names::bombarrowsnmb,
-		Names::blockarrowsnmb
+		Names::blockarrowsnmb,
+		Names::stoneblockarrowsnmb
 	},
 	{							// BUILDER SHOP
 		Names::drillbnmb,
@@ -117,7 +119,7 @@ string[][] button_texts =
 		Names::dinghynmb,
 		Names::longboatnmb,
 		Names::warboatnmb
-	}*/
+	}
 };
 
 string[][] button_file_names =
@@ -164,9 +166,10 @@ string[][] button_file_names =
 	{
 		"take_out_drill",
 		"cancel_charging",
-		"activate_or_throw_bomb"
-	}
-	/*{
+		"mark_team_builder"
+		//"activate_or_throw_bomb"
+	},
+	{
 		"go away"								// TECHNICAL LINE DONT TOUCH PLEASE
 	},
 	{
@@ -185,7 +188,8 @@ string[][] button_file_names =
 		"a_waterarrows",
 		"a_firearrows",
 		"a_bombarrows",
-		"a_blockarrows"
+		"a_blockarrows",
+		"a_stoneblockarrows",
 	},
 	{
 		"b_drill",
@@ -218,7 +222,7 @@ string[][] button_file_names =
 		"boat_dinghy",
 		"boat_longboat",
 		"boat_warboat"
-	}*/
+	}
 };
 
 // Settings
@@ -228,13 +232,14 @@ string[][] setting_texts =
 		Names::grapplewhilecharging,
 		Names::switchclasschanginginshop,
 		Names::cyclewithitem,
+		Names::pickupsystem,
 		Names::drillknight,
 		Names::drillbuilder,
 		Names::drillarcher,
 		Names::bombbuilder,
-		Names::bombarcher
-		//Names::nomenubuyingset,
-		//Names::nomenubuyingboldarset
+		Names::bombarcher,
+		Names::nomenubuyingset,
+		Names::nomenubuyingboldarset
 	}
 };
 
@@ -244,13 +249,14 @@ string[][] setting_file_names =
 		"grapple_with_charging",
 		"disable_class_change_in_shops",
 		"cycle_with_item",
+		"item_pickup",
 		"pickdrill_knight",
 		"pickdrill_builder",
 		"pickdrill_archer",
 		"pickbomb_builder",
-		"pickbomb_archer"
-		//"nomenubuying",
-		//"nomenubuying_b",
+		"pickbomb_archer",
+		"nomenubuying",
+		"nomenubuying_b",
 	}
 };
 
@@ -268,6 +274,10 @@ string[][][] setting_options =
 		{
 			Descriptions::universalno, // 10	CYCLE WITH ITEM IN HAND
 			Descriptions::universalyes // 20
+		},
+		{
+			Descriptions::universalold, // 10	ITEM PICKUP SYSTEM
+			Descriptions::universalnew // 20
 		},
 		{
 			Descriptions::universalno, // 10	DRILL AUTOPICKUP FOR KNIGHT
@@ -288,15 +298,15 @@ string[][][] setting_options =
 		{
 			Descriptions::universalno, // 10	BOMB AUTOPICKUP FOR ARCHER
 			Descriptions::universalyes // 20
-		}
-		/*{
+		},
+		{
 			Descriptions::universalno, // 10	NO MENU BUYING
 			Descriptions::universalyes // 20
 		},
 		{
 			Descriptions::universalno, // 10	NO MENU BUYING (BOLDAR)
 			Descriptions::universalyes // 20
-		}*/
+		}
 	}
 };
 
@@ -314,6 +324,10 @@ string[][][] setting_option_names =
 		{
 			"no", // 10    CYCLE WITH ITEM IN HAND
 			"yes" // 20
+		},
+		{
+			"legacy", // 10    ITEM PICKUP SYSTEM
+			"new" // 20
 		},
 		{
 			"no", // 10    DRILL AUTOPICKUP FOR KNIGHT
@@ -334,15 +348,15 @@ string[][][] setting_option_names =
 		{
 			"no", // 10    BOMB AUTOPICKUP FOR ARCHER
 			"yes" // 20
-		}
-		/*{
+		},
+		{
 			"no", // 10    NO MENU BUYING
 			"yes" // 20
 		},
 		{
 			"no", // 10    NO MENU BUYING (BOLDAR)
 			"yes" // 20
-		}*/
+		}
 	}
 };
 
@@ -351,9 +365,10 @@ string[][] vsetting_texts =
 {
 	{
 		Names::blockbar,
-		//Names::shownomenubuyingpan,
-		//Names::dsewnmb,
+		Names::shownomenubuyingpan,
+		Names::dsewnmb,
 		Names::camerasw,
+		Names::visualitempick,
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
@@ -369,9 +384,10 @@ string[][] vsetting_file_names =
 {
 	{
 		"blockbar_hud",
-		//"shownomenupanel",
-		//"dse_while_using_nomenu_buying",
+		"shownomenupanel",
+		"dse_while_using_nomenu_buying",
 		"camera_sway",
+		"visual_item_pick",
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
@@ -390,20 +406,24 @@ string[][][] vsetting_options =
 			Descriptions::universalno, // 10	BLOCKBAR ON HUD
 			Descriptions::universalyes // 20
 		},
-		/*{
+		{
 			Descriptions::universalno, // 10	SHOW NOMENU BUYING PANEL
 			Descriptions::universalyes // 20
 		},
 		{
 			Descriptions::universalno, // 10	DONT SHOW EMOTES WHILE USING NOMENU BUYING
 			Descriptions::universalyes // 20
-		},*/
+		},
 		{
 			"1", // 1							CAMERA SWAY
 			"2", // 2
 			"3", // 3
 			"4", // 4
 			"5" // 5
+		},
+		{
+			Descriptions::universaloff,       // VISUAL ITEM PICKING
+			Descriptions::universalon
 		},
 		{
 			Descriptions::universaloff,       // BODY TILTING
@@ -447,20 +467,24 @@ string[][][] vsetting_option_names =
 			"no", // 10    BLOCKBAR
 			"yes" // 20
 		},
-		/*{
+		{
 			"no", // 10    SHOW NOMENU BUYING PANEL
 			"yes" // 20
 		},
 		{
 			"no", // 10    DONT SHOW EMOTES WHILE USING NOMENU BUYING
 			"yes" // 20
-		},*/
+		},
 		{
 			"1", // 1	   CAMERA SWAY
 			"2", // 2
 			"3", // 3
 			"4", // 4
 			"5" // 5
+		},
+		{
+			"off",       // VISUAL ITEM PICKING
+			"on"
 		},
 		{
 			"off",       // BODY TILTING

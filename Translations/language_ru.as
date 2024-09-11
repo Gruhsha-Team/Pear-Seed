@@ -34,6 +34,8 @@ namespace ru
 	d_universalno							= "Нет",
 	d_universalon							= "Включено",
 	d_universaloff							= "Выключено",
+	d_universalold							= "Старая",
+	d_universalnew							= "Новая",
 
 	// PickingCommands.as
 	d_bindingscom							= "Открыть меню кастомных биндингов",
@@ -123,6 +125,7 @@ namespace ru
 		// Actions
 	n_drillcommand							= "Достать/Убрать дрель",
 	n_cancelarrowschargingcommand			= "Перестать заряжать лук",
+	n_markbuildercommand					= "Отмечать позицию строителя",
 	n_activateorthrowbomb					= "Активация бомбы (Строитель)",
 
 		// NoMenuBuying Binds
@@ -151,7 +154,8 @@ namespace ru
 	n_waterarrowsnmb						= "Водные стрелы",
 	n_firearrowsnmb							= "Огненные стрелы",
 	n_bombarrowsnmb							= "Стрелы-бомбы",
-	n_blockarrowsnmb						= "Стрелы-блоки",
+	n_blockarrowsnmb						= "Стрелы-блоки (дерево)",
+	n_stoneblockarrowsnmb					= "Стрелы-блоки (камень)",
 
 			// Quarters
 	n_beernmb								= "Квас",
@@ -198,6 +202,8 @@ namespace ru
 	n_bombbuilder							= "Автоподбор бомб (Строитель)",
 	n_bombarcher							= "Автоподбор бомб (Лучник)",
 	n_cyclewithitem							= "Переключение с предметом в руках",
+	n_visualitempick						= "Наглядное расстояние до предмета",
+	n_pickupsystem							= "Система подбора предметов",
 
 		// Other
 	n_pressdelete							= "Выбери клавишу и нажми [DELETE] для очистки хоткея!",
@@ -215,6 +221,8 @@ namespace ru
 
 	// ScoreboardRender.as
 	n_matssection							= "Материалы",
+	n_damagedealtsc							= "Урон",
+	n_killsperminute						= "У/М",
 
 	// Quarters.as
 	n_beeritem								= "Пиво - 1 Сердце",

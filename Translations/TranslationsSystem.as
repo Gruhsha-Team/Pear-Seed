@@ -49,6 +49,8 @@ namespace Descriptions
 	universalno		  	  			= Translate(en::d_universalno+"\\"+ru::d_universalno),
 	universalon		  	  			= Translate(en::d_universalon+"\\"+ru::d_universalon),
 	universaloff		  	  		= Translate(en::d_universaloff+"\\"+ru::d_universaloff),
+	universalold		  	  		= Translate(en::d_universalold+"\\"+ru::d_universalold),
+	universalnew		  	  		= Translate(en::d_universalnew+"\\"+ru::d_universalnew),
 
 	// PickingCommands.as
 	bindingscom		  	       		= Translate(en::d_bindingscom+"\\"+ru::d_bindingscom),
@@ -124,6 +126,7 @@ namespace Names
 		// Actions
 	drillcommand		  	      		= Translate(en::n_drillcommand+"\\"+ru::n_drillcommand),
 	cancelarrowschargingcommand			= Translate(en::n_cancelarrowschargingcommand+"\\"+ru::n_cancelarrowschargingcommand),
+	markbuildercommand					= Translate(en::n_markbuildercommand+"\\"+ru::n_markbuildercommand),
 	activateorthrowbomb					= Translate(en::n_activateorthrowbomb+"\\"+ru::n_activateorthrowbomb),
 
 		// NoMenuBuying Binds
@@ -153,6 +156,7 @@ namespace Names
 	firearrowsnmb						= Translate(en::n_firearrowsnmb+"\\"+ru::n_firearrowsnmb),
 	bombarrowsnmb						= Translate(en::n_bombarrowsnmb+"\\"+ru::n_bombarrowsnmb),
 	blockarrowsnmb						= Translate(en::n_blockarrowsnmb+"\\"+ru::n_blockarrowsnmb),
+	stoneblockarrowsnmb					= Translate(en::n_stoneblockarrowsnmb+"\\"+ru::n_stoneblockarrowsnmb),
 
 			// Quarters
 	beernmb								 = Translate(en::n_beernmb+"\\"+ru::n_beernmb),
@@ -199,6 +203,8 @@ namespace Names
 	bombbuilder							 = Translate(en::n_bombbuilder+"\\"+ru::n_bombbuilder),
 	bombarcher							 = Translate(en::n_bombarcher+"\\"+ru::n_bombarcher),
 	cyclewithitem						 = Translate(en::n_cyclewithitem+"\\"+ru::n_cyclewithitem),
+	visualitempick						 = Translate(en::n_visualitempick+"\\"+ru::n_visualitempick),
+	pickupsystem						 = Translate(en::n_pickupsystem+"\\"+ru::n_pickupsystem),
 
 		// Other
 	pressdelete		  	       			= Translate(en::n_pressdelete+"\\"+ru::n_pressdelete),
@@ -213,6 +219,8 @@ namespace Names
 
 	// ScoreboardCommon.as
 	modsettingsbutton	  	       		= Translate(en::n_modsettingsbutton+"\\"+ru::n_modsettingsbutton),
+	damagedealtsc	  	       			= Translate(en::n_damagedealtsc+"\\"+ru::n_damagedealtsc),
+	killsperminute	  	       			= Translate(en::n_killsperminute+"\\"+ru::n_killsperminute),
 
 	// ScoreboardRender.as
 	matssection	  	   		    		= Translate(en::n_matssection+"\\"+ru::n_matssection),

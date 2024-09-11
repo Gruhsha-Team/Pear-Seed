@@ -17,7 +17,6 @@ const int lower_stone = 30;
 //property
 const string SPAWN_ITEMS_TIMER_BUILDER = "CTF SpawnItems Builder:";
 const string SPAWN_ITEMS_TIMER_ARCHER  = "CTF SpawnItems Archer:";
-const string RESUPPLY_TIME_STRING = "team resupply timer";  // Waffle: Team resupply crate
 
 string base_name() { return "tent"; }
 

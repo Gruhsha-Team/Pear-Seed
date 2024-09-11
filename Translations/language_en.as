@@ -34,6 +34,8 @@ namespace en
 	d_universalno							= "No",
 	d_universalon							= "On",
 	d_universaloff							= "Off",
+	d_universalold							= "Old",
+	d_universalnew							= "New",
 
 	// PickingCommands.as
 	d_bindingscom							= "Show mod bindings menu",
@@ -123,6 +125,7 @@ namespace en
 		// Actions
 	n_drillcommand							= "Take out drill",
 	n_cancelarrowschargingcommand			= "Cancel bow charging",
+	n_markbuildercommand					= "Mark builder position",
 	n_activateorthrowbomb					= "Activate/throw bomb (Builder)",
 
 		// NoMenuBuying Binds
@@ -151,7 +154,8 @@ namespace en
 	n_waterarrowsnmb						= "Water Arrows",
 	n_firearrowsnmb							= "Fire Arrows",
 	n_bombarrowsnmb							= "Bomb Arrows",
-	n_blockarrowsnmb						= "Block Arrows",
+	n_blockarrowsnmb						= "Wooden Block Arrows",
+	n_stoneblockarrowsnmb					= "Stone Block Arrows",
 
 			// Quarters
 	n_beernmb								= "Beer",
@@ -198,6 +202,8 @@ namespace en
 	n_bombbuilder							= "Bomb autopickup (Builder)",
 	n_bombarcher							= "Bomb autopickup (Archer)",
 	n_cyclewithitem							= "Cycle with item in hand",
+	n_visualitempick						= "Visual item picking",
+	n_pickupsystem							= "Item pickup system",
 
 		// Other
 	n_pressdelete							= "Choose a bind and press [DELETE] to remove key",
@@ -215,6 +221,8 @@ namespace en
 
 	// ScoreboardRender.as
 	n_matssection							= "Materials",
+	n_damagedealtsc							= "Damage",
+	n_killsperminute						= "KPM",
 
 	// Quarters.as
 	n_beeritem								= "Beer - 1 Heart",

@@ -32,7 +32,7 @@ void onInit(CRules@ this)
 
 		// default values for binds:
 		// knight shop
-		/*if (!file.exists("k_bomb$1")) file.add_s32("k_bomb$1", 49);
+		if (!file.exists("k_bomb$1")) file.add_s32("k_bomb$1", 49);
 		if (!file.exists("k_bomb$2")) file.add_s32("k_bomb$2", -1);
 		if (!file.exists("k_waterbomb$1")) file.add_s32("k_waterbomb$1", 50);
 		if (!file.exists("k_waterbomb$2")) file.add_s32("k_waterbomb$2", -1);
@@ -78,6 +78,8 @@ void onInit(CRules@ this)
 		if (!file.exists("a_bombarrows$2")) file.add_s32("a_bombarrows$2", -1);
 		if (!file.exists("a_blockarrows$1")) file.add_s32("a_blockarrows$1", 53);
 		if (!file.exists("a_blockarrows$2")) file.add_s32("a_blockarrows$2", -1);
+		if (!file.exists("a_stoneblockarrows$1")) file.add_s32("a_stoneblockarrows$1", 54);
+		if (!file.exists("a_stoneblockarrows$2")) file.add_s32("a_stoneblockarrows$2", -1);
 
 		// kfc
 		if (!file.exists("kfc_beer$1")) file.add_s32("kfc_beer$1", 49);
@@ -111,7 +113,7 @@ void onInit(CRules@ this)
 		if (!file.exists("boat_longboat$1")) file.add_s32("boat_longboat$1", 50);
 		if (!file.exists("boat_longboat$2")) file.add_s32("boat_longboat$2", -1);
 		if (!file.exists("boat_warboat$1")) file.add_s32("boat_warboat$1", 51);
-		if (!file.exists("boat_warboat$2")) file.add_s32("boat_warboat$2", -1);*/
+		if (!file.exists("boat_warboat$2")) file.add_s32("boat_warboat$2", -1);
 
 		if(!file.saveFile(BINDINGSFILE + ".cfg"))
 		{
@@ -144,6 +146,11 @@ void onInit(CRules@ this)
 			if (!sfile.exists("cycle_with_item"))
 			{
 				sfile.add_string("cycle_with_item", "no");
+			}
+
+			if (!sfile.exists("item_pickup"))
+			{
+				sfile.add_string("item_pickup", "legacy");
 			}
 
 			if (!sfile.exists("pickdrill_knight"))
@@ -186,6 +193,7 @@ void onInit(CRules@ this)
 			sfile.add_string("grapple_with_charging", "yes");
 			sfile.add_string("disable_class_change_in_shops", "no");
 			sfile.add_string("cycle_with_item", "no");
+			sfile.add_string("item_pickup", "legacy");
 			sfile.add_string("pickdrill_knight", "yes");
 			sfile.add_string("pickdrill_builder", "yes");
 			sfile.add_string("pickdrill_archer", "yes");
@@ -231,6 +239,11 @@ void onInit(CRules@ this)
 				sfile.add_string("dse_while_using_nomenu_buying", "yes");
 			}*/
 
+			if (!sfile.exists("visual_item_pick"))
+			{
+				sfile.add_string("visual_item_pick", "off");
+			}
+
 			if (!sfile.exists("body_tilting"))
 			{
 				sfile.add_string("body_tilting", "on");
@@ -261,11 +274,6 @@ void onInit(CRules@ this)
 				sfile.add_string("annoying_nature", "on");
 			}
 
-			if (!sfile.exists("annoying_voicelines"))
-			{
-				sfile.add_string("annoying_voicelines", "on");
-			}
-
 			if (!sfile.exists("annoying_tags"))
 			{
 				sfile.add_string("annoying_tags", "on");
@@ -282,13 +290,13 @@ void onInit(CRules@ this)
 			//sfile.add_string("shownomenupanel", "yes");
 			//sfile.add_string("dse_while_using_nomenu_buying", "yes");
 			sfile.add_string("camera_sway", "5");
+			sfile.add_string("visual_item_pick", "off");
 			sfile.add_string("body_tilting", "on");
 			sfile.add_string("head_rotating", "on");
 			sfile.add_string("clusterfuck", "on");
 			sfile.add_string("clusterfuck_blood", "on");
 			sfile.add_string("clusterfuck_smoke", "on");
 			sfile.add_string("annoying_nature", "on");
-			sfile.add_string("annoying_voicelines", "on");
 			sfile.add_string("annoying_tags", "on");
 			sfile.add_string("custom_death_and_pain_sounds", "on");
 

@@ -77,12 +77,10 @@ void onRender(CSprite@ this)
 
 	u8 type = blob.get_u8("bomb type");
 	u8 frame = 1;
-	if (type == 0)
-	{
+
+	if (type == 0) {
 		frame = 0;
-	}
-	else if (type < 255)
-	{
+	} else if (type < 255) {
 		frame = 1 + type;
 	}
 

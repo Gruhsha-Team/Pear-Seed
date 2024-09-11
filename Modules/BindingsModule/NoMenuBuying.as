@@ -1,9 +1,9 @@
 // NoMenuBuying.as
-
-#include "BindingsCommon.as"
 #include "ShopCommon.as"
+#include "BindingsCommon.as"
 
-void onTick(CBlob@ this) {
+void onTick(CBlob@ this)
+{
 	// Shops!
 	bool overlapping_knightshop = false;
 	bool overlapping_archershop = false;
@@ -24,6 +24,9 @@ void onTick(CBlob@ this) {
 	CBlob@[] overlapping;
 	if (getMap().getBlobsInRadius(this.getPosition(), 8.0f, overlapping)) {
 		for (int i = 0; i < overlapping.length; ++i) {
+			// fix multiply buying shit
+			if (!this.isMyPlayer()) return;
+
 			if (overlapping[i].getName() == "knightshop") {
 				overlapping_knightshop = true;
 				@theknightshop = overlapping[i];
@@ -47,9 +50,20 @@ void onTick(CBlob@ this) {
 	}
 
 	bool we_buying = false;
-	if (getRules().get_string("nomenubuying") == "yes" && this.getName() != "builder") we_buying = true;
-	if (getRules().get_string("nomenubuying_b") == "yes" && this.getName() == "builder") we_buying = true;
-	if (getGridMenuByName("Buy") !is null) we_buying = true;
+	if (getRules().get_string("nomenubuying") == "yes" && this.getName() != "builder") {
+		//printf("NOMENUBUYING IS ACTIVE");
+		we_buying = true;
+	}
+
+	if (getRules().get_string("nomenubuying_b") == "yes" && this.getName() == "builder"){
+		//printf("BUILDER NOMENUBUYING IS ACTIVE");
+		we_buying = true;
+	}
+
+	if (getGridMenuByName("Buy") !is null) {
+		//printf("MENU IS OPEN");
+		we_buying = true;
+	}
 
 	if (we_buying) {
 		// Knight shop
@@ -83,6 +97,18 @@ void onTick(CBlob@ this) {
 				if (b_KeyJustPressed("k_satchel")) {
 					wanna_buy = true;
 					item_id	= 5;
+				}
+				if (b_KeyJustPressed("k_sticky")) {
+					wanna_buy = true;
+					item_id	= 6;
+				}
+				if (b_KeyJustPressed("k_icebomb")) {
+					wanna_buy = true;
+					item_id	= 7;
+				}
+				if (b_KeyJustPressed("k_goldmine")) {
+					wanna_buy = true;
+					item_id	= 8;
 				}
 
 				if (wanna_buy) {
@@ -195,6 +221,10 @@ void onTick(CBlob@ this) {
 				if (b_KeyJustPressed("a_blockarrows")) {
 					wanna_buy = true;
 					item_id	= 4;
+				}
+				if (b_KeyJustPressed("a_stoneblockarrows")) {
+					wanna_buy = true;
+					item_id	= 5;
 				}
 
 				if (wanna_buy) {
@@ -353,7 +383,8 @@ void onTick(CBlob@ this) {
 	}
 }
 
-void onRender(CSprite@ this) {
+void onRender(CSprite@ this)
+{
 	CBlob@ blob = this.getBlob();
 	if (blob is null || !blob.isMyPlayer()) return;
 
@@ -419,7 +450,10 @@ void onRender(CSprite@ this) {
 		"k_mine",
 		"k_keg",
 		"k_drill",
-		"k_satchel"
+		"k_satchel",
+		"k_sticky",
+		"k_icebomb",
+		"k_goldmine"
 		};
 
 		if (theknightshop.get("shop array", @shopitems)) {
@@ -455,7 +489,8 @@ void onRender(CSprite@ this) {
 		"a_waterarrows",
 		"a_firearrows",
 		"a_bombarrows",
-		"a_blockarrows"
+		"a_blockarrows",
+		"a_stoneblockarrows"
 		};
 
 		if (thearchershop.get("shop array", @shopitems)) {

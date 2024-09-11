@@ -38,17 +38,20 @@ class OldPlayerStats {
 	s32 kills;
 	s32 deaths;
 	s32 assists;
+	f32 dmgdeal;
+	f32 kpm;
 
 	OldPlayerStats() {
 		kills   = 0;
 		deaths  = 0;
 		assists = 0;
+		dmgdeal = 0;
+		kpm = 0;
 	}
 }
 
 //returns the bottom
-float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ team, Vec2f &out pane_tl, Vec2f &out pane_br, Vec2f emblem)
-{
+float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ team, Vec2f &out pane_tl, Vec2f &out pane_br, Vec2f emblem) {
 	if (players.size() <= 0)
 		return tl.y;
 
@@ -107,9 +110,13 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 	GUI::DrawText(getTranslatedString("Username"), Vec2f(br.x - 470, tl.y), SColor(0xffffffff));
 	GUI::DrawText(getTranslatedString("Ping"), Vec2f(br.x - 330, tl.y), SColor(0xffffffff));
 	GUI::DrawText(getTranslatedString("Kills"), Vec2f(br.x - 260, tl.y), kdr_color);      // Waffle: Change header color for old stats
-	GUI::DrawText(getTranslatedString("Deaths"), Vec2f(br.x - 190, tl.y), kdr_color);     // Waffle: --
-	GUI::DrawText(getTranslatedString("Assists"), Vec2f(br.x - 120, tl.y), kdr_color);    // Waffle: --
-	GUI::DrawText(getTranslatedString("KDR"), Vec2f(br.x - 50, tl.y), kdr_color);         // Waffle: --
+	GUI::DrawText(Names::damagedealtsc, Vec2f(br.x - 170, tl.y), kdr_color);
+	GUI::DrawText(Names::killsperminute, Vec2f(br.x - 100, tl.y), kdr_color);
+
+	// OLD STUFF
+	//GUI::DrawText(getTranslatedString("Deaths"), Vec2f(br.x - 190, tl.y), kdr_color);     // Waffle: --
+	//GUI::DrawText(getTranslatedString("Assists"), Vec2f(br.x - 120, tl.y), kdr_color);    // Waffle: --
+	//GUI::DrawText(getTranslatedString("KDR"), Vec2f(br.x - 50, tl.y), kdr_color);         // Waffle: --
 
 	// Old accolades shit, we dont using this anymore
 	/*GUI::DrawText(getTranslatedString("Accolades"), Vec2f(br.x - accolades_start, tl.y), SColor(0xffffffff));
@@ -237,18 +244,12 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		}
 
 		// head icon
-
 		string headTexture = "Heads.png";
 		int headIndex = 32*4;
 		int teamIndex = p.getTeamNum();
 		Vec2f headOffset = Vec2f(22, -12);
 		float headScale = 1.0f;
 		SColor headColor(0xFFFFFFFF);
-
-		string customHeadTexture = getPath() + "Characters/CustomHeads/" + username + ".png";
-		//string customHeadTexture = ""; // comment out line above and uncomment this for debug
-
-		Accolades@ acchead = getPlayerAccolades(p.getUsername());
 
 		// show normally colored head for specs, they're never alive
 		if (team !is null && dead)
@@ -260,18 +261,11 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 			headIndex = b.get_s32("head index");
 			headTexture = b.get_string("head texture");
 			teamIndex = b.get_s32("head team");
-		} else if (p.exists("head index") && customHeadTexture == "") {
+		} else if (p.exists("head index")) {
 			// HACK: no better infrastructure to know a player's head when
 			// they're dead
 			headIndex = p.get_s32("head index");
 			headTexture = p.get_string("head texture");
-		} else if (customHeadTexture != "") {
-			// if player has custom head
-			headIndex = p.get_s32("head index");
-			headTexture = customHeadTexture;
-			teamIndex = p.get_s32("head team");
-
-		//printf ("We set " + headTexture + " for player " + username + " from custom heads"); // debug shit
 		} else {
 			headColor = 0x00000000;
 		}
@@ -589,6 +583,8 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		s32 kills   = p.getKills();
 		s32 deaths  = p.getDeaths();
 		s32 assists = p.getAssists();
+		f32 dmgdeal = getRules().get_f32("damage_impact_" + p.getUsername());
+		f32 kpm = getKPM(p);
 
 		if (old_stats)
 		{
@@ -611,15 +607,19 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 				kills   = old_player_stats.kills;
 				deaths  = old_player_stats.deaths;
 				assists = old_player_stats.assists;
+				dmgdeal = old_player_stats.dmgdeal;
+				kpm     = old_player_stats.kpm;
 			}
 		}
 
 		GUI::DrawText("" + username, Vec2f(br.x - 470, tl.y), namecolour);
 		GUI::DrawText("" + ping_in_ms, Vec2f(br.x - 330, tl.y), SColor(0xffffffff));
 		GUI::DrawText("" + kills, Vec2f(br.x - 260, tl.y), kdr_color);
-		GUI::DrawText("" + deaths, Vec2f(br.x - 190, tl.y), kdr_color);
-		GUI::DrawText("" + assists, Vec2f(br.x - 120, tl.y), kdr_color);
-		GUI::DrawText("" + formatFloat(kills / Maths::Max(f32(deaths), 1.0f), "", 0, 2), Vec2f(br.x - 50, tl.y), kdr_color);
+		GUI::DrawText("" + dmgdeal, Vec2f(br.x - 170, tl.y), kdr_color);
+		GUI::DrawText("" + formatFloat(kpm, "", 0, 2), Vec2f(br.x - 100, tl.y), kdr_color);
+		//GUI::DrawText("" + deaths, Vec2f(br.x - 190, tl.y), kdr_color);
+		//GUI::DrawText("" + assists, Vec2f(br.x - 120, tl.y), kdr_color);
+		//GUI::DrawText("" + formatFloat(kills / Maths::Max(f32(deaths), 1.0f), "", 0, 2), Vec2f(br.x - 50, tl.y), kdr_color);
 
 		// matetials section
 		GUI::DrawText(getRules().get_s32("personalwood_" + username) + " ", Vec2f(br.x - 605, tl.y), SColor(0xffffffff));
@@ -645,8 +645,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 
 }
 
-void onRenderScoreboard(CRules@ this)
-{
+void onRenderScoreboard(CRules@ this) {
 	if (this.get_bool("bindings_open")) return;
 
 	//sort players
@@ -657,6 +656,7 @@ void onRenderScoreboard(CRules@ this)
 	{
 		CPlayer@ p = getPlayer(i);
 		f32 kdr = getKDR(p);
+		f32 kills = p.getKills();
 		bool inserted = false;
 		if (p.getTeamNum() == this.getSpectatorTeamNum())
 		{
@@ -669,7 +669,7 @@ void onRenderScoreboard(CRules@ this)
 		{
 			for (u32 j = 0; j < blueplayers.length; j++)
 			{
-				if (getKDR(blueplayers[j]) < kdr)
+				if (blueplayers[j].getKills() < kills)
 				{
 					blueplayers.insert(j, p);
 					inserted = true;
@@ -685,7 +685,7 @@ void onRenderScoreboard(CRules@ this)
 		{
 			for (u32 j = 0; j < redplayers.length; j++)
 			{
-				if (getKDR(redplayers[j]) < kdr)
+				if (redplayers[j].getKills() < kills)
 				{
 					redplayers.insert(j, p);
 					inserted = true;
@@ -953,9 +953,11 @@ void onRestart(CRules@ this)
 				old_player_stats_core.stats.set(player_name, @old_player_stats);
 			}
 
-			old_player_stats.kills    = player.getKills();
-			old_player_stats.deaths   = player.getDeaths();
+			old_player_stats.kills = player.getKills();
+			old_player_stats.deaths = player.getDeaths();
 			old_player_stats.assists = player.getAssists();
+			old_player_stats.dmgdeal = getRules().get_f32("damage_impact_" + player.getUsername());
+			old_player_stats.kpm = getKPM(player);
 		}
 
 		// Reset for next game
