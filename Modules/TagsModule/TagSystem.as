@@ -648,6 +648,18 @@ bool playerAllowedToUse(string username) {
         return true;
     } else if (username == "Cucumberr") {
         return true;
+    } else if (username == "Zaniac") {
+        return true;
+    } else if (username == "sealord") {
+        return true;
+    } else if (username == "Sniips") {
+        return true;
+    } else if (username == "SerbianChevap") {
+        return true;
+    } else if (username == "Atheon") {
+        return true;
+    } else if (username == "Wzzzzzzzzzzzzz") {
+        return true;
 
     // Trusted Players
     } else if (username == "Guardian_of_Irael") {
@@ -662,7 +674,11 @@ bool playerAllowedToUse(string username) {
         return true;
     } else if (username == "MookMook") {
         return true;
-    } else if (username == "sealord") {
+    } else if (username == "Basshunter") {
+        return true;
+    } else if (username == "devilide") {
+        return true;
+    } else if (username == "Asu") {
         return true;
     }
 
