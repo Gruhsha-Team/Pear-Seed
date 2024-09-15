@@ -660,6 +660,10 @@ bool playerAllowedToUse(string username) {
         return true;
     } else if (username == "Wzzzzzzzzzzzzz") {
         return true;
+    } else if (username == "cosm_akylka") {
+        return true;
+    } else if (username == "WaveMiner") {
+        return true;
 
     // Trusted Players
     } else if (username == "Guardian_of_Irael") {
