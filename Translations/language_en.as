@@ -22,6 +22,7 @@ namespace en
 	// ArcherShop.as
 	d_woodenarrowdesc						= "Spawns wooden block at the landing site.",
 	d_stonearrowdesc						= "Spawns stone block at the landing site.",
+	d_mountedbowdesc						= "Stationary crossbow for those who want to be an archer for a while.",
 
 	// BindingsCommon.as
 	d_modbindplaceholder					= "placeholder",
@@ -56,6 +57,12 @@ namespace en
 	d_specallcomtext						= "Puts everyone in Spectators",
 	d_preventvoicelinespamtext				= "Disallow annoying voiceline spam from player",
 
+	// KnightShop.as
+	d_stickybombdesc						= "Slime-covered dynamite that sticks to surfaces. Useful in stealth operations and demolition of structures.",
+	d_goldenminedesc						= "More durable version of mine, able to stick to surface.",
+	d_slideminedesc							= "A less durable version of the regular mine, can be primed while moving.",
+	d_icebombdesc							= "A snow globe with a mini-keg inside, capable of slowing down an opponent for a small amount of time.",
+
 	// Satchel.as
 	d_satcheldesc							= "Ignites flammable blocks, activated by throw key",
 
@@ -74,11 +81,26 @@ namespace en
 	d_totaltext								= "Total ",
 
 	// Quarters.as
-	d_beertext								= "A cup of refreshing beer.",
-	d_mealtext								= "A rich and delicious meal.",
-	d_burgertext							= "Burger on the go for a quick snack.",
+	d_beertext								= "A cup of refreshing kvass.",
+	d_mealtext								= "A rich and delicious borsch.",
+	d_burgertext							= "Pear tart on the go for a quick snack.",
 	d_peartext								= "A juicy and sweet pear.",
 	d_sleeptext								= "Sleep. Free!",
+
+	// VehicleShop.as
+	d_bomberdesc							= "Air vehicle, can carry two people and some cargo. Can bombard on Space.",
+
+	// TimeToEnd.as
+	d_thirtyminutesleft						= "5 minutes left, hurry up!",
+	d_suddenactive							= "SUDDEN DEATH MODE IS ACTIVE!",
+	d_kegbuff								= "* Kegs are buffed;",
+	d_drillbuff1							= "* Drillzone compeletly disabled;",
+	d_drillbuff2							= "* Knights and archers get less heat while drilling;",
+	d_blockreqdebuff						= "* Block requirements on mid is multiplied by 1.35;",
+	d_respawndebuff							= "* Respawn time is 15 seconds;",
+	d_shielddebuff							= "* Shields miss half of the damage from slashes and jabs;",
+	d_swordbuff								= "* Knight gains the ability to strike fire once every 30 seconds;",
+	d_pricedebuff							= "* Prices for some items are being recalculated.",
 
 	//////////////////////////////////////////////////////////
 	// Names
@@ -126,7 +148,8 @@ namespace en
 	n_drillcommand							= "Take out drill",
 	n_cancelarrowschargingcommand			= "Cancel bow charging",
 	n_markbuildercommand					= "Mark builder position",
-	n_activateorthrowbomb					= "Activate/throw bomb (Builder)",
+	n_activateorthrowbomb					= "Activate/throw item",
+	n_putitemcommand						= "Put item into inventory",
 
 		// NoMenuBuying Binds
 			// Knight Shop
@@ -136,6 +159,10 @@ namespace en
 	n_kegnmb								= "Keg",
 	n_drillnmb								= "Drill",
 	n_satchelnmb							= "Satchel",
+	n_stickybombnmb							= "Sticky Bomb",
+	n_goldenminenmb							= "Golden Mine",
+	n_icebombnmb							= "Ice Bomb",
+	n_slideminenmb							= "Slide Mine",
 
 			// Builder Shop
 	n_drillbnmb								= "Drill",
@@ -156,18 +183,20 @@ namespace en
 	n_bombarrowsnmb							= "Bomb Arrows",
 	n_blockarrowsnmb						= "Wooden Block Arrows",
 	n_stoneblockarrowsnmb					= "Stone Block Arrows",
+	n_mountedbownmb							= "Mounted Bow",
 
 			// Quarters
-	n_beernmb								= "Beer",
-	n_mealnmb								= "Meal",
+	n_beernmb								= "Kvass",
+	n_mealnmb								= "Borsch",
 	n_eggnmb								= "Egg",
-	n_burgernmb								= "Burger",
+	n_burgernmb								= "Pear Tart",
 	n_pearnmb								= "Pear",
 	n_sleepnmb								= "Sleep",
 
 			// Vehicle Shop
 	n_catapultnmb							= "Catapult",
 	n_ballistanmb							= "Ballista",
+	n_bombernmb								= "Bomber",
 	n_outpostnmb							= "Outpost",
 	n_boltsnmb								= "Ballista Bolts",
 	n_shellsnmb								= "Ballista Shells",
@@ -190,6 +219,7 @@ namespace en
 	n_clusterfuck							= "Toggle particles and gibs",
 	n_clusterfuck_blood						= "Toggle blood",
 	n_clusterfuck_smoke						= "Toggle smoke",
+	n_drillzoneborders						= "Drill Zone Borders",
 	n_grapplewhilecharging					= "Use grapple while charging",
 	n_annoyingnature						= "Sounds from bushes and tree leafs",
 	n_annoyingvoicelines					= "Sounds from voicelines",
@@ -211,6 +241,12 @@ namespace en
 	// Food.as
 	n_burgerinv								= "Pear tart",
 
+	// KnightShop.as
+	n_stickybomb							= "Sticky Bomb",
+	n_goldenmine							= "Golden Mine",
+	n_slidemine							    = "Slide Mine",
+	n_icebomb								= "Ice Bomb",
+
 	// KIWI_Playercard.as
 	n_medalsn								= "Medals",
 	n_partipin								= "Participation",
@@ -225,10 +261,13 @@ namespace en
 	n_killsperminute						= "KPM",
 
 	// Quarters.as
-	n_beeritem								= "Beer - 1 Heart",
-	n_mealitem								= "Meal - Full Health",
+	n_beeritem								= "Kvass - 1 Heart",
+	//n_beeritem								= "Beer - 1 Heart",
+	n_mealitem								= "Borsch - Full Health",
+	//n_mealitem								= "Meal - Full Health",
 	n_eggitem								= "Egg - Full Health",
-	n_burgeritem							= "Burger - Full Health",
+	n_burgeritem							= "Pear Tart - Full Health",
+	//n_burgeritem							= "Burger - Full Health",
 	n_pearitem								= "Pear - 2 Hearts",
 	n_sleepaction							= "Sleep",
 

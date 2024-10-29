@@ -35,6 +35,7 @@ namespace ArcherParams
 const f32 archer_grapple_length = 72.0f;
 const f32 archer_grapple_slack = 16.0f;
 const f32 archer_grapple_throw_speed = 20.0f;
+const f32 archer_grapple_throw_speed_i = 10.0f;
 
 const f32 archer_grapple_force = 2.0f;
 const f32 archer_grapple_accel_limit = 1.5f;
@@ -61,20 +62,27 @@ namespace BombType
 		bomb = 0,
 		water,
 		sticky,
+		ice,
 		count
 	};
 }
 
 const string[] bombNames = { "Bomb",
-                             "Water Bomb"
+                             "Water Bomb",
+                             "Sticky Bomb",
+							 "Ice Bomb"
                            };
 
 const string[] bombIcons = { "$Bomb$",
-                             "$WaterBomb$"
+                             "$WaterBomb$",
+                             "$StickyBomb$",
+							 "$IceBomb$"
                            };
 
 const string[] bombTypeNames = { "mat_bombs",
-                                 "mat_waterbombs"
+                                 "mat_waterbombs",
+                                 "mat_stickybombs",
+								 "mat_icebombs"
                                };
 
 bool hasBombs(CBlob@ this, u8 bombType)
@@ -221,7 +229,7 @@ const string[] arrowNames = { "Regular arrows",
                               "Water arrows",
                               "Fire arrows",
                               "Bomb arrow",
-                              "Wooden Block arrows",
+                              "Wooden Block Arrows",
                               "Stone Block Arrows"
                             };
 

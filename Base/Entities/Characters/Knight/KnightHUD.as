@@ -45,12 +45,6 @@ void ManageCursors(CBlob@ this)
 
 			getHUD().SetCursorImage(getPath() + "Sprites/HUD/Cursors/DrillCursor.png", Vec2f(32, 32));
 			getHUD().SetCursorOffset(Vec2f(-11, -11) * cl_mouse_scale);
-
-			/*if ((holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0))
-			{
-				getHUD().SetCursorImage(getPath() + "Sprites/HUD/Cursors/CantDrillCursor.png", Vec2f(32, 32));
-				getHUD().SetCursorOffset(Vec2f(-11, -11) * cl_mouse_scale);
-			}*/
 		}
 		else
 		{
@@ -82,6 +76,13 @@ void onRender(CSprite@ this)
 		frame = 0;
 	} else if (type < 255) {
 		frame = 1 + type;
+	}
+
+	// HACK: because code above just fucking epic, we need use new clause for new bombs
+	if (type == 2) {
+		frame = 5;
+	} else if (type == 3) {
+		frame = 6;
 	}
 
 	// draw coins

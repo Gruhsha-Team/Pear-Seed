@@ -98,6 +98,22 @@ void onTick(CBlob@ this)
 					wanna_buy = true;
 					item_id	= 5;
 				}
+				if (b_KeyJustPressed("k_sticky")) {
+					wanna_buy = true;
+					item_id	= 6;
+				}
+				if (b_KeyJustPressed("k_icebomb")) {
+					wanna_buy = true;
+					item_id	= 7;
+				}
+				if (b_KeyJustPressed("k_goldmine")) {
+					wanna_buy = true;
+					item_id	= 8;
+				}
+				if (b_KeyJustPressed("k_slidemine")) {
+					wanna_buy = true;
+					item_id	= 9;
+				}
 
 				if (wanna_buy) {
 					dont_show_emotes = true;
@@ -214,6 +230,10 @@ void onTick(CBlob@ this)
 					wanna_buy = true;
 					item_id	= 5;
 				}
+				if (b_KeyJustPressed("a_mountedbow")) {
+					wanna_buy = true;
+					item_id	= 6;
+				}
 
 				if (wanna_buy) {
 					dont_show_emotes = true;
@@ -297,17 +317,21 @@ void onTick(CBlob@ this)
 					wanna_buy = true;
 					item_id	= 1;
 				}
-				if (b_KeyJustPressed("vehicle_outpost")) {
+				if (b_KeyJustPressed("vehicle_bomber")) {
 					wanna_buy = true;
 					item_id	= 2;
 				}
-				if (b_KeyJustPressed("vehicle_bolts")) {
+				if (b_KeyJustPressed("vehicle_outpost")) {
 					wanna_buy = true;
 					item_id	= 3;
 				}
-				if (b_KeyJustPressed("vehicle_shells")) {
+				if (b_KeyJustPressed("vehicle_bolts")) {
 					wanna_buy = true;
 					item_id	= 4;
+				}
+				if (b_KeyJustPressed("vehicle_shells")) {
+					wanna_buy = true;
+					item_id	= 5;
 				}
 
 				if (wanna_buy) {
@@ -438,7 +462,11 @@ void onRender(CSprite@ this)
 		"k_mine",
 		"k_keg",
 		"k_drill",
-		"k_satchel"
+		"k_satchel",
+		"k_sticky",
+		"k_icebomb",
+		"k_goldmine",
+		"k_slidemine"
 		};
 
 		if (theknightshop.get("shop array", @shopitems)) {
@@ -475,7 +503,8 @@ void onRender(CSprite@ this)
 		"a_firearrows",
 		"a_bombarrows",
 		"a_blockarrows",
-		"a_stoneblockarrows"
+		"a_stoneblockarrows",
+		"a_mountedbow"
 		};
 
 		if (thearchershop.get("shop array", @shopitems)) {
@@ -598,18 +627,23 @@ void onRender(CSprite@ this)
 		string[] items = {
 		"vehicle_catapult",
         "vehicle_ballista",
+		"vehicle_bomber",
         "vehicle_outpost",
         "vehicle_bolts",
         "vehicle_shells"
 		};
 
 		if (thevehicle.get("shop array", @shopitems)) {
-			for (int i = 0; i < 5; ++i) {
+			for (int i = 0; i < 6; ++i) {
 				s32 buttonwidth = advance_by.x;
 				s32 buttonheight = advance_by.y;
 				ShopItem @s_item = shopitems[i];
 
 				if (s_item.blobName == "catapult") {
+					buttonwidth = 72;
+					buttonheight = 64;
+				}
+				if (s_item.blobName == "bomber") {
 					buttonwidth = 72;
 					buttonheight = 64;
 				}

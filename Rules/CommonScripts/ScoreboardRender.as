@@ -28,7 +28,7 @@ bool mouseWasPressed2 = false;
 
 const string OLD_PLAYER_STATS_CORE = "player stats core";
 
-const string mod_version = "v1.0.4";
+const string mod_version = "v1.1";
 
 class OldPlayerStatsCore {
 	dictionary stats;
@@ -859,7 +859,7 @@ void onRenderScoreboard(CRules@ this) {
 	ScoreboardField(
 		Vec2f(screenWidth - tl.x - 200, 115 - scrollOffset),
 		Vec2f(screenWidth - tl.x,       115 - scrollOffset + 40),
-		Descriptions::currentversiontext + mod_version + "\n(3.2)"
+		Descriptions::currentversiontext + mod_version + "\n(3.2.4)"
 	);
 	LinkButton(
 		Vec2f(screenWidth - tl.x - 275, 115 - scrollOffset),

@@ -147,6 +147,11 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 				time = 45;
 			}
 
+			// HACK: remove stun from icebomb
+			if (hitterBlob.getConfig() == "icebomb") {
+				time = 0;
+			}
+
 			// Halve the stun if it was blocked
 			if (defended)
 			{

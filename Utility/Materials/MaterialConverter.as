@@ -103,6 +103,27 @@ void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint )
     }
 }
 
+void onDetach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint )
+{
+    if (!isServer()) return;
+
+    u16 mats_count = attached.getQuantity();
+
+    if (this !is null && attached !is null) {
+        if (attached.getConfig() == "mat_stone") {
+            attached.set_s32("attach time", -1);
+            attached.Sync("attach time", true);
+
+            //printf("Stone attach time is " + attached.get_s32("attach time"));
+        } else if (attached.getConfig() == "mat_wood") {
+            attached.set_s32("attach time", -1);
+            attached.Sync("attach time", true);
+
+            //printf("Wood attach time is " + attached.get_s32("attach time"));
+        }
+    }
+}
+
 // Set pickup timer
 void onAddToInventory(CBlob@ this, CBlob@ blob)
 {
@@ -116,6 +137,24 @@ void onAddToInventory(CBlob@ this, CBlob@ blob)
             //printf("Stone pickup time is " + blob.get_s32("pickup time"));
         } else if (blob.getConfig() == "mat_wood") {
             blob.set_s32("pickup time", getGameTime());
+            blob.Sync("pickup time", true);
+
+            //printf("Wood pickup time is " + blob.get_s32("pickup time"));
+        }
+    }
+}
+
+void onRemoveFromInventory(CBlob@ this, CBlob@ blob) {
+    if (!isServer()) return;
+
+    if (this !is null && blob !is null) {
+        if (blob.getConfig() == "mat_stone") {
+            blob.set_s32("pickup time", -1);
+            blob.Sync("pickup time", true);
+
+            //printf("Stone pickup time is " + blob.get_s32("pickup time"));
+        } else if (blob.getConfig() == "mat_wood") {
+            blob.set_s32("pickup time", -1);
             blob.Sync("pickup time", true);
 
             //printf("Wood pickup time is " + blob.get_s32("pickup time"));

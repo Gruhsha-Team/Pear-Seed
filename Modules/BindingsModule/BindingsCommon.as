@@ -63,7 +63,8 @@ string[][] button_texts =
 	{
 		Names::drillcommand,
 		Names::cancelarrowschargingcommand,
-		Names::markbuildercommand
+		Names::markbuildercommand,
+		Names::putitemcommand
 		//Names::activateorthrowbomb
 	},
 	{
@@ -78,7 +79,11 @@ string[][] button_texts =
 		Names::minenmb,
 		Names::kegnmb,
 		Names::drillnmb,
-		Names::satchelnmb
+		Names::satchelnmb,
+		Names::stickybombnmb,
+		Names::goldenminenmb,
+		Names::icebombnmb,
+		Names::slideminenmb
 	},
 	{							// ARCHER SHOP
 		Names::arrowsnmb,
@@ -86,7 +91,8 @@ string[][] button_texts =
 		Names::firearrowsnmb,
 		Names::bombarrowsnmb,
 		Names::blockarrowsnmb,
-		Names::stoneblockarrowsnmb
+		Names::stoneblockarrowsnmb,
+		Names::mountedbownmb
 	},
 	{							// BUILDER SHOP
 		Names::drillbnmb,
@@ -111,6 +117,7 @@ string[][] button_texts =
 	{							// VEHICLE SHOP
 		Names::catapultnmb,
 		Names::ballistanmb,
+		Names::bombernmb,
 		Names::outpostnmb,
 		Names::boltsnmb,
 		Names::shellsnmb
@@ -166,7 +173,8 @@ string[][] button_file_names =
 	{
 		"take_out_drill",
 		"cancel_charging",
-		"mark_team_builder"
+		"mark_team_builder",
+		"put_item"
 		//"activate_or_throw_bomb"
 	},
 	{
@@ -181,7 +189,11 @@ string[][] button_file_names =
 		"k_mine",
 		"k_keg",
 		"k_drill",
-		"k_satchel"
+		"k_satchel",
+		"k_sticky",
+		"k_icebomb",
+		"k_goldmine",
+		"k_slidemine"
 	},
 	{
 		"a_arrows",
@@ -190,6 +202,7 @@ string[][] button_file_names =
 		"a_bombarrows",
 		"a_blockarrows",
 		"a_stoneblockarrows",
+		"a_mountedbow"
 	},
 	{
 		"b_drill",
@@ -214,6 +227,7 @@ string[][] button_file_names =
 	{
 		"vehicle_catapult",
 		"vehicle_ballista",
+		"vehicle_bomber",
 		"vehicle_outpost",
 		"vehicle_bolts",
 		"vehicle_shells",

@@ -44,12 +44,6 @@ void ManageCursors(CBlob@ this)
 
 			getHUD().SetCursorImage(getPath() + "Sprites/HUD/Cursors/DrillCursor.png", Vec2f(32, 32));
 			getHUD().SetCursorOffset(Vec2f(-11, -11) * cl_mouse_scale);
-
-			/*if ((holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0))
-			{
-				getHUD().SetCursorImage(getPath() + "Sprites/HUD/Cursors/CantDrillCursor.png", Vec2f(32, 32));
-				getHUD().SetCursorOffset(Vec2f(-11, -11) * cl_mouse_scale);
-			}*/
 		} else {
 			// set cursor
 			getHUD().SetCursorImage("Entities/Characters/Archer/ArcherCursor.png", Vec2f(32, 32));

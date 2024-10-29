@@ -110,6 +110,7 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
 	}
 
 	const bool bomberman = this.hasTag("bomberman_style");
+	const bool directional = this.hasTag("directional_style");
 
 	//actor damage
 	u8 hitter = Hitters::explosion;
@@ -130,6 +131,13 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
 		return;
 	}
 
+	if (this.getConfig() == "icebomb")
+	{
+		int tilesr = (r / map.tilesize) * 0.5f;
+		Splash(this, tilesr, tilesr, 0.0f, false);
+		return;
+	}
+
 	//
 
 	makeLargeExplosionParticle(pos);
@@ -138,6 +146,12 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
 	if (bomberman)
 	{
 		BombermanExplosion(this, radius, damage, map_damage_radius, map_damage_ratio, map_damage_raycast, hitter, should_teamkill);
+
+		return; //------------------------------------------------------ END WHEN BOMBERMAN
+	}
+
+	if (directional) {
+		DirectionalExplosion(this, radius, damage, map_damage_radius, map_damage_ratio, map_damage_raycast, hitter, should_teamkill);
 
 		return; //------------------------------------------------------ END WHEN BOMBERMAN
 	}
@@ -358,6 +372,19 @@ void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@
 			hitBlob.AddForce(velocity);
 		}
 	}
+
+	if (this.getName() == "icebomb") {
+		if (hitBlob !is null && hitBlob.hasTag("player")) {
+			hitBlob.Tag("icy");
+			//hitBlob.Sync("icy", true);
+		}
+	}
+
+	if (this.getName() == "waterbomb") {
+		if (hitBlob !is null && hitBlob.hasTag("player") && hitBlob.hasTag("icy")) {
+			hitBlob.add_s32("icy time", getTicksASecond() * 5);
+		}
+	}
 }
 
 /**
@@ -528,7 +555,60 @@ void BombermanExplosion(CBlob@ this, f32 radius, f32 damage, f32 map_damage_radi
 	//left and right
 	LinearExplosion(this, Vec2f(-1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
 	LinearExplosion(this, Vec2f(1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+}
 
+void DirectionalExplosion(CBlob@ this, f32 radius, f32 damage, f32 map_damage_radius,
+                        f32 map_damage_ratio, bool map_damage_raycast, const u8 hitter,
+                        const bool should_teamkill = false)
+{
+	Vec2f pos = this.getPosition();
+	CMap@ map = this.getMap();
+	const f32 interval = map.tilesize;
+
+	const int steps = 4; //HACK - todo property
+
+	f32 ray_width = 16.0f;
+	if (this.exists("map_bomberman_width"))
+	{
+		ray_width = this.get_f32("map_bomberman_width");
+	}
+
+	//get blobs
+	CBlob@[] blobs;
+	map.getBlobsInRadius(pos, radius, @blobs);
+
+	// up
+	if (this.getAngleDegrees() == -90)
+		LinearExplosion(this, Vec2f(0, -1), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	// up and left
+	else if (this.getAngleDegrees() >= -90 && this.getAngleDegrees() < 0) {
+		LinearExplosion(this, Vec2f(0, -1), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+		LinearExplosion(this, Vec2f(-1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	}
+	// up and right
+	else if (this.getAngleDegrees() >= 0 && this.getAngleDegrees() < -90) {
+		LinearExplosion(this, Vec2f(0, -1), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+		LinearExplosion(this, Vec2f(1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	}
+	// down
+	else if (this.getAngleDegrees() == 90)
+		LinearExplosion(this, Vec2f(0, 1), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	// down and left
+	else if (this.getAngleDegrees() < 90 && this.getAngleDegrees() > 0) {
+		LinearExplosion(this, Vec2f(0, 1), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+		LinearExplosion(this, Vec2f(-1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	}
+	// down and right
+	else if (this.getAngleDegrees() > 90 && this.getAngleDegrees() < 180) {
+		LinearExplosion(this, Vec2f(0, 1), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+		LinearExplosion(this, Vec2f(1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	}
+	// left
+	else if (this.getAngleDegrees() == 180)
+		LinearExplosion(this, Vec2f(-1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
+	// right
+	else if (this.getAngleDegrees() == -0 || this.getAngleDegrees() == 0)
+		LinearExplosion(this, Vec2f(1, 0), radius, ray_width, steps, damage, hitter, blobs, should_teamkill);
 }
 
 bool canExplosionDamage(CMap@ map, Vec2f tpos, TileType t)
@@ -571,6 +651,14 @@ bool HitBlob(CBlob@ this, Vec2f mapPos, CBlob@ hit_blob, f32 radius, f32 damage,
 	Vec2f hit_blob_pos = hit_blob.getPosition();
 	Vec2f wall_hit;
 	Vec2f hitvec = hit_blob_pos - pos;
+
+	// Erzats tigorsun's autistic bombjumps fix from bunnie
+	if (this.getName() == "bomb" && hit_blob.getName() == "bomb" && this.getDamageOwnerPlayer() is hit_blob.getDamageOwnerPlayer()) {
+		if (isServer() && !hit_blob.isAttached()) {
+			hit_blob.Tag("DONTSTACKBOMBJUMP");
+			hit_blob.Sync("DONTSTACKBOMBJUMP", true);
+		}
+	}
 
 	if (bother_raycasting && this.getName() != "keg") // have we already checked the rays?
 	{
@@ -634,6 +722,10 @@ bool HitBlob(CBlob@ this, Vec2f mapPos, CBlob@ hit_blob, f32 radius, f32 damage,
 	f32 scale;
 	Vec2f bombforce = hit_blob.hasTag("invincible") ? Vec2f_zero : getBombForce(this, radius, hit_blob_pos, pos, hit_blob.getMass());
 	f32 dam = damage * getBombDamageScale(this, radius, hit_blob_pos, pos);
+
+	if (this.getName() == "stickybomb") {
+		bombforce = hit_blob.hasTag("invincible") ? Vec2f_zero : getStickyBombForce(this, radius, hit_blob_pos, pos, hit_blob.getMass());
+	}
 
 	//explosion particle
 	makeSmallExplosionParticle(hit_blob_pos);

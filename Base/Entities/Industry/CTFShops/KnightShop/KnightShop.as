@@ -7,6 +7,7 @@
 #include "CheckSpam.as"
 #include "GenericButtonCommon.as"
 #include "TeamIconToken.as"
+#include "TranslationsSystem.as"
 
 void onInit(CBlob@ this)
 {
@@ -22,7 +23,7 @@ void onInit(CBlob@ this)
 
 	// SHOP
 	this.set_Vec2f("shop offset", Vec2f_zero);
-	this.set_Vec2f("shop menu size", Vec2f(7, 1));
+	this.set_Vec2f("shop menu size", Vec2f(7, 2));
 	this.set_string("shop description", "Buy");
 	this.set_u8("shop icon", 25);
 
@@ -43,6 +44,7 @@ void onInit(CBlob@ this)
 	{
 		ShopItem@ s = addShopItem(this, "Mine", getTeamIcon("mine", "Mine.png", team_num, Vec2f(16, 16), 1), "mine", Descriptions::mine, false);
 		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::mine);
+		AddRequirement(s.requirements, "no more", "mine", "Mine", 8);
 	}
 	{
 		ShopItem@ s = addShopItem(this, "Keg", getTeamIcon("keg", "Keg.png", team_num, Vec2f(16, 16), 0), "keg", Descriptions::keg, false);
@@ -56,6 +58,25 @@ void onInit(CBlob@ this)
 	{
 		ShopItem@ s = addShopItem(this, "Satchel", getTeamIcon("satchel", "Satchel.png", team_num, Vec2f(16, 16), 0), "satchel", Descriptions::satchel, false);
 		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::satchel);
+		s.spawnToInventory = true;
+	}
+	{
+		ShopItem@ s = addShopItem(this, Names::stickybomb, "$stickybombs$", "mat_stickybombs", Descriptions::stickybombdesc, true);
+		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::stickybomb);
+	}
+	{
+		ShopItem@ s = addShopItem(this, Names::icebomb, "$icebomb$", "mat_icebombs", Descriptions::icebombdesc, true);
+		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::icebomb);
+	}
+	{
+		ShopItem@ s = addShopItem(this, Names::goldenmine, getTeamIcon("golden_mine", "GoldenMine.png", team_num, Vec2f(16, 16), 1), "golden_mine", Descriptions::goldenminedesc, true);
+		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::golden_mine);
+		AddRequirement(s.requirements, "no more", "golden_mine", "Golden Mine", 5);
+	}
+	{
+		ShopItem@ s = addShopItem(this, Names::slidemine, getTeamIcon("slidemine", "SlideMine.png", team_num, Vec2f(16, 16), 1), "slidemine", Descriptions::slideminedesc, true);
+		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::slidemine);
+		AddRequirement(s.requirements, "no more", "slidemine", "Slide Mine", 3);
 	}
 }
 

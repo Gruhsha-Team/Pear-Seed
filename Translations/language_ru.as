@@ -22,6 +22,7 @@ namespace ru
 	// ArcherShop.as
 	d_woodenarrowdesc						= "Ставит деревянный блок на месте приземления.",
 	d_stonearrowdesc						= "Ставит каменный блок на месте приземления.",
+	d_mountedbowdesc						= "Стационарный арбалет для тех, кто хочет хоть немного побыть лучником.",
 
 	// BindingsCommon.as
 	d_modbindplaceholder					= "пусто",
@@ -56,6 +57,12 @@ namespace ru
 	d_specallcomtext						= "Сделать всех игроков наблюдателями",
 	d_preventvoicelinespamtext				= "Запретить игроку спамить войслайнами",
 
+	// KnightShop.as
+	d_stickybombdesc						= "Покрытый слизью динамит, прилипающий к поверхности. Полезен в стелс-операциях и сносе конструкций.",
+	d_goldenminedesc						= "Более прочная версия мины, способна прилипать к поверхности.",
+	d_slideminedesc							= "Менее прочная версия обычной мины, взводится в боевое состояние при движении.",
+	d_icebombdesc							= "Снежный шар с мини-кегой внутри, способен замедлить противника на небольшое время.",
+
 	// Satchel.as
 	d_satcheldesc							= "Поджигает горючие блоки, активируется при помощи клавиши броска",
 
@@ -74,11 +81,26 @@ namespace ru
 	d_totaltext								= "Всего ",
 
 	// Quarters.as
-	d_beertext								= "Кружка освежающего пива.",
-	d_mealtext								= "Питательный мясной обед.",
-	d_burgertext							= "Бургер с собой в дорогу.",
+	d_beertext								= "Кружка освежающего кваса.",
+	d_mealtext								= "Нажористый и вкусный борщ.",
+	d_burgertext							= "Пирожок с грушами с собой в дорогу.",
 	d_peartext								= "Сочная и сладкая груша.",
 	d_sleeptext								= "Прилечь поспать. Бесплатно!",
+
+	// VehicleShop.as
+	d_bomberdesc							= "Воздушное транспортное средство, может перевезти двух человек и некоторое количество груза. Можно сбрасывать предметы на клавишу Space.",
+
+	// TimeToEnd.as
+	d_thirtyminutesleft						= "Осталось 5 минут до конца раунда, поторопитесь!",
+	d_suddenactive							= "РЕЖИМ ВНЕЗАПНОЙ СМЕРТИ АКТИВЕН!",
+	d_kegbuff								= "* Более мощные кеги;",
+	d_drillbuff1							= "* Зона дриллинга полностью выключена;",
+	d_drillbuff2							= "* Рыцари и лучники получают меньше нагрева при дриллинге;",
+	d_blockreqdebuff						= "* Требования блоков на миду умножаются в 1.35 раз;",
+	d_respawndebuff							= "* Время респауна увеличено до 15 секунд;",
+	d_shielddebuff							= "* Щиты пропускают половину урона от слешей и тычков;",
+	d_swordbuff								= "* Рыцарь получает возможность раз в 30 секунд ударить огнём;",
+	d_pricedebuff							= "* Пересчитываются цены на некоторые предметы.",
 
 	//////////////////////////////////////////////////////////
 	// Names
@@ -126,7 +148,8 @@ namespace ru
 	n_drillcommand							= "Достать/Убрать дрель",
 	n_cancelarrowschargingcommand			= "Перестать заряжать лук",
 	n_markbuildercommand					= "Отмечать позицию строителя",
-	n_activateorthrowbomb					= "Активация бомбы (Строитель)",
+	n_activateorthrowbomb					= "Активация предметов",
+	n_putitemcommand						= "Положить предмет в инвентарь",
 
 		// NoMenuBuying Binds
 			// Knight Shop
@@ -136,6 +159,10 @@ namespace ru
 	n_kegnmb								= "Кега",
 	n_drillnmb								= "Бур",
 	n_satchelnmb							= "Взрывпакет",
+	n_stickybombnmb							= "Липкая бомба",
+	n_goldenminenmb							= "Золотая мина",
+	n_icebombnmb							= "Ледяная бомба",
+	n_slideminenmb							= "Слайд-мина",
 
 			// Builder Shop
 	n_drillbnmb								= "Бур",
@@ -156,6 +183,7 @@ namespace ru
 	n_bombarrowsnmb							= "Стрелы-бомбы",
 	n_blockarrowsnmb						= "Стрелы-блоки (дерево)",
 	n_stoneblockarrowsnmb					= "Стрелы-блоки (камень)",
+	n_mountedbownmb							= "Стационарный арбалет",
 
 			// Quarters
 	n_beernmb								= "Квас",
@@ -168,6 +196,7 @@ namespace ru
 			// Vehicle Shop
 	n_catapultnmb							= "Катапульта",
 	n_ballistanmb							= "Баллиста",
+	n_bombernmb								= "Воздушный шар",
 	n_outpostnmb							= "Аванпост",
 	n_boltsnmb								= "Болты для баллисты",
 	n_shellsnmb								= "Взрывные болты для баллисты",
@@ -190,6 +219,7 @@ namespace ru
 	n_clusterfuck							= "Отображение частиц и кусков",
 	n_clusterfuck_blood						= "Отображение крови",
 	n_clusterfuck_smoke						= "Отображение дыма",
+	n_drillzoneborders						= "Границы зоны дриллинга",
 	n_grapplewhilecharging					= "Использовать крюк при стрельбе",
 	n_annoyingnature						= "Звук от кустов и листьев",
 	n_annoyingvoicelines					= "Звуки войслайнов",
@@ -211,6 +241,12 @@ namespace ru
 	// Food.as
 	n_burgerinv								= "Пирожок с грушами",
 
+	// KnightShop.as
+	n_stickybomb							= "Липкая бомба",
+	n_goldenmine							= "Золотая мина",
+	n_slidemine							    = "Слайд-мина",
+	n_icebomb								= "Ледяная бомба",
+
 	// KIWI_Playercard.as
 	n_medalsn								= "Медали",
 	n_partipin								= "Участие",
@@ -225,10 +261,13 @@ namespace ru
 	n_killsperminute						= "У/М",
 
 	// Quarters.as
-	n_beeritem								= "Пиво - 1 Сердце",
-	n_mealitem								= "Мясное блюдо - Полное здоровье",
+	n_beeritem								= "Квас - 1 Сердце",
+	//n_beeritem								= "Пиво - 1 Сердце",
+	n_mealitem								= "Борщ - Полное здоровье",
+	//n_mealitem								= "Мясное блюдо - Полное здоровье",
 	n_eggitem								= "Яйцо - Полное здоровье",
-	n_burgeritem							= "Бургер - Полное здоровье",
+	n_burgeritem							= "Пирожок с грушами - Полное здоровье",
+	//n_burgeritem							= "Бургер - Полное здоровье",
 	n_pearitem								= "Груша - 2 Сердца",
 	n_sleepaction							= "Лечь спать",
 

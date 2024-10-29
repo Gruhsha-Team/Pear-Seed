@@ -174,13 +174,19 @@ void ManageGrapple(CBlob@ this, ArcherInfo@ archer)
 
 			//aim in direction of cursor
 			f32 distance = direction.Normalize();
-			if (distance > 1.0f)
-			{
-				archer.grapple_vel = direction * archer_grapple_throw_speed;
-			}
-			else
-			{
-				archer.grapple_vel = Vec2f_zero;
+
+			if (!this.hasTag("icy")) {
+				if (distance > 1.0f) {
+					archer.grapple_vel = direction * archer_grapple_throw_speed;
+				} else {
+					archer.grapple_vel = Vec2f_zero;
+				}
+			} else {
+				if (distance > 1.0f) {
+					archer.grapple_vel = direction * archer_grapple_throw_speed_i;
+				} else {
+					archer.grapple_vel = Vec2f_zero;
+				}
 			}
 
 			SyncGrapple(this);
@@ -726,7 +732,7 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 					const string itemname = item.getName();
 					if (!holding && bombTypeNames[bombType] == itemname)
 					{
-						if (bombType >= 2)
+						if (bombType >= 4)
 						{
 							this.server_Pickup(item);
 							client_SendThrowOrActivateCommand(this);
@@ -1407,6 +1413,31 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.Tag("splash ray cast");
 					}
 				}
+				else if (bombType == 2)
+				{
+					CBlob @blob = server_CreateBlob("stickybomb", this.getTeamNum(), this.getPosition());
+					if (blob !is null)
+					{
+						TakeItem(this, bombTypeName);
+						this.server_Pickup(blob);
+					}
+				}
+				else if (bombType == 3)
+				{
+					CBlob @blob = server_CreateBlob("icebomb", this.getTeamNum(), this.getPosition());
+					if (blob !is null)
+					{
+						TakeItem(this, bombTypeName);
+						this.server_Pickup(blob);
+						blob.set_f32("map_damage_ratio", 0.0f);
+						blob.set_f32("explosive_damage", 0.0f);
+						blob.set_f32("explosive_radius", 128.0f);
+						blob.set_bool("map_damage_raycast", false);
+						blob.set_string("custom_explosion_sound", "/GlassBreak");
+						blob.set_u8("custom_hitter", Hitters::water);
+						blob.Tag("splash ray cast");
+					}
+				}
 			}
 		}
 		SetFirstAvailableBomb(this);
@@ -1517,6 +1548,8 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 	AddIconToken("$BombArrow$", "Entities/Characters/Archer/ArcherIcons.png", Vec2f(16, 32), 3, this.getTeamNum());
 	AddIconToken("$BlockArrow$", "Entities/Characters/Archer/ArcherIcons.png", Vec2f(16, 32), 4, this.getTeamNum());
 	AddIconToken("$StoneBlockArrow$", "Entities/Characters/Archer/ArcherIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
+	AddIconToken("$StickyBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
+	AddIconToken("$IceBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 6, this.getTeamNum());
 	
 	if (arrowTypeNames.length == 0)
 	{
@@ -1529,7 +1562,7 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 	}
 
 	this.ClearGridMenusExceptInventory();
-	Vec2f pos2(gridmenu.getUpperLeftPosition().x - 0.8f * (gridmenu.getLowerRightPosition().x - gridmenu.getUpperLeftPosition().x),
+	Vec2f pos2(gridmenu.getUpperLeftPosition().x - 1.1f * (gridmenu.getLowerRightPosition().x - gridmenu.getUpperLeftPosition().x),
 	          gridmenu.getUpperLeftPosition().y + 48);
 	CGridMenu@ menu2 = CreateGridMenu(pos2, this, Vec2f(bombTypeNames.length, 2), getTranslatedString("Current bomb"));
 	u8 weaponSel = this.get_u8("bomb type");

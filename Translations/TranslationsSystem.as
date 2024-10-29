@@ -37,6 +37,7 @@ namespace Descriptions
 	// ArcherShop.as
 	woodenarrowdesc		  	    	= Translate(en::d_woodenarrowdesc+"\\"+ru::d_woodenarrowdesc),
 	stonearrowdesc		  	    	= Translate(en::d_stonearrowdesc+"\\"+ru::d_stonearrowdesc),
+	mountedbowdesc		  	    	= Translate(en::d_mountedbowdesc+"\\"+ru::d_mountedbowdesc),
 
 	// BindingsCommon.as
 	modbindplaceholder		  	    = Translate(en::d_modbindplaceholder+"\\"+ru::d_modbindplaceholder),
@@ -54,6 +55,28 @@ namespace Descriptions
 
 	// PickingCommands.as
 	bindingscom		  	       		= Translate(en::d_bindingscom+"\\"+ru::d_bindingscom),
+	togglechcomtext		  	       	= Translate(en::d_togglechcomtext+"\\"+ru::d_togglechcomtext),
+	togglechcomchat		  	       	= Translate(en::d_togglechcomchat+"\\"+ru::d_togglechcomchat),
+	togglechcom2		  	       	= Translate(en::d_togglechcom2+"\\"+ru::d_togglechcom2),
+	togglechcom3		  	       	= Translate(en::d_togglechcom3+"\\"+ru::d_togglechcom3),
+	archerlimchat		  	       	= Translate(en::d_archerlimchat+"\\"+ru::d_archerlimchat),
+	archerlimtext		  	       	= Translate(en::d_archerlimtext+"\\"+ru::d_archerlimtext),
+	builderlimchat		  	       	= Translate(en::d_builderlimchat+"\\"+ru::d_builderlimchat),
+	builderlimtext		  	       	= Translate(en::d_builderlimtext+"\\"+ru::d_builderlimtext),
+	lockcomtext		  	      	 	= Translate(en::d_lockcomtext+"\\"+ru::d_lockcomtext),
+	lockcomchatunl		  	      	= Translate(en::d_lockcomchatunl+"\\"+ru::d_lockcomchatunl),
+	lockcomchatloc		  	       	= Translate(en::d_lockcomchatloc+"\\"+ru::d_lockcomchatloc),
+	pickcomtext		  	    	   	= Translate(en::d_pickcomtext+"\\"+ru::d_pickcomtext),
+	demotecomtext		  	       	= Translate(en::d_demotecomtext+"\\"+ru::d_demotecomtext),
+	appointcomtext		  	       	= Translate(en::d_appointcomtext+"\\"+ru::d_appointcomtext),
+	specallcomtext		  	       	= Translate(en::d_specallcomtext+"\\"+ru::d_specallcomtext),
+	preventvoicelinespamtext		= Translate(en::d_preventvoicelinespamtext+"\\"+ru::d_preventvoicelinespamtext),
+
+	// KnightShop.as
+	stickybombdesc					= Translate(en::d_stickybombdesc+"\\"+ru::d_stickybombdesc),
+	goldenminedesc					= Translate(en::d_goldenminedesc+"\\"+ru::d_goldenminedesc),
+	slideminedesc					= Translate(en::d_slideminedesc+"\\"+ru::d_slideminedesc),
+	icebombdesc						= Translate(en::d_icebombdesc+"\\"+ru::d_icebombdesc),
 
 	// Satchel.as
 	satcheldesc			  	       	= Translate(en::d_satcheldesc+"\\"+ru::d_satcheldesc),
@@ -78,6 +101,21 @@ namespace Descriptions
 	burgertext						= Translate(en::d_burgertext+"\\"+ru::d_burgertext),
 	peartext						= Translate(en::d_peartext+"\\"+ru::d_peartext),
 	sleeptext						= Translate(en::d_sleeptext+"\\"+ru::d_sleeptext),
+
+	// VehicleShop.as
+	bomberdesc						= Translate(en::d_bomberdesc+"\\"+ru::d_bomberdesc),
+
+	// TimeToEnd.as
+	thirtyminutesleft				= Translate(en::d_thirtyminutesleft+"\\"+ru::d_thirtyminutesleft),
+	suddenactive					= Translate(en::d_suddenactive+"\\"+ru::d_suddenactive),
+	kegbuff							= Translate(en::d_kegbuff+"\\"+ru::d_kegbuff),
+	drillbuff1						= Translate(en::d_drillbuff1+"\\"+ru::d_drillbuff1),
+	drillbuff2						= Translate(en::d_drillbuff2+"\\"+ru::d_drillbuff2),
+	blockreqdebuff					= Translate(en::d_blockreqdebuff+"\\"+ru::d_blockreqdebuff),
+	respawndebuff					= Translate(en::d_respawndebuff+"\\"+ru::d_respawndebuff),
+	shielddebuff					= Translate(en::d_shielddebuff+"\\"+ru::d_shielddebuff),
+	swordbuff						= Translate(en::d_swordbuff+"\\"+ru::d_swordbuff),
+	pricedebuff						= Translate(en::d_pricedebuff+"\\"+ru::d_pricedebuff),
 
 	empty 					= "";
 }
@@ -128,6 +166,7 @@ namespace Names
 	cancelarrowschargingcommand			= Translate(en::n_cancelarrowschargingcommand+"\\"+ru::n_cancelarrowschargingcommand),
 	markbuildercommand					= Translate(en::n_markbuildercommand+"\\"+ru::n_markbuildercommand),
 	activateorthrowbomb					= Translate(en::n_activateorthrowbomb+"\\"+ru::n_activateorthrowbomb),
+	putitemcommand						= Translate(en::n_putitemcommand+"\\"+ru::n_putitemcommand),
 
 		// NoMenuBuying Binds
 			// Knight Shop
@@ -137,6 +176,10 @@ namespace Names
 	kegnmb								= Translate(en::n_kegnmb+"\\"+ru::n_kegnmb),
 	drillnmb							= Translate(en::n_drillnmb+"\\"+ru::n_drillnmb),
 	satchelnmb							= Translate(en::n_satchelnmb+"\\"+ru::n_satchelnmb),
+	stickybombnmb						= Translate(en::n_stickybombnmb+"\\"+ru::n_stickybombnmb),
+	goldenminenmb						= Translate(en::n_goldenminenmb+"\\"+ru::n_goldenminenmb),
+	icebombnmb							= Translate(en::n_icebombnmb+"\\"+ru::n_icebombnmb),
+	slideminenmb						= Translate(en::n_slideminenmb+"\\"+ru::n_slideminenmb),
 
 			// Builder Shop
 	drillbnmb							= Translate(en::n_drillbnmb+"\\"+ru::n_drillbnmb),
@@ -157,6 +200,7 @@ namespace Names
 	bombarrowsnmb						= Translate(en::n_bombarrowsnmb+"\\"+ru::n_bombarrowsnmb),
 	blockarrowsnmb						= Translate(en::n_blockarrowsnmb+"\\"+ru::n_blockarrowsnmb),
 	stoneblockarrowsnmb					= Translate(en::n_stoneblockarrowsnmb+"\\"+ru::n_stoneblockarrowsnmb),
+	mountedbownmb						= Translate(en::n_mountedbownmb+"\\"+ru::n_mountedbownmb),
 
 			// Quarters
 	beernmb								 = Translate(en::n_beernmb+"\\"+ru::n_beernmb),
@@ -169,6 +213,7 @@ namespace Names
 			// Vehicle Shop
 	catapultnmb								 = Translate(en::n_catapultnmb+"\\"+ru::n_catapultnmb),
 	ballistanmb								 = Translate(en::n_ballistanmb+"\\"+ru::n_ballistanmb),
+	bombernmb								 = Translate(en::n_bombernmb+"\\"+ru::n_bombernmb),
 	outpostnmb								 = Translate(en::n_outpostnmb+"\\"+ru::n_outpostnmb),
 	boltsnmb								 = Translate(en::n_boltsnmb+"\\"+ru::n_boltsnmb),
 	shellsnmb								 = Translate(en::n_shellsnmb+"\\"+ru::n_shellsnmb),
@@ -191,6 +236,7 @@ namespace Names
 	clusterfuck	  	      				 = Translate(en::n_clusterfuck+"\\"+ru::n_clusterfuck),
 	clusterfuck_blood	  	      		 = Translate(en::n_clusterfuck_blood+"\\"+ru::n_clusterfuck_blood),
 	clusterfuck_smoke	  	      		 = Translate(en::n_clusterfuck_smoke+"\\"+ru::n_clusterfuck_smoke),
+	drillzoneborders		  	      	 = Translate(en::n_drillzoneborders+"\\"+ru::n_drillzoneborders),
 	grapplewhilecharging	  	      	 = Translate(en::n_grapplewhilecharging+"\\"+ru::n_grapplewhilecharging),
 	annoyingnature		 	 	      	 = Translate(en::n_annoyingnature+"\\"+ru::n_annoyingnature),
 	annoyingvoicelines		 	 	     = Translate(en::n_annoyingvoicelines+"\\"+ru::n_annoyingvoicelines),
@@ -211,6 +257,12 @@ namespace Names
 
 	// Food.as
 	burgerinv		  	       			= Translate(en::n_burgerinv+"\\"+ru::n_burgerinv),
+
+	// KnightShop.as
+	stickybomb							= Translate(en::n_stickybomb+"\\"+ru::n_stickybomb),
+	goldenmine							= Translate(en::n_goldenmine+"\\"+ru::n_goldenmine),
+	slidemine							= Translate(en::n_slidemine+"\\"+ru::n_slidemine),
+	icebomb								= Translate(en::n_icebomb+"\\"+ru::n_icebomb),
 
 	// KIWI_Playercard.as
 	medalsn		  	       				= Translate(en::n_medalsn+"\\"+ru::n_medalsn),

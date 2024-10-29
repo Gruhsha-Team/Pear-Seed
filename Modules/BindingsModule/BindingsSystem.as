@@ -44,6 +44,14 @@ void onInit(CRules@ this)
 		if (!file.exists("k_drill$2")) file.add_s32("k_drill$2", -1);
 		if (!file.exists("k_satchel$1")) file.add_s32("k_satchel$1", 54);
 		if (!file.exists("k_satchel$2")) file.add_s32("k_satchel$2", -1);
+		if (!file.exists("k_sticky$1")) file.add_s32("k_sticky$1", 55);
+		if (!file.exists("k_sticky$2")) file.add_s32("k_sticky$2", -1);
+		if (!file.exists("k_icebomb$1")) file.add_s32("k_icebomb$1", 56);
+		if (!file.exists("k_icebomb$2")) file.add_s32("k_icebomb$2", -1);
+		if (!file.exists("k_goldmine$1")) file.add_s32("k_goldmine$1", 57);
+		if (!file.exists("k_goldmine$2")) file.add_s32("k_goldmine$2", -1);
+		if (!file.exists("k_slidemine$1")) file.add_s32("k_slidemine$1", 48);
+		if (!file.exists("k_slidemine$2")) file.add_s32("k_slidemine$2", -1);
 
 		// builder shop
 		if (!file.exists("b_drill$1")) file.add_s32("b_drill$1", 49);
@@ -80,6 +88,8 @@ void onInit(CRules@ this)
 		if (!file.exists("a_blockarrows$2")) file.add_s32("a_blockarrows$2", -1);
 		if (!file.exists("a_stoneblockarrows$1")) file.add_s32("a_stoneblockarrows$1", 54);
 		if (!file.exists("a_stoneblockarrows$2")) file.add_s32("a_stoneblockarrows$2", -1);
+		if (!file.exists("a_mountedbow$1")) file.add_s32("a_mountedbow$1", 55);
+		if (!file.exists("a_mountedbow$2")) file.add_s32("a_mountedbow$2", -1);
 
 		// kfc
 		if (!file.exists("kfc_beer$1")) file.add_s32("kfc_beer$1", 49);
@@ -100,11 +110,13 @@ void onInit(CRules@ this)
 		if (!file.exists("vehicle_catapult$2")) file.add_s32("vehicle_catapult$2", -1);
 		if (!file.exists("vehicle_ballista$1")) file.add_s32("vehicle_ballista$1", 50);
 		if (!file.exists("vehicle_ballista$2")) file.add_s32("vehicle_ballista$2", -1);
-		if (!file.exists("vehicle_outpost$1")) file.add_s32("vehicle_outpost$1", 51);
+		if (!file.exists("vehicle_bomber$1")) file.add_s32("vehicle_bomber$1", 51);
+		if (!file.exists("vehicle_bomber$2")) file.add_s32("vehicle_bomber$2", -1);
+		if (!file.exists("vehicle_outpost$1")) file.add_s32("vehicle_outpost$1", 52);
 		if (!file.exists("vehicle_outpost$2")) file.add_s32("vehicle_outpost$2", -1);
-		if (!file.exists("vehicle_bolts$1")) file.add_s32("vehicle_bolts$1", 52);
+		if (!file.exists("vehicle_bolts$1")) file.add_s32("vehicle_bolts$1", 53);
 		if (!file.exists("vehicle_bolts$2")) file.add_s32("vehicle_bolts$2", -1);
-		if (!file.exists("vehicle_shells$1")) file.add_s32("vehicle_shells$1", 53);
+		if (!file.exists("vehicle_shells$1")) file.add_s32("vehicle_shells$1", 54);
 		if (!file.exists("vehicle_shells$2")) file.add_s32("vehicle_shells$2", -1);
 
 		// boat shop
@@ -178,7 +190,7 @@ void onInit(CRules@ this)
 				sfile.add_string("pickdrill_archer", "yes");
 			}
 
-			/*if (!sfile.exists("nomenubuying"))
+			if (!sfile.exists("nomenubuying"))
 			{
 				sfile.add_string("nomenubuying", "no");
 			}
@@ -186,7 +198,7 @@ void onInit(CRules@ this)
 			if (!sfile.exists("nomenubuying_b"))
 			{
 				sfile.add_string("nomenubuying_b", "no");
-			}*/
+			}
 		}
 		else // default settings
 		{
@@ -199,14 +211,14 @@ void onInit(CRules@ this)
 			sfile.add_string("pickdrill_archer", "yes");
 			sfile.add_string("pickbomb_builder", "yes");
 			sfile.add_string("pickbomb_archer", "yes");
-			//sfile.add_string("nomenubuying", "no");
-			//sfile.add_string("nomenubuying_b", "no");
+			sfile.add_string("nomenubuying", "no");
+			sfile.add_string("nomenubuying_b", "no");
 
 			printf("Creating local settings file with default values for Gruhsha.");
 		}
 
 		if(!sfile.saveFile(SETTINGSFILE + ".cfg"))
-		{	
+		{
 			print("Failed to save GRUHSHA_customizableplayersettings.cfg");
 		}
 		else
@@ -229,7 +241,7 @@ void onInit(CRules@ this)
 				sfile.add_string("blockbar_hud", "yes");
 			}
 
-			/*if (!sfile.exists("shownomenupanel"))
+			if (!sfile.exists("shownomenupanel"))
 			{
 				sfile.add_string("shownomenupanel", "yes");
 			}
@@ -237,7 +249,7 @@ void onInit(CRules@ this)
 			if (!sfile.exists("dse_while_using_nomenu_buying"))
 			{
 				sfile.add_string("dse_while_using_nomenu_buying", "yes");
-			}*/
+			}
 
 			if (!sfile.exists("visual_item_pick"))
 			{
@@ -287,8 +299,8 @@ void onInit(CRules@ this)
 		else // default settings
 		{
 			sfile.add_string("blockbar_hud", "yes");
-			//sfile.add_string("shownomenupanel", "yes");
-			//sfile.add_string("dse_while_using_nomenu_buying", "yes");
+			sfile.add_string("shownomenupanel", "yes");
+			sfile.add_string("dse_while_using_nomenu_buying", "yes");
 			sfile.add_string("camera_sway", "5");
 			sfile.add_string("visual_item_pick", "off");
 			sfile.add_string("body_tilting", "on");
@@ -353,13 +365,13 @@ void onTick(CRules@ this)
 	{
 		ResetRuleBindings();
 		LoadFileBindings();
-	} 
+	}
 
 	if (getGameTime() % 30 == 0 && !this.get_bool("loadedsettings"))
 	{
 		ResetRuleSettings();
 		LoadFileSettings();
-	} 
+	}
 
 	if (getGameTime() % 30 == 0 && !this.get_bool("loadedvsettings"))
 	{
@@ -555,7 +567,7 @@ void InitMenu()
 						button.m_selecteds.push_back(true);
 						button.m_state.push_back(ClickableButtonStates::Selected);
 					}
-					else 
+					else
 					{
 						button.m_selecteds.push_back(false);
 						button.m_state.push_back(ClickableButtonStates::None);

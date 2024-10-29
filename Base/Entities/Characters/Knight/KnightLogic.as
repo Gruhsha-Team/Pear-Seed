@@ -339,7 +339,7 @@ void onTick(CBlob@ this)
 					const string itemname = item.getName();
 					if (!holding && bombTypeNames[bombType] == itemname)
 					{
-						if (bombType >= 2)
+						if (bombType >= 4)
 						{
 							this.server_Pickup(item);
 							client_SendThrowOrActivateCommand(this);
@@ -1335,6 +1335,31 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.Tag("splash ray cast");
 					}
 				}
+				else if (bombType == 2)
+				{
+					CBlob @blob = server_CreateBlob("stickybomb", this.getTeamNum(), this.getPosition());
+					if (blob !is null)
+					{
+						TakeItem(this, bombTypeName);
+						this.server_Pickup(blob);
+					}
+				}
+				else if (bombType == 3)
+				{
+					CBlob @blob = server_CreateBlob("icebomb", this.getTeamNum(), this.getPosition());
+					if (blob !is null)
+					{
+						TakeItem(this, bombTypeName);
+						this.server_Pickup(blob);
+						blob.set_f32("map_damage_ratio", 0.0f);
+						blob.set_f32("explosive_damage", 0.0f);
+						blob.set_f32("explosive_radius", 128.0f);
+						blob.set_bool("map_damage_raycast", false);
+						blob.set_string("custom_explosion_sound", "/GlassBreak");
+						blob.set_u8("custom_hitter", Hitters::water);
+						blob.Tag("splash ray cast");
+					}
+				}
 			}
 		}
 		SetFirstAvailableBomb(this);
@@ -1496,8 +1521,7 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 					velocity.Normalize();
 					velocity *= 12; // knockback force is same regardless of distance
 
-					if (rayb.getTeamNum() != this.getTeamNum() || rayb.hasTag("dead player"))
-					{
+					if (rayb.getTeamNum() != this.getTeamNum() || rayb.hasTag("dead player")) {
 						this.server_Hit(rayb, rayInfos[j].hitpos, velocity, temp_damage, type, true);
 					}
 
@@ -1842,6 +1866,9 @@ void Callback_PickBomb(CBitStream@ params)
 // bomb pick menu
 void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 {
+	AddIconToken("$StickyBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
+	AddIconToken("$IceBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 6, this.getTeamNum());
+
 	if (bombTypeNames.length == 0)
 	{
 		return;

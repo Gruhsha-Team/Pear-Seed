@@ -136,3 +136,21 @@ void onAddToInventory(CBlob@ this, CBlob@ blob)
         }
     }
 }
+
+void onRemoveFromInventory(CBlob@ this, CBlob@ blob) {
+    if (!isServer()) return;
+
+    if (this !is null && blob !is null) {
+        if (blob.getConfig() == "mat_stone") {
+            blob.set_s32("storage pickup time", -1);
+            blob.Sync("storage pickup time", true);
+
+            //printf("Stone pickup time is " + blob.get_s32("pickup time"));
+        } else if (blob.getConfig() == "mat_wood") {
+            blob.set_s32("storage pickup time", -1);
+            blob.Sync("storage pickup time", true);
+
+            //printf("Wood pickup time is " + blob.get_s32("pickup time"));
+        }
+    }
+}

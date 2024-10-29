@@ -18,10 +18,10 @@ namespace CTFCosts
 		quarry_stone, quarry_gold, quarry_count;
 
 	//ArcherShop.as
-	s32 arrows, waterarrows, firearrows, bombarrows, blockarrows, stoneblockarrows;
+	s32 arrows, waterarrows, firearrows, bombarrows, blockarrows, stoneblockarrows, mountedbow;
 
 	//KnightShop.as
-	s32 bomb, waterbomb, mine, keg, satchel;
+	s32 bomb, waterbomb, mine, keg, satchel, stickybomb, golden_mine, icebomb, slidemine;
 
 	//BuilderShop.as
 	s32 lantern_wood, bucket_wood, filled_bucket, sponge, boulder_stone,
@@ -32,7 +32,7 @@ namespace CTFCosts
 	s32 dinghy, dinghy_wood, longboat, longboat_wood, warboat, warboat_gold;
 
 	//VehicleShop.as
-	s32 catapult, ballista, ballista_ammo, ballista_bomb_ammo, outpost_coins, outpost_gold;
+	s32 catapult, ballista, bomber, ballista_ammo, ballista_bomb_ammo, outpost_coins, outpost_gold;
 
 	//Quarters.as
 	s32 beer, meal, egg, burger, pear;
@@ -126,6 +126,7 @@ void InitCosts()
 	CTFCosts::bombarrows =                  ReadCost(cfg, costs, "cost_bombarrows"         , 50);
 	CTFCosts::blockarrows =                 ReadCost(cfg, costs, "cost_blockarrows"        , 40);
 	CTFCosts::stoneblockarrows =            ReadCost(cfg, costs, "cost_stoneblockarrows"   , 70);
+	CTFCosts::mountedbow =                  ReadCost(cfg, costs, "cost_mountedbow"         , 100);
 
 	//KnightShop.as
 	CTFCosts::bomb =                        ReadCost(cfg, costs, "cost_bomb"               , 25);
@@ -133,6 +134,10 @@ void InitCosts()
 	CTFCosts::mine =                        ReadCost(cfg, costs, "cost_mine"               , 60);
 	CTFCosts::keg =                         ReadCost(cfg, costs, "cost_keg"                , 120);
 	CTFCosts::satchel =                     ReadCost(cfg, costs, "cost_satchel"            , 35);
+	CTFCosts::stickybomb =                  ReadCost(cfg, costs, "cost_stickybomb"         , 85);
+	CTFCosts::golden_mine =                 ReadCost(cfg, costs, "cost_golden_mine"        , 90);
+	CTFCosts::icebomb =                     ReadCost(cfg, costs, "cost_icebomb"            , 70);
+	CTFCosts::slidemine =                   ReadCost(cfg, costs, "cost_slidemine"          , 80);
 
 	//BuilderShop.as
 	CTFCosts::lantern_wood =                ReadCost(cfg, costs, "cost_lantern_wood"       , 10);
@@ -160,6 +165,7 @@ void InitCosts()
 	//VehicleShop.as
 	CTFCosts::catapult =                    ReadCost(cfg, costs, "cost_catapult"                   , 120);
 	CTFCosts::ballista =                    ReadCost(cfg, costs, "cost_ballista"                   , 200);
+	CTFCosts::bomber =                      ReadCost(cfg, costs, "cost_bomber"                     , 280);
 	CTFCosts::ballista_ammo =               ReadCost(cfg, costs, "cost_ballista_ammo"              , 80);
 	CTFCosts::ballista_bomb_ammo =          ReadCost(cfg, costs, "cost_ballista_bomb_ammo"         , 100);
 	CTFCosts::outpost_coins =               ReadCost(cfg, costs, "cost_outpost_coins"              , 150);
