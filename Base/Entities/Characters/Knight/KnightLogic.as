@@ -262,11 +262,39 @@ void onTick(CBlob@ this)
 	bool pressed_a2 = this.isKeyPressed(key_action2);
 	bool walking = (this.isKeyPressed(key_left) || this.isKeyPressed(key_right));
 
+	bool holding_drill = false;
+
 	const bool myplayer = this.isMyPlayer();
 
 	if (getNet().isClient() && !this.isInInventory() && myplayer)  //Knight charge cursor
 	{
 		SwordCursorUpdate(this, knight);
+	}
+
+	//printf("state: " + knight.state);
+
+	if (this.getCarriedBlob() !is null)
+	{
+		if (this.getCarriedBlob().getConfig() == "drill")
+		{
+			//knight.state = KnightStates::normal; //cancel any attacks or shielding
+			/*if (knight.state >= 4)
+			{
+				knight.state = KnightStates::normal;
+				this.set_s32("currentKnightState", 0);
+			}*/
+
+			//knight.swordTimer = 0;
+			//knight.slideTime = 0;
+			//knight.doubleslash = false;
+			//this.set_s32("currentKnightState", 0);
+
+			//pressed_a1 = false;
+			//pressed_a2 = false;
+			
+			//holding_drill = true;
+			//knocked = true;
+		}
 	}
 
 	if (knocked)
@@ -397,7 +425,18 @@ void onTick(CBlob@ this)
 
 		if (this.isKeyJustPressed(key_action1) && getGameTime() > 150)
 		{
-			SetHelp(this, "help self action", "knight", getTranslatedString("$Slash$ Slash!    $KEY_HOLD$$LMB$"), "", 13);
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				SetHelp(this, "help self action", "knight", getTranslatedString("$Slash$ Slash!    $KEY_HOLD$$LMB$"), "", 13);
+			}
 		}
 	}
 
@@ -527,8 +566,19 @@ class NormalState : KnightState
 	{
 		if (this.isKeyPressed(key_action1) && !moveVars.wallsliding)
 		{
-			knight.state = KnightStates::sword_drawn;
-			return true;
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				knight.state = KnightStates::sword_drawn;
+				return true;
+			}
 		}
 		else if (this.isKeyPressed(key_action2))
 		{
@@ -570,8 +620,24 @@ class ShieldingState : KnightState
 	{
 		if (this.isKeyPressed(key_action1))
 		{
-			knight.state = KnightStates::sword_drawn;
-			return true;
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				knight.state = KnightStates::sword_drawn;
+				return true;
+			}
+			else if (!this.isKeyPressed(key_action2))
+			{
+				knight.state = KnightStates::normal;
+				return false;
+			}
 		}
 		else if (!this.isKeyPressed(key_action2))
 		{
@@ -617,8 +683,24 @@ class ShieldGlideState : KnightState
 	{
 		if (this.isKeyPressed(key_action1))
 		{
-			knight.state = KnightStates::sword_drawn;
-			return true;
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				knight.state = KnightStates::sword_drawn;
+				return true;
+			}
+			else if (!this.isKeyPressed(key_action2))
+			{
+				knight.state = KnightStates::normal;
+				return false;
+			}
 		}
 		else if (!this.isKeyPressed(key_action2))
 		{
@@ -693,8 +775,24 @@ class ShieldSlideState : KnightState
 	{
 		if (this.isKeyPressed(key_action1))
 		{
-			knight.state = KnightStates::sword_drawn;
-			return true;
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				knight.state = KnightStates::sword_drawn;
+				return true;
+			}
+			else if (!this.isKeyPressed(key_action2))
+			{
+				knight.state = KnightStates::normal;
+				return false;
+			}
 		}
 		else if (!this.isKeyPressed(key_action2))
 		{
@@ -1019,7 +1117,18 @@ class SlashState : KnightState
 		if (knight.state == KnightStates::sword_power_super
 			&& this.isKeyJustPressed(key_action1))
 		{
-			knight.doubleslash = true;
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				knight.doubleslash = true;
+			}
 		}
 
 		if (delta == 2)
@@ -1089,8 +1198,19 @@ class ResheathState : KnightState
 		}
 		else if (this.isKeyPressed(key_action1))
 		{
-			knight.state = KnightStates::sword_drawn;
-			return true;
+			CBlob@ carried = this.getCarriedBlob();
+			bool magicdrill = false;
+
+			if (carried !is null)
+			{
+				if (carried.getName() == "drill") magicdrill = true;
+			}
+
+			if (!magicdrill)
+			{
+				knight.state = KnightStates::sword_drawn;
+				return true;
+			}
 		}
 
 		AttackMovement(this, knight, moveVars);
