@@ -79,8 +79,8 @@ void onTick(CBlob@ this)
                         CPlayer@ p = builders_blue[i];
                         if (p is null) continue;
 
-                        getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), wood_count / builders_blue.length);
-                        getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
+                        getRules().add_s32("personalwood_" + p.getPlayer().getUsername(), wood_count / builders_blue.length);
+                        getRules().Sync("personalwood_" + p.getPlayer().getUsername(), true);
                         //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
 
                         this.server_PutOutInventory(item);
@@ -93,8 +93,8 @@ void onTick(CBlob@ this)
                         CPlayer@ p = builders_red[i];
                         if (p is null) continue;
 
-                        getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), wood_count / builders_red.length);
-                        getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
+                        getRules().add_s32("personalwood_" + p.getPlayer().getUsername(), wood_count / builders_red.length);
+                        getRules().Sync("personalwood_" + p.getPlayer().getUsername(), true);
                         //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
 
                         this.server_PutOutInventory(item);
