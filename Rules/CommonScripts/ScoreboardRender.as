@@ -17,6 +17,9 @@ int hovered_card = -1;
 bool draw_age = false;
 bool draw_tier = false;
 
+Vec2f hovered_entry_tl;
+Vec2f hovered_entry_br;
+
 float scoreboardMargin = 52.0f;
 float scrollOffset = 0.0f;
 float scrollSpeed = 4.0f;
@@ -28,7 +31,7 @@ bool mouseWasPressed2 = false;
 
 const string OLD_PLAYER_STATS_CORE = "player stats core";
 
-const string mod_version = "v1.1";
+const string mod_version = "v2.0";
 
 class OldPlayerStatsCore {
 	dictionary stats;
@@ -148,10 +151,21 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		tl.y += stepheight;
 		br.y = tl.y + lineheight;
 
-		bool playerHover = mousePos.x > tl.x && mousePos.x < br.x && mousePos.y > tl.y && mousePos.y < br.y;
+		Vec2f player_hover_tl = tl-Vec2f(0, 6);
+		Vec2f player_hover_br = br-Vec2f(0, 0);
+
+		bool playerHover = mousePos.x>player_hover_tl.x&&mousePos.x<player_hover_br.x&&mousePos.y>player_hover_tl.y&&mousePos.y<player_hover_br.y;
+
+		Vec2f card_icon_pos = Vec2f(br.x - info_icon_offset, tl.y-8);
 
 		if (playerHover)
 		{
+			if (hovered_card < 0) {
+				hovered_entry_tl = player_hover_tl;
+				hovered_entry_br = player_hover_br;
+				hovered_card = i;
+				hovered_pos = card_icon_pos;
+			}
 			if (controls.mousePressed1)
 			{
 				setSpectatePlayer(p.getUsername());
@@ -178,8 +192,6 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		{
 			playercolour = 0xffcccccc;
 			@hoveredPlayer = p;
-			hoveredPos = tl;
-			hoveredPos.x = br.x - 150;
 		}
 
 		GUI::DrawLine2D(Vec2f(tl.x, br.y + 1) + lineoffset, Vec2f(br.x, br.y + 1) + lineoffset, SColor(underlinecolor));
@@ -319,7 +331,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		///////////////////////////////////////////////
 
 		u8 card_variants_amount = CFileImage("id_card_icon").getWidth()/16;
-		Vec2f card_icon_pos = Vec2f(br.x - info_icon_offset, tl.y-8);
+		
 		GUI::DrawIcon(
 			"id_card_icon",
 			p.getNetworkID() % card_variants_amount + (p.getOldGold() && !p.isBot() ? card_variants_amount : 0),
@@ -819,12 +831,16 @@ void onRenderScoreboard(CRules@ this) {
 
 	bool click_to_close = controls.mousePressed1;
 	bool left_card_bounds = mousePos.y>card_botRight.y||mousePos.y<card_topLeft.y||mousePos.x>card_botRight.x||mousePos.x<card_topLeft.x;
-
-	if (click_to_close || left_card_bounds) {
+	bool left_entry_bounds = mousePos.y>hovered_entry_br.y||mousePos.y<hovered_entry_tl.y||mousePos.x>hovered_entry_br.x||mousePos.x<hovered_entry_tl.x;
+	
+	if (click_to_close||(left_card_bounds&&left_entry_bounds)) {
 		//debug thing to check the borderlines
 		if (g_debug > 0 && hovered_card > -1)
+		{
 			GUI::DrawBubble(card_topLeft, card_botRight);
-
+			GUI::DrawBubble(hovered_entry_tl, hovered_entry_br);
+		}
+		
 		hovered_card = -1;
 	}
 
@@ -850,7 +866,7 @@ void onRenderScoreboard(CRules@ this) {
 		}
 	}
 
-	drawPlayerCard(hoveredPlayer, hoveredPos);
+	//drawPlayerCard(hoveredPlayer, hoveredPos);
 	///////////////////////////////////////////////
 
 	// Old accolades shit, we dont using this anymore
@@ -859,7 +875,7 @@ void onRenderScoreboard(CRules@ this) {
 	ScoreboardField(
 		Vec2f(screenWidth - tl.x - 200, 115 - scrollOffset),
 		Vec2f(screenWidth - tl.x,       115 - scrollOffset + 40),
-		Descriptions::currentversiontext + mod_version + "\n(3.2.4)"
+		Descriptions::currentversiontext + mod_version + "\n(3.4)"
 	);
 	LinkButton(
 		Vec2f(screenWidth - tl.x - 275, 115 - scrollOffset),
@@ -1103,4 +1119,23 @@ void ScoreboardField(Vec2f tl, Vec2f br, const string&in text)
 {
 	GUI::DrawPane(tl, br, 0xffcfcfcf);
  	GUI::DrawTextCentered(text, Vec2f(tl.x + ((br.x - tl.x) * 0.50f), tl.y + ((br.y - tl.y) * 0.50f)), 0xffffffff);
+}
+
+void drawManualPointer(const f32&in x, const f32&in y)
+{
+	const string openHelp = Descriptions::helptip.replace("{KEY}", "["+getControls().getActionKeyKeyName(AK_MENU)+"]");
+	
+	Vec2f dim;
+	GUI::GetTextDimensions(openHelp, dim);
+	
+	Vec2f pos(x, y);
+	const f32 width = dim.x + 15;
+	pos.x -= width / 2;
+	
+	Vec2f bot = pos;
+	bot.x += width;
+	bot.y += 25;
+	
+	GUI::DrawPane(pos, bot, SColor(0xffcccccc));
+	GUI::DrawTextCentered(openHelp, Vec2f(x, y+12), color_white);
 }

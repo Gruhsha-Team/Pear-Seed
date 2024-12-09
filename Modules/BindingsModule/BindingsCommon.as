@@ -64,8 +64,10 @@ string[][] button_texts =
 		Names::drillcommand,
 		Names::cancelarrowschargingcommand,
 		Names::markbuildercommand,
-		Names::putitemcommand
-		//Names::activateorthrowbomb
+		Names::putitemcommand,
+		Names::blockrotatecommand,
+		Names::activateorthrowbomb,
+		Names::showinvkey
 	},
 	{
 		"Go away"								// TECHNICAL LINE DONT TOUCH PLEASE
@@ -84,6 +86,8 @@ string[][] button_texts =
 		Names::goldenminenmb,
 		Names::icebombnmb,
 		Names::slideminenmb
+		//Names::boosternmb,
+		//Names::fumokegnmb
 	},
 	{							// ARCHER SHOP
 		Names::arrowsnmb,
@@ -174,8 +178,10 @@ string[][] button_file_names =
 		"take_out_drill",
 		"cancel_charging",
 		"mark_team_builder",
-		"put_item"
-		//"activate_or_throw_bomb"
+		"put_item",
+		"blob_rotate",
+		"bomb_key",
+		"showinv"
 	},
 	{
 		"go away"								// TECHNICAL LINE DONT TOUCH PLEASE
@@ -194,6 +200,8 @@ string[][] button_file_names =
 		"k_icebomb",
 		"k_goldmine",
 		"k_slidemine"
+		//"k_booster",
+		//"k_fumokeg"
 	},
 	{
 		"a_arrows",
@@ -246,7 +254,7 @@ string[][] setting_texts =
 		Names::grapplewhilecharging,
 		Names::switchclasschanginginshop,
 		Names::cyclewithitem,
-		Names::pickupsystem,
+		//Names::pickupsystem,
 		Names::drillknight,
 		Names::drillbuilder,
 		Names::drillarcher,
@@ -263,7 +271,7 @@ string[][] setting_file_names =
 		"grapple_with_charging",
 		"disable_class_change_in_shops",
 		"cycle_with_item",
-		"item_pickup",
+		//"item_pickup",
 		"pickdrill_knight",
 		"pickdrill_builder",
 		"pickdrill_archer",
@@ -289,10 +297,10 @@ string[][][] setting_options =
 			Descriptions::universalno, // 10	CYCLE WITH ITEM IN HAND
 			Descriptions::universalyes // 20
 		},
-		{
-			Descriptions::universalold, // 10	ITEM PICKUP SYSTEM
-			Descriptions::universalnew // 20
-		},
+		//{
+		//	Descriptions::universalold, // 10	ITEM PICKUP SYSTEM
+		//	Descriptions::universalnew // 20
+		//},
 		{
 			Descriptions::universalno, // 10	DRILL AUTOPICKUP FOR KNIGHT
 			Descriptions::universalyes // 20
@@ -339,10 +347,10 @@ string[][][] setting_option_names =
 			"no", // 10    CYCLE WITH ITEM IN HAND
 			"yes" // 20
 		},
-		{
-			"legacy", // 10    ITEM PICKUP SYSTEM
-			"new" // 20
-		},
+		//{
+		//	"legacy", // 10    ITEM PICKUP SYSTEM
+		//	"new" // 20
+		//},
 		{
 			"no", // 10    DRILL AUTOPICKUP FOR KNIGHT
 			"yes" // 20
@@ -382,7 +390,7 @@ string[][] vsetting_texts =
 		Names::shownomenubuyingpan,
 		Names::dsewnmb,
 		Names::camerasw,
-		Names::visualitempick,
+		//Names::visualitempick,
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
@@ -390,7 +398,8 @@ string[][] vsetting_texts =
 		Names::clusterfuck_smoke,
 		Names::annoyingnature,
 		Names::annoyingtags,
-		Names::customdpsounds
+		Names::customdpsounds,
+		Names::customboomeffects
 	}
 };
 
@@ -401,7 +410,7 @@ string[][] vsetting_file_names =
 		"shownomenupanel",
 		"dse_while_using_nomenu_buying",
 		"camera_sway",
-		"visual_item_pick",
+		//"visual_item_pick",
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
@@ -409,7 +418,8 @@ string[][] vsetting_file_names =
 		"clusterfuck_smoke",
 		"annoying_nature",
 		"annoying_tags",
-		"custom_death_and_pain_sounds"
+		"custom_death_and_pain_sounds",
+		"custom_boom_effects"
 	}
 };
 
@@ -435,10 +445,10 @@ string[][][] vsetting_options =
 			"4", // 4
 			"5" // 5
 		},
-		{
-			Descriptions::universaloff,       // VISUAL ITEM PICKING
-			Descriptions::universalon
-		},
+		//{
+		////	Descriptions::universaloff,       // VISUAL ITEM PICKING
+		//	Descriptions::universalon
+		//},
 		{
 			Descriptions::universaloff,       // BODY TILTING
 			Descriptions::universalon
@@ -470,6 +480,10 @@ string[][][] vsetting_options =
 		{
 			Descriptions::universaloff,       // DEATH AND PAIN
 			Descriptions::universalon
+		},
+		{
+			Descriptions::universaloff,       // CUSTOM BOOM EFFECTS
+			Descriptions::universalon
 		}
 	}
 };
@@ -496,10 +510,10 @@ string[][][] vsetting_option_names =
 			"4", // 4
 			"5" // 5
 		},
-		{
-			"off",       // VISUAL ITEM PICKING
-			"on"
-		},
+		//{
+		//	"off",       // VISUAL ITEM PICKING
+		//	"on"
+		//},
 		{
 			"off",       // BODY TILTING
 			"on"
@@ -530,6 +544,10 @@ string[][][] vsetting_option_names =
 		},
 		{
 			"off",       // DEATH AND PAIN
+			"on"
+		},
+		{
+			"off",       // CUSTOM BOOM EFFECTS
 			"on"
 		}
 	}
@@ -792,6 +810,31 @@ void ResetRuleVSettings()
 		for (int g=0; g<vsetting_texts[i].length; ++g)
 		{
 			rules.set_string(vsetting_file_names[i][g], "null");
+		}
+	}
+}
+
+void CheckOneValue() {
+	ConfigFile file;
+
+	string file_entry1 = "sv_deltapos_modifier_check";
+	if (file.loadFile(BINDINGSDIR + BINDINGSFILE))
+	{
+		if (file.exists(file_entry1)) {
+			// else parameter is > 1 - update config string
+			if (sv_deltapos_modifier > file.read_f32("sv_deltapos_modifier_check")) {
+				file.add_s32("sv_deltapos_modifier_check", sv_deltapos_modifier);
+			}
+
+			CBitStream params;
+
+			if (file.read_f32("sv_deltapos_modifier_check") > 1) {
+				params.write_u8(1);
+			} else {
+				params.write_u8(0);
+			}
+
+			getRules().SendCommand(getRules().getCommandID("lagswitch check"), params);
 		}
 	}
 }

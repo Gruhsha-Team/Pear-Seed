@@ -106,12 +106,12 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 				return; // potential abuse fix
 			}
 
-			if (this.get_s32("personalstone_" + p.getUsername()) < 2000)
+			if (this.get_s32("personalstone_" + p.getUsername()) < 1000)
 			{
 				this.add_s32("personalstone_" + p.getUsername(), stone_amount);
 				this.Sync("personalstone_" + p.getUsername(), true);
 			}
-			else if (this.get_s32("personalstone_" + p.getUsername()) >= 2000)
+			else if (this.get_s32("personalstone_" + p.getUsername()) >= 1000)
 			{
 				return; // potential abuse fix
 			}

@@ -93,6 +93,10 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 		// range check
 		if (this.getDistanceTo(caller) > this.getRadius()) return;
 
+		// team check
+		u8 callerTeamNum = caller.getTeamNum();
+		if (this.getTeamNum() != callerTeamNum) return;
+
 		CBlob@[] ammos;
 		string[] eligible_ammo_names;
 
@@ -126,17 +130,17 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 			CBlob@ stone = server_CreateBlobNoInit("mat_stone");
 			stone.Tag('custom quantity');
 			stone.Init();
-			if (getRules().get_s32("personalstone_" + callerp.getUsername()) >= 250 && !inv.isFull())
+			if (getRules().get_s32("teamstone" + callerTeamNum) >= 250 && !inv.isFull())
 			{
 				stone.server_SetQuantity(50);
-				getRules().sub_s32("personalstone_" + callerp.getUsername(), 50);
-				getRules().Sync("personalstone_" + callerp.getUsername(), true);
+				getRules().sub_s32("teamstone" + callerTeamNum, 50);
+				getRules().Sync("teamstone" + callerTeamNum, true);
 			}
 			else if (!inv.isFull())
 			{
-				stone.server_SetQuantity(getRules().get_s32("personalstone_" + callerp.getUsername()));
-				getRules().sub_s32("personalstone_" + callerp.getUsername(), (getRules().get_s32("personalstone_" + callerp.getUsername())));
-				getRules().Sync("personalstone_" + callerp.getUsername(), true);
+				stone.server_SetQuantity(getRules().get_s32("teamstone" + callerTeamNum));
+				getRules().sub_s32("teamstone" + callerTeamNum, (getRules().get_s32("teamstone" + callerTeamNum)));
+				getRules().Sync("teamstone" + callerTeamNum, true);
 			}
 			ammos.push_back(stone);
 		}

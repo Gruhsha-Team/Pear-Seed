@@ -15,6 +15,7 @@ namespace BombType
 		water,
 		sticky,
 		ice,
+		booster,
 		count
 	};
 }
@@ -22,19 +23,22 @@ namespace BombType
 const string[] bombNames = { "Bomb",
                              "Water Bomb",
                              "Sticky Bomb",
-							 "Ice Bomb"
+							 "Ice Bomb",
+							 "Booster"
                            };
 
 const string[] bombIcons = { "$Bomb$",
                              "$WaterBomb$",
                              "$StickyBomb$",
-							 "$IceBomb$"
+							 "$IceBomb$",
+							 "$Booster$"
                            };
 
 const string[] bombTypeNames = { "mat_bombs",
                                  "mat_waterbombs",
                                  "mat_stickybombs",
-								 "mat_icebombs"
+								 "mat_icebombs",
+								 "mat_boosters"
                                };
 
 shared class HitData
@@ -188,16 +192,13 @@ CBlob@ server_BuildBlob(CBlob@ this, BuildBlock[]@ blocks, const u32 &in index)
 		if (!b.buildOnGround)
 		{
 			this.server_Pickup(blockBlob);
+			blockBlob.Tag("temp blob");
 		}
 		else
 		{
 			shape.server_SetActive(true); // have it enable if its a shop
 		}
 
-		if (b.temporaryBlob)
-		{
-			blockBlob.Tag("temp blob");
-		}
 		return blockBlob;
 	}
 

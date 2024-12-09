@@ -9,6 +9,8 @@
 #include "Help.as";
 #include "Requirements.as"
 #include "StandardControlsCommon.as";
+#include "HolidaySprites.as";
+#include "BindingsCommon.as"
 
 //attacks limited to the one time per-actor before reset.
 
@@ -91,6 +93,7 @@ void onInit(CBlob@ this)
 	this.addCommandID("activate/throw bomb");
 
 	this.push("names to activate", "keg");
+	this.push("names to activate", "fumokeg");
 	this.push("names to activate", "satchel");
 
 	this.set_u8("bomb type", 255);
@@ -318,47 +321,103 @@ void onTick(CBlob@ this)
 	if (myplayer)
 	{
 		// space
-		if (this.isKeyJustPressed(key_action3))
-		{
-			CBlob@ carried = this.getCarriedBlob();
-			bool holding = carried !is null;// && carried.hasTag("exploding");
+        if (getRules().get_s32("bomb_key$1") != -1) {
+			if (this.isKeyJustPressed(key_action3)) {
+				CBlob@ carried = this.getCarriedBlob();
 
-			CInventory@ inv = this.getInventory();
-			bool thrown = false;
-			u8 bombType = this.get_u8("bomb type");
-			if (bombType == 255)
-			{
-				SetFirstAvailableBomb(this);
-				bombType = this.get_u8("bomb type");
-			}
-			if (bombType < bombTypeNames.length)
-			{
-				for (int i = 0; i < inv.getItemsCount(); i++)
-				{
-					CBlob@ item = inv.getItem(i);
-					const string itemname = item.getName();
-					if (!holding && bombTypeNames[bombType] == itemname)
-					{
-						if (bombType >= 4)
-						{
-							this.server_Pickup(item);
-							client_SendThrowOrActivateCommand(this);
-							thrown = true;
-						}
-						else
-						{
-							client_SendThrowOrActivateCommandBomb(this, bombType);
-							thrown = true;
-						}
-						break;
-					}
+				if (carried is null || !carried.hasTag("temp blob")) {
+					client_SendThrowOrActivateCommand(this);
 				}
 			}
 
-			if (!thrown)
-			{
-				client_SendThrowOrActivateCommand(this);
-				SetFirstAvailableBomb(this);
+			if (b_KeyJustPressed("bomb_key")) {
+				CBlob@ carried = this.getCarriedBlob();
+				bool holding = carried !is null;// && carried.hasTag("exploding");
+
+				CInventory@ inv = this.getInventory();
+				bool thrown = false;
+				u8 bombType = this.get_u8("bomb type");
+
+				if (bombType == 255)
+				{
+					SetFirstAvailableBomb(this);
+					bombType = this.get_u8("bomb type");
+				}
+
+				if (bombType < bombTypeNames.length)
+				{
+					for (int i = 0; i < inv.getItemsCount(); i++)
+					{
+						CBlob@ item = inv.getItem(i);
+						const string itemname = item.getName();
+						if (!holding && bombTypeNames[bombType] == itemname)
+						{
+							if (bombType >= 5)
+							{
+								this.server_Pickup(item);
+								client_SendThrowOrActivateCommand(this);
+								thrown = true;
+							}
+							else
+							{
+								client_SendThrowOrActivateCommandBomb(this, bombType);
+								thrown = true;
+							}
+							break;
+						}
+					}
+				}
+
+				if (!thrown)
+				{
+					client_SendThrowOrActivateCommand(this);
+					SetFirstAvailableBomb(this);
+				}
+			}
+        } else {
+			if (this.isKeyJustPressed(key_action3)) {
+				CBlob@ carried = this.getCarriedBlob();
+				bool holding = carried !is null;// && carried.hasTag("exploding");
+
+				CInventory@ inv = this.getInventory();
+				bool thrown = false;
+				u8 bombType = this.get_u8("bomb type");
+
+				if (bombType == 255)
+				{
+					SetFirstAvailableBomb(this);
+					bombType = this.get_u8("bomb type");
+				}
+
+				if (bombType < bombTypeNames.length)
+				{
+					for (int i = 0; i < inv.getItemsCount(); i++)
+					{
+						CBlob@ item = inv.getItem(i);
+						const string itemname = item.getName();
+						if (!holding && bombTypeNames[bombType] == itemname)
+						{
+							if (bombType >= 5)
+							{
+								this.server_Pickup(item);
+								client_SendThrowOrActivateCommand(this);
+								thrown = true;
+							}
+							else
+							{
+								client_SendThrowOrActivateCommandBomb(this, bombType);
+								thrown = true;
+							}
+							break;
+						}
+					}
+				}
+
+				if (!thrown)
+				{
+					client_SendThrowOrActivateCommand(this);
+					SetFirstAvailableBomb(this);
+				}
 			}
 		}
 
@@ -1360,6 +1419,21 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.Tag("splash ray cast");
 					}
 				}
+				else if (bombType == 4)
+				{
+					CBlob @blob = server_CreateBlob("booster", this.getTeamNum(), this.getPosition());
+					if (blob !is null)
+					{
+						TakeItem(this, bombTypeName);
+						this.server_Pickup(blob);
+						blob.set_f32("map_damage_ratio", 0.0f);
+						blob.set_f32("explosive_damage", 0.0f);
+						blob.set_f32("explosive_radius", 92.0f);
+						blob.set_bool("map_damage_raycast", false);
+						blob.set_string("custom_explosion_sound", "/GlassBreak2");
+						blob.set_u8("custom_hitter", Hitters::water);
+					}
+				}
 			}
 		}
 		SetFirstAvailableBomb(this);
@@ -1863,11 +1937,18 @@ void Callback_PickBomb(CBitStream@ params)
 	blob.SendCommand(blob.getCommandID("pick " + matname));
 }
 
+string icons_file_name;
+
 // bomb pick menu
 void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 {
+	icons_file_name = isAnyHoliday() ? getHolidayVersionFileName("KnightIcons") : "KnightIcons.png";
+
+	AddIconToken("$Bomb$", icons_file_name, Vec2f(16, 32), 0, this.getTeamNum());
+	AddIconToken("$WaterBomb$", icons_file_name, Vec2f(16, 32), 2, this.getTeamNum());
 	AddIconToken("$StickyBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
 	AddIconToken("$IceBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 6, this.getTeamNum());
+	AddIconToken("$Booster$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
 
 	if (bombTypeNames.length == 0)
 	{

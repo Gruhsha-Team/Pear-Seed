@@ -71,13 +71,24 @@ void onInit(CBlob@ this)
 	{
 		ShopItem@ s = addShopItem(this, Names::goldenmine, getTeamIcon("golden_mine", "GoldenMine.png", team_num, Vec2f(16, 16), 1), "golden_mine", Descriptions::goldenminedesc, true);
 		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::golden_mine);
-		AddRequirement(s.requirements, "no more", "golden_mine", "Golden Mine", 5);
+		AddRequirement(s.requirements, "no more", "golden_mine", "Golden Mine", 2);
 	}
 	{
 		ShopItem@ s = addShopItem(this, Names::slidemine, getTeamIcon("slidemine", "SlideMine.png", team_num, Vec2f(16, 16), 1), "slidemine", Descriptions::slideminedesc, true);
 		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::slidemine);
 		AddRequirement(s.requirements, "no more", "slidemine", "Slide Mine", 3);
+		AddRequirement(s.requirements, "buy delay", "slidemine", "Slide Mine");
 	}
+	/*{ Not need on Pear Seed
+		ShopItem@ s = addShopItem(this, Names::booster, "$booster$", "mat_boosters", Descriptions::boosterdesc, true);
+		AddRequirement(s.requirements, "coin", "", "Coins", 30);
+	}*/
+	/*{ No-no-no, fumo keg is exclusive item for Gruhsha CTF
+		ShopItem@ s = addShopItem(this, Names::fumokegname, getTeamIcon("fumokeg", "FumoKegIcon.png", team_num, Vec2f(16, 16), 0), "fumokeg", Descriptions::fumokegdesc, true);
+		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::fumokeg);
+		AddRequirement(s.requirements, "blob", "mat_gold", "Gold", CTFCosts::fumokeg_gold);
+		AddRequirement(s.requirements, "no more", "fumokeg", "Fumo Keg", 1);
+	}*/
 }
 
 void GetButtonsFor(CBlob@ this, CBlob@ caller)

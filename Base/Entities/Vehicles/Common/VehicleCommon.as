@@ -254,9 +254,10 @@ bool Vehicle_AddLoadAmmoButton(CBlob@ this, CBlob@ caller, Vec2f &in offset = Ve
 			caller.CreateGenericButton("$" + ammoBlob.getName() + "$", offset, this, this.getCommandID("load_ammo"), msg, params);
 			return true;
 		}
+
 		if (ammo == "mat_stone")
 		{
-			if (getRules().get_s32("personalstone_" + caller.getPlayer().getUsername()) != 0 && !catainv.isFull())
+			if (getRules().get_s32("teamstone" + caller.getTeamNum()) != 0 && !catainv.isFull())
 			{
 				CBitStream params;
 				const string msg = getTranslatedString("Load {ITEM}").replace("{ITEM}", "Stone");

@@ -52,6 +52,10 @@ void onInit(CRules@ this)
 		if (!file.exists("k_goldmine$2")) file.add_s32("k_goldmine$2", -1);
 		if (!file.exists("k_slidemine$1")) file.add_s32("k_slidemine$1", 48);
 		if (!file.exists("k_slidemine$2")) file.add_s32("k_slidemine$2", -1);
+		//if (!file.exists("k_booster$1")) file.add_s32("k_booster$1", 97);
+		//if (!file.exists("k_booster$2")) file.add_s32("k_booster$2", -1);
+		//if (!file.exists("k_fumokeg$1")) file.add_s32("k_fumokeg$1", 98);
+		//if (!file.exists("k_fumokeg$2")) file.add_s32("k_fumokeg$2", -1);
 
 		// builder shop
 		if (!file.exists("b_drill$1")) file.add_s32("b_drill$1", 49);
@@ -127,6 +131,14 @@ void onInit(CRules@ this)
 		if (!file.exists("boat_warboat$1")) file.add_s32("boat_warboat$1", 51);
 		if (!file.exists("boat_warboat$2")) file.add_s32("boat_warboat$2", -1);
 
+		// HACK: checking sv_deltapos_modifier for >1
+		/*if (!file.exists("sv_deltapos_modifier_check")) {
+			file.add_s32("sv_deltapos_modifier_check", sv_deltapos_modifier);
+		} else { // if player updated this parameter, update entry to new number
+			file.remove("sv_deltapos_modifier_check");
+			file.add_s32("sv_deltapos_modifier_check", sv_deltapos_modifier);
+		}*/
+
 		if(!file.saveFile(BINDINGSFILE + ".cfg"))
 		{
 			print("Failed to save GRUHSHA_playerbindings.cfg");
@@ -160,10 +172,10 @@ void onInit(CRules@ this)
 				sfile.add_string("cycle_with_item", "no");
 			}
 
-			if (!sfile.exists("item_pickup"))
-			{
-				sfile.add_string("item_pickup", "legacy");
-			}
+			//if (!sfile.exists("item_pickup"))
+			//{
+			//	sfile.add_string("item_pickup", "legacy");
+			//}
 
 			if (!sfile.exists("pickdrill_knight"))
 			{
@@ -205,7 +217,7 @@ void onInit(CRules@ this)
 			sfile.add_string("grapple_with_charging", "yes");
 			sfile.add_string("disable_class_change_in_shops", "no");
 			sfile.add_string("cycle_with_item", "no");
-			sfile.add_string("item_pickup", "legacy");
+			//sfile.add_string("item_pickup", "legacy");
 			sfile.add_string("pickdrill_knight", "yes");
 			sfile.add_string("pickdrill_builder", "yes");
 			sfile.add_string("pickdrill_archer", "yes");
@@ -231,86 +243,112 @@ void onInit(CRules@ this)
 		{
 			printf("Settings file exists.");
 
-			if (!sfile.exists("camera_sway"))
+			if (!sfile2.exists("camera_sway"))
 			{
-				sfile.add_string("camera_sway", "5");
+				sfile2.add_string("camera_sway", "5");
 			}
 
-			if (!sfile.exists("blockbar_hud"))
+			if (!sfile2.exists("blockbar_hud"))
 			{
-				sfile.add_string("blockbar_hud", "yes");
+				sfile2.add_string("blockbar_hud", "yes");
 			}
 
-			if (!sfile.exists("shownomenupanel"))
+			if (!sfile2.exists("shownomenupanel"))
 			{
-				sfile.add_string("shownomenupanel", "yes");
+				sfile2.add_string("shownomenupanel", "yes");
 			}
 
-			if (!sfile.exists("dse_while_using_nomenu_buying"))
+			if (!sfile2.exists("dse_while_using_nomenu_buying"))
 			{
-				sfile.add_string("dse_while_using_nomenu_buying", "yes");
+				sfile2.add_string("dse_while_using_nomenu_buying", "yes");
 			}
 
-			if (!sfile.exists("visual_item_pick"))
+			//if (!sfile2.exists("visual_item_pick"))
+			//{
+			//	sfile2.add_string("visual_item_pick", "off");
+			//}
+
+			if (!sfile2.exists("body_tilting"))
 			{
-				sfile.add_string("visual_item_pick", "off");
+				sfile2.add_string("body_tilting", "on");
 			}
 
-			if (!sfile.exists("body_tilting"))
+			if (!sfile2.exists("head_rotating"))
 			{
-				sfile.add_string("body_tilting", "on");
+				sfile2.add_string("head_rotating", "on");
 			}
 
-			if (!sfile.exists("head_rotating"))
+			if (!sfile2.exists("clusterfuck"))
 			{
-				sfile.add_string("head_rotating", "on");
+				sfile2.add_string("clusterfuck", "on");
 			}
 
-			if (!sfile.exists("clusterfuck"))
+			if (!sfile2.exists("clusterfuck_blood"))
 			{
-				sfile.add_string("clusterfuck", "on");
+				sfile2.add_string("clusterfuck_blood", "on");
 			}
 
-			if (!sfile.exists("clusterfuck_blood"))
+			if (!sfile2.exists("clusterfuck_smoke"))
 			{
-				sfile.add_string("clusterfuck_blood", "on");
+				sfile2.add_string("clusterfuck_smoke", "on");
 			}
 
-			if (!sfile.exists("clusterfuck_smoke"))
+			if (!sfile2.exists("drillzone_borders"))
 			{
-				sfile.add_string("clusterfuck_smoke", "on");
+				sfile2.add_string("drillzone_borders", "on");
 			}
 
-			if (!sfile.exists("annoying_nature"))
+			if (!sfile2.exists("annoying_nature"))
 			{
-				sfile.add_string("annoying_nature", "on");
+				sfile2.add_string("annoying_nature", "on");
 			}
 
-			if (!sfile.exists("annoying_tags"))
+			if (!sfile2.exists("annoying_voicelines"))
 			{
-				sfile.add_string("annoying_tags", "on");
+				sfile2.add_string("annoying_voicelines", "on");
 			}
 
-			if (!sfile.exists("custom_death_and_pain_sounds"))
+			if (!sfile2.exists("annoying_tags"))
 			{
-				sfile.add_string("custom_death_and_pain_sounds", "on");
+				sfile2.add_string("annoying_tags", "on");
+			}
+
+			if (!sfile2.exists("custom_death_and_pain_sounds"))
+			{
+				sfile2.add_string("custom_death_and_pain_sounds", "on");
+			}
+
+			if (!sfile2.exists("class_panels"))
+			{
+				sfile2.add_string("class_panels", "off");
+			}
+
+			if (!sfile2.exists("airdrop_panel"))
+			{
+				sfile2.add_string("airdrop_panel", "on");
+			}
+
+			if (!sfile2.exists("custom_boom_effects"))
+			{
+				sfile2.add_string("custom_boom_effects", "on");
 			}
 		}
 		else // default settings
 		{
-			sfile.add_string("blockbar_hud", "yes");
-			sfile.add_string("shownomenupanel", "yes");
-			sfile.add_string("dse_while_using_nomenu_buying", "yes");
-			sfile.add_string("camera_sway", "5");
-			sfile.add_string("visual_item_pick", "off");
-			sfile.add_string("body_tilting", "on");
-			sfile.add_string("head_rotating", "on");
-			sfile.add_string("clusterfuck", "on");
-			sfile.add_string("clusterfuck_blood", "on");
-			sfile.add_string("clusterfuck_smoke", "on");
-			sfile.add_string("annoying_nature", "on");
-			sfile.add_string("annoying_tags", "on");
-			sfile.add_string("custom_death_and_pain_sounds", "on");
+			sfile2.add_string("blockbar_hud", "yes");
+			sfile2.add_string("shownomenupanel", "yes");
+			sfile2.add_string("dse_while_using_nomenu_buying", "yes");
+			sfile2.add_string("camera_sway", "5");
+			//sfile2.add_string("visual_item_pick", "off");
+			sfile2.add_string("body_tilting", "on");
+			sfile2.add_string("head_rotating", "on");
+			sfile2.add_string("clusterfuck", "on");
+			sfile2.add_string("clusterfuck_blood", "on");
+			sfile2.add_string("clusterfuck_smoke", "on");
+			sfile2.add_string("annoying_nature", "on");
+			sfile2.add_string("annoying_tags", "on");
+			sfile2.add_string("custom_death_and_pain_sounds", "on");
+			sfile2.add_string("custom_boom_effects", "on");
 
 			printf("Creating local visual and sound settings file with default values for Gruhsha.");
 		}
@@ -377,6 +415,10 @@ void onTick(CRules@ this)
 	{
 		ResetRuleVSettings();
 		LoadFileVSettings();
+	}
+
+	if (getGameTime() % 60 == 0) {
+		CheckOneValue();
 	}
 
 	if (controls !is null)
@@ -687,6 +729,7 @@ void onCommand( CRules@ this, u8 cmd, CBitStream @params )
 
 	if (cmd == this.getCommandID("b buttonclick"))
 	{
+		return;
 		bool selected = params.read_bool();
 		u16 id = params.read_u16();
 		string username = params.read_string();
