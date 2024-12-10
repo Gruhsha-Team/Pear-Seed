@@ -39,27 +39,27 @@ namespace en
 	d_universalnew							= "New",
 
 	// GameHelp.as
-	d_header1									= "Gruhsha CTF - Russian Captains",
-	d_header2									= "Tips: Sudden Death",
+	d_header1									= "Pear Seed - Upgraded Vanilla KAG",
+	d_header2									= "Discord Server",
 	d_header3									= "Tips: Materials",
 	d_header4									= "Tips: Airdrop",
 	d_header5									= "Tips: Trampolines",
-	d_header6									= "Tips: Class and Vehicle Changes",
+	d_header6									= "Tips: Class Changes",
 	d_header7									= "Tips: New Items",
 	d_header8									= "Tips: Settings",
 
 		// Main page
-	d_tiptext1								= "\n\n\n\n\n\nWelcome to Gruhsha CTF!\n\nThis is a competitive version of the CTF mode, where the balance has been changed,\nadded new items, various improvements and fixed the most unbearable bugs.\n\nYour goal is still capture the flag, but it is limited by time - you have 35 minutes\nto complete your goal, otherwise you'll see a banner like the one below ;)\n\nTo learn more, read this help.",
+	d_tiptext1								= "\n\n\n\n\n\nWelcome to Pear Seed CTF!\n\nIt's a public version of Gruhsha CTF, where the balance has been changed,\nadded new items, various improvements and fixed the most unbearable bugs.\n\nUnlike the original mod, the balance here is geared towards fun :D\n\nTo learn more, read this help.",
 		// Sudden Death
-	d_tiptext2								= "Five minutes before the end of the match, Sudden Death begins.\n\nDuring it, various buffs and debuffs are activated, recognize which you can\nby hovering over the skull icon in the left corner of the screen and reading the note.",
+	d_tiptext2								= "If you're interested in more competitive gameplay, check out our Discord server and take\nGruhsha Games role so you don't miss out on notifications about the next games!\n(including on this server)\n\nYou can get to the server by pressing the button shown in the screenshot.",
 		// Materials
-	d_tiptext3								= "\n\nThe main material system is a virtual team system.\nThis means you don't have to deal with inventory management most of your time.\n\nBut the real materials is still falling off the builders' backs,\nit can be converted either by the builder or in storage.\n\nP.S. gold is only there as a real blob and is of high value, don't lose it.",
+	d_tiptext3								= "\n\nThe main material system is a virtual personal system.\nThis means you don't have to deal with inventory management most of your time.\n\nBut the real materials is still falling off the builders' backs,\nit can be converted either by the builder or in storage.\n(Storage converts material for all builders on the team, the saw works similarly)\n\nP.S. gold is only there as a real blob and is of high value, don't lose it.",
 		// Airdrop
-	d_tiptext4								= "Every 6 minutes a crate will appear in the center of the map.\nIt's in your best interest to pick him up as soon as possible -\nhe gives very useful things!\n\n(can only be opened at the base)",
+	d_tiptext4								= "Every 1 hour and 5 minutes, a box will appear in the center of the map.\nIt is in your interest to get it as soon as possible - when you open it,\nyou will get a pleasant surprise ;)\n\n(can only be opened at the base)",
 		// Trampolines
 	d_tiptext5								= "Physics of jumping on the trampoline has been changed - it accelerates\nyou more than once, it pushes back at the speed and height you hit it.\n\nIf you want to use it, put it at the bottom of your base,\nmake sure there's nothing in your way and jump off the tower roof onto it.",
 		// Class & Vehicles
-	d_tiptext6								= "\n\nAll three classes received various useful changes:\n* Builders build faster and can throw bombs;\n* Archers can use the hook and shoot at the same time, can use drill and throw bombs;\n* Knights have gotten a lot of new items in their arsenal and can use the drill;\n* And much more.\n\nIn addition, a couple of new vehicles have been added and shops to buy them\ncan be freely built (limit one per team).",
+	d_tiptext6								= "\n\nAll three classes received various useful changes:\n* Builders build faster and can throw bombs;\n* Archers can use the hook and shoot at the same time, can use drill and throw bombs;\n* Knights have gotten a lot of new items in their arsenal and can use the drill;\n* And much more.\n\n(Knights and archers are restricted to a certain zone,\noutside of which they cannot use the drill, except at their base)",
 		// Items
 	d_tiptext7								= "Various new lore-friendly items have been added, which will help quite nicely\nin both regular and stealthy pushes.\n\nDon't be afraid to try something new, some items can effectively\nhalt the enemy push ;)",
 		// Settings

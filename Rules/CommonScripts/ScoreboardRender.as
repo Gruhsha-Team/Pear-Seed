@@ -804,6 +804,9 @@ void onRenderScoreboard(CRules@ this) {
 
 	Vec2f mousePos = controls.getMouseScreenPos();
 	bool left_side = mousePos.x<getScreenWidth()/2;
+	const f32 screenMidX = getScreenWidth()/2;
+
+	drawManualPointer(screenMidX, tl.y + 50);
 
 	///////////////////////////////////////////////
 	// Player card section
