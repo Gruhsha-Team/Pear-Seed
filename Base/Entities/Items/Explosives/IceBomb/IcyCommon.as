@@ -30,11 +30,15 @@ void onTick(CBlob@ this) {
     if (!this.hasTag("icy")) return;
 
     if (this.hasTag("icy") && this.get_s32("icy time") > 0) {
-        if (this.hasTag(burning_tag)) {
+        if (this.hasTag("immune from icy")) { // cuz some players cant wait 10 and 5 seconds
+            this.sub_s32("icy time", 5);
+        } else if (this.hasTag(burning_tag)) {
             this.sub_s32("icy time", 2);
         } else {
             this.sub_s32("icy time", 1);
         }
+
+        //printf("current time " + this.get_s32("icy time"));
 
         // Imitation of slow down via player's mass increasing
         this.SetMass(140.0);
@@ -48,5 +52,46 @@ void onTick(CBlob@ this) {
         // Untag player, he's warmed up
         this.Untag("icy");
         //this.Sync("icy", true);
+    }
+}
+
+// Logic for some items
+void onAddToInventory(CBlob@ this, CBlob@ blob) {
+    if (!isServer()) return;
+
+	if (blob !is null && this !is null && this.hasTag("player")) {
+        if (blob.getConfig() == "lantern") {
+            this.Tag("immune from icy");
+        }
+	}
+}
+
+void onRemoveFromInventory(CBlob@ this, CBlob@ blob) {
+    if (!isServer()) return;
+
+	if (blob !is null && this !is null && this.hasTag("player")) {
+        if (blob.getConfig() == "lantern") {
+            this.Untag("immune from icy");
+        }
+	}
+}
+
+void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint) {
+    if (!isServer()) return;
+
+    if (this !is null && attached !is null) {
+        if (attached.getConfig() == "lantern") {
+            this.Tag("immune from icy");
+        }
+    }
+}
+
+void onDetach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint) {
+    if (!isServer()) return;
+
+    if (this !is null && attached !is null) {
+        if (attached.getConfig() == "lantern") {
+            this.Untag("immune from icy");
+        }
     }
 }
