@@ -2,7 +2,7 @@
 // random item on victim's death
 #define SERVER_ONLY
 
-const int TIMER_BEFORE_NEXT_ITEM = 10 * getTicksASecond();
+const int TIMER_BEFORE_NEXT_ITEM = 5 * getTicksASecond();
 
 void dropRandomItem(CBlob@ this) {
 	if (!this.hasTag("dropped random item")) { // double check
@@ -27,7 +27,7 @@ void dropRandomItem(CBlob@ this) {
 		//printf("Current " + killer.getUsername() + "'s" + " killstreak: " + kill_count);
 		//printf("Drop Random is " + drop_random);
 
-		if (killer !is null) {
+		if (killer.getBlob() !is null) {
 			if (drop_random >= 2.5) {
 				CBlob@ icebomb = server_CreateBlob("mat_icebombs", -1, this.getPosition());
 
