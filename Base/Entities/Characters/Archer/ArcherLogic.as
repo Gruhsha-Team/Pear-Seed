@@ -12,7 +12,8 @@
 #include "RedBarrierCommon.as";
 #include "StandardControlsCommon.as";
 #include "HolidaySprites.as";
-#include "BindingsCommon.as"
+#include "BindingsCommon.as";
+#include "TranslationsSystem.as";
 
 const int FLETCH_COOLDOWN = 45;
 const int PICKUP_COOLDOWN = 15;

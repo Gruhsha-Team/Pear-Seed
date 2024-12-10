@@ -11,6 +11,7 @@
 #include "StandardControlsCommon.as";
 #include "HolidaySprites.as";
 #include "BindingsCommon.as"
+#include "TranslationsSystem.as";
 
 //attacks limited to the one time per-actor before reset.
 
