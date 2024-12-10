@@ -98,6 +98,9 @@ namespace Descriptions
 	fumokegdesc						= Translate(en::d_fumokegdesc+"\\"+ru::d_fumokegdesc),
 	boosterdesc						= Translate(en::d_boosterdesc+"\\"+ru::d_boosterdesc),
 
+	// Misc
+	dropmatsbutton					= Translate(en::d_dropmatsbutton+"\\"+ru::d_dropmatsbutton),
+
 	// Satchel.as
 	satcheldesc			  	       	= Translate(en::d_satcheldesc+"\\"+ru::d_satcheldesc),
 

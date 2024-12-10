@@ -92,6 +92,9 @@ namespace en
 	d_fumokegdesc							= "The last thing, you'll be able to see in your life.",
 	d_boosterdesc							= "Bottle of compressed air that pushes objects and players in the opposite direction from you.",
 
+	// Misc
+	d_dropmatsbutton						= "Drop mats",
+
 	// Satchel.as
 	d_satcheldesc							= "Ignites flammable blocks, activated by throw key",
 
