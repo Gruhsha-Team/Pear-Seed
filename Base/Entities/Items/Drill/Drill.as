@@ -22,12 +22,18 @@ const u8 high_damage_window = 40; // at how much heat before max drill deals inc
 const string last_drill_prop = "drill last active";
 
 const u8 heat_add = 7;
-const u8 heat_add_k = 12;
+const u8 heat_add_k = 8;
+const u8 heat_add_high = 9;
+const u8 heat_add_low = 5;
 const u8 heat_add_constructed = 2;
-const u8 heat_add_constructed_k = 7.5;
+const u8 heat_add_constructed_k = 2.3;
+const u8 heat_add_constructed_high = 10;
+const u8 heat_add_constructed_low = 1;
 const u8 heat_add_blob = 6;
-const u8 heat_add_blob_k = 10;
-const u8 heat_cool_amount = 3;
+const u8 heat_add_blob_k = 6.9;
+const u8 heat_add_blob_high = 15;
+const u8 heat_add_blob_low = 4;
+const u8 heat_cool_amount = 2;
 
 const f32 heat_reduction_water = 0.5f;
 
@@ -210,6 +216,7 @@ void onTick(CSprite@ this)
 
 void onTick(CBlob@ this)
 {
+	CRules@ rules = getRules();
 	u8 heat = this.get_u8(heat_prop);
 	const u32 gametime = getGameTime();
 	bool inwater = this.isInWater();
@@ -267,6 +274,14 @@ void onTick(CBlob@ this)
 			if (!holder.isKeyPressed(key_action1) || (holder.isKeyPressed(key_action2) && holder.getConfig() == "knight") || isKnocked(holder))
 			{
 				this.set_bool(buzz_prop, false);
+				return;
+			}
+
+			// disallow to use drill, when knight out of drill zone
+			if ((holder.getConfig() == "knight" || holder.getConfig() == "archer") && ( (holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0) ))
+			{
+				this.set_bool(buzz_prop, false);
+				//printf("Go away!");
 				return;
 			}
 
@@ -449,8 +464,7 @@ void onTick(CBlob@ this)
 									{
 										u8 adding = heat_add_constructed;
 
-										if (holder.getConfig() != "builder")
-										{
+										if (holder.getConfig() != "builder") {
 											adding = heat_add_constructed_k;
 										}
 
@@ -460,8 +474,7 @@ void onTick(CBlob@ this)
 									{
 										u8 adding = heat_add_blob;
 
-										if (holder.getConfig() != "builder")
-										{
+										if (holder.getConfig() != "builder") {
 											adding = heat_add_blob_k;
 										}
 
@@ -471,8 +484,7 @@ void onTick(CBlob@ this)
 									{
 										u8 adding = heat_add;
 
-										if (holder.getConfig() != "builder")
-										{
+										if (holder.getConfig() != "builder") {
 											adding = heat_add_k;
 										}
 
@@ -573,6 +585,8 @@ void onThisAddToInventory(CBlob@ this, CBlob@ blob)
 
 void onRender(CSprite@ this)
 {
+	CRules@ rules = getRules();
+
 	CPlayer@ local = getLocalPlayer();
 	CBlob@ localBlob = local.getBlob();
 
@@ -596,6 +610,20 @@ void onRender(CSprite@ this)
 	bool hover = (mousePos - blobPos).getLength() < blob.getRadius() * 1.50f;
 
 	if (blob.isInInventory()) return;
+
+	if (holder !is null && holder.isMyPlayer() && holder.getBlob() !is null)
+	{
+		f32 left = getRules().get_u16("barrier_x1");
+		f32 right = getRules().get_u16("barrier_x2");
+
+		f32 holder_x = holder.getBlob().getPosition().x;
+
+		// Change cursor and play sound, when you can't drill outside zone
+		if ((holder.getBlob().getConfig() == "knight" || holder.getBlob().getConfig() == "archer") && ( (holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0)  && ( (holder_x <= left && holder.getTeamNum() == 1) || (holder_x >= right && holder.getTeamNum() == 0) ) && holder.getBlob().isKeyJustPressed(key_action1) && isClient()))
+		{
+			holderBlob.getSprite().PlaySound("NoAmmo.ogg", 0.5);
+		}
+	}
 
 	Vec2f dim = Vec2f(402, 64);
 	Vec2f ul(getHUDX() - dim.x / 2.0f, getHUDY() - dim.y + 12);

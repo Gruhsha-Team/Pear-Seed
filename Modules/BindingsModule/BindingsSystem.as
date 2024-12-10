@@ -303,11 +303,6 @@ void onInit(CRules@ this)
 				sfile2.add_string("annoying_nature", "on");
 			}
 
-			if (!sfile2.exists("annoying_voicelines"))
-			{
-				sfile2.add_string("annoying_voicelines", "on");
-			}
-
 			if (!sfile2.exists("annoying_tags"))
 			{
 				sfile2.add_string("annoying_tags", "on");
@@ -316,16 +311,6 @@ void onInit(CRules@ this)
 			if (!sfile2.exists("custom_death_and_pain_sounds"))
 			{
 				sfile2.add_string("custom_death_and_pain_sounds", "on");
-			}
-
-			if (!sfile2.exists("class_panels"))
-			{
-				sfile2.add_string("class_panels", "off");
-			}
-
-			if (!sfile2.exists("airdrop_panel"))
-			{
-				sfile2.add_string("airdrop_panel", "on");
 			}
 
 			if (!sfile2.exists("custom_boom_effects"))
@@ -345,6 +330,7 @@ void onInit(CRules@ this)
 			sfile2.add_string("clusterfuck", "on");
 			sfile2.add_string("clusterfuck_blood", "on");
 			sfile2.add_string("clusterfuck_smoke", "on");
+			sfile2.add_string("drillzone_borders", "on");
 			sfile2.add_string("annoying_nature", "on");
 			sfile2.add_string("annoying_tags", "on");
 			sfile2.add_string("custom_death_and_pain_sounds", "on");

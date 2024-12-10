@@ -396,6 +396,7 @@ string[][] vsetting_texts =
 		Names::clusterfuck,
 		Names::clusterfuck_blood,
 		Names::clusterfuck_smoke,
+		Names::drillzoneborders,
 		Names::annoyingnature,
 		Names::annoyingtags,
 		Names::customdpsounds,
@@ -416,6 +417,7 @@ string[][] vsetting_file_names =
 		"clusterfuck",
 		"clusterfuck_blood",
 		"clusterfuck_smoke",
+		"drillzone_borders",
 		"annoying_nature",
 		"annoying_tags",
 		"custom_death_and_pain_sounds",
@@ -467,6 +469,10 @@ string[][][] vsetting_options =
 		},
 		{
 			Descriptions::universaloff,       // CLUSTERFUCK SMOKE
+			Descriptions::universalon
+		},
+		{
+			Descriptions::universaloff,       // DRILLZONE BORDERS
 			Descriptions::universalon
 		},
 		{
