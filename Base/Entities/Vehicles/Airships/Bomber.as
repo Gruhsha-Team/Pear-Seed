@@ -1,5 +1,6 @@
 #include "VehicleCommon.as"
 #include "Hitters.as"
+#include "ActivationThrowCommon.as"
 
 // Boat logic
 
@@ -86,7 +87,9 @@ void onTick(CBlob@ this)
 
 			//TODO: move to atmosphere damage script
 			f32 y = this.getPosition().y;
-			if (y < 100)
+			//printf("My height is " + y);
+
+			if (y < 0)
 			{
 				if (getGameTime() % 15 == 0)
 					this.server_Hit(this, this.getPosition(), Vec2f(0, 0), y < 50 ? (y < 0 ? 2.0f : 1.0f) : 0.25f, 0, true);
@@ -151,6 +154,10 @@ void onTick(CBlob@ this)
 							item.server_Die();
 						}
 					} else {
+						// activate items, if we can
+						if (isCanBeActivated(item))
+							server_Activate(item);
+
 						this.server_PutOutInventory(item);
 						item.setPosition(this.getPosition());
 					}
@@ -161,6 +168,16 @@ void onTick(CBlob@ this)
 	}
 	///////////////////////////////////////////////
 	///////////////////////////////////////////////
+}
+
+bool isCanBeActivated(CBlob@ item) {
+	if (item.getConfig() == "keg" ||
+		item.getConfig() == "satchel"
+	) {
+		return true;
+	}
+
+	return false;
 }
 
 bool doesCollideWithBlob(CBlob@ this, CBlob@ blob)

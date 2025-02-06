@@ -14,6 +14,11 @@ void onInit(CBlob@ this)
 	this.addCommandID("spawn on cursor position");
 }
 
+void onInit(CSprite@ this)
+{
+	this.ScaleBy(0.5f, 0.5f);
+}
+
 void onTick(CBlob@ this) {
 	if (this.isAttachedToPoint("PICKUP")) {
 		AttachmentPoint@ point = this.getAttachments().getAttachmentPointByName("PICKUP");
@@ -24,27 +29,20 @@ void onTick(CBlob@ this) {
 		CControls@ controls = holder.getControls();
 
 		if (controls.isKeyJustPressed(KEY_MBUTTON)) {
-			for (uint i = 0; i < fridges_to_spawn; i++) {
-				this.SendCommand(this.getCommandID("spawn on middle"));
-			}
+			this.SendCommand(this.getCommandID("spawn on middle"));
 		}
 
-		if (controls.ActionKeyPressed(AK_ACTION2)) {
-			for (uint i = 0; i < fridges_to_spawn; i++) {
-				this.SendCommand(this.getCommandID("spawn above player"));
-			}
+		if (controls.isKeyJustPressed(KEY_RBUTTON)) {
+			this.SendCommand(this.getCommandID("spawn above player"));
 		}
 
-		if (controls.ActionKeyPressed(AK_ACTION1)) {
-			for (uint i = 0; i < fridges_to_spawn; i++) {
-				this.SendCommand(this.getCommandID("spawn on cursor position"));
-			}
+		if (controls.isKeyJustPressed(KEY_LBUTTON)) {
+			this.SendCommand(this.getCommandID("spawn on cursor position"));
 		}
 	}
 }
 
-void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint)
-{
+void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint) {
 	this.server_setTeamNum(attached.getTeamNum());
 }
 

@@ -12,8 +12,6 @@ void onInit(CBlob@ this)
 {
 	InitCosts(); //read from cfg
 
-	AddIconToken("$_buildershop_filled_bucket$", "Bucket.png", Vec2f(16, 16), 1);
-
 	this.set_TileType("background tile", CMap::tile_wood_back);
 
 	this.getSprite().SetZ(-50); //background
@@ -23,6 +21,8 @@ void onInit(CBlob@ this)
 	this.set("onShopMadeItem handle", @onMadeItem);
 
 	this.Tag("has window");
+
+	int team_num = this.getTeamNum();
 
 	// SHOP
 	this.set_Vec2f("shop offset", Vec2f_zero);
@@ -34,7 +34,9 @@ void onInit(CBlob@ this)
 	this.set_Vec2f("class offset", Vec2f(-6, 0));
 	this.set_string("required class", "builder");
 
-	int team_num = this.getTeamNum();
+	// ICONS
+	AddIconToken("$_buildershop_filled_bucket$", "Bucket.png", Vec2f(16, 16), 1);
+	AddIconToken("builderfleximage", "builderfleximage.png", Vec2f(17, 15), 0, 255);
 
 	{
 		ShopItem@ s = addShopItem(this, "Drill", getTeamIcon("drill", "Drill.png", team_num, Vec2f(32, 16), 0), "drill", Descriptions::drill, false);

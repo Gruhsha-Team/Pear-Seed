@@ -1,7 +1,7 @@
 void onInit(CBlob@ this)
 {
 	this.getShape().SetGravityScale(0);
-	this.server_SetTimeToDie(2);
+	this.server_SetTimeToDie(0.5);
 }
 
 void onTick(CBlob@ this)
@@ -48,8 +48,13 @@ void onTick(CBlob@ this)
 			f32 exp_dot = explosion_dir.x*ds_dir.x + explosion_dir.y*ds_dir.y;
 
 			f32 angle_factor_account = exp_dot >= 0.87 ? 180 : 0;
+
+			Vec2f tile_vel = Vec2f(-radius/3.5, 0).RotateBy(-(pos-tpos).getAngle()+angle_factor_account);
+			f32 tile_vellen = tile_vel.Length();
+			tile_vel.Normalize();
+			tile_vel *= Maths::Min(tile_vellen, 14);
 			
-			e_tile.setVelocity(Vec2f(-radius/3.5, 0).RotateBy(-(pos-tpos).getAngle()+angle_factor_account));
+			e_tile.setVelocity(tile_vel);
 		}
 	}
 

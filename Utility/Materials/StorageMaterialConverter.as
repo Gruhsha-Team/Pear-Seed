@@ -9,23 +9,6 @@ void onTick(CBlob@ this)
     if (!isServer()) return;
 
     CInventory@ inv = this.getInventory();
-    CPlayer@ player = null;
-
-    CPlayer@[] builders_blue;
-    CPlayer@[] builders_red;
-
-    // calculating amount of players in classes
-    for (u32 i = 0; i < getPlayersCount(); i++) {
-        CPlayer@ p = getPlayer(i);
-		if (p is null) continue;
-
-        if (getPlayer(i).getBlob() is null) continue;
-
-        if (getPlayer(i).getBlob().getName() == "builder") {
-            if (getPlayer(i).getTeamNum() == 0) builders_blue.push_back(p);
-            else if (getPlayer(i).getTeamNum() == 1) builders_red.push_back(p);
-        }
-    }
 
     // Convert material, if storage have it in inventory
     if (this !is null && inv !is null) {
@@ -43,66 +26,28 @@ void onTick(CBlob@ this)
                 printf("Wood amount in inventory is " + wood_count);
             }*/
 
-            if (name == "mat_stone" && getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("storage pickup time")) {
-                if (this.getTeamNum() == 0 && builders_blue.length > 0) { // BLUE TEAM
-                    for (int i = 0; i < builders_blue.length; ++i) {
-                        CPlayer@ p = builders_blue[i];
-                        if (p is null) continue;
+            if (name == "mat_stone" &&
+                    item.get_s32("storage pickup time") != -1 &&
+                    getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("storage pickup time")) {
+                getRules().add_s32("teamstone" + this.getTeamNum(), stone_count);
+                getRules().Sync("teamstone" + this.getTeamNum(), true);
+                //inv.server_RemoveItems("mat_stone", stone_count); // dont working with onRemoveFromInventory hook???
 
-                        getRules().add_s32("personalstone_" + p.getUsername(), stone_count / builders_blue.length);
-                        getRules().Sync("personalstone_" + p.getUsername(), true);
-                        //inv.server_RemoveItems("mat_stone", stone_count); // dont working with onRemoveFromInventory hook???
-
-                        this.server_PutOutInventory(item);
-                        item.server_Die();
-                    }
-
-                    this.SendCommand(this.getCommandID("play convert sound"));
-                } else if (this.getTeamNum() == 1 && builders_red.length > 0) { // RED TEAM
-                    for (int i = 0; i < builders_red.length; ++i) {
-                        CPlayer@ p = builders_red[i];
-                        if (p is null) continue;
-
-                        getRules().add_s32("personalstone_" + p.getUsername(), stone_count / builders_red.length);
-                        getRules().Sync("personalstone_" + p.getUsername(), true);
-                        //inv.server_RemoveItems("mat_stone", stone_count); // dont working with onRemoveFromInventory hook???
-
-                        this.server_PutOutInventory(item);
-                        item.server_Die();
-                    }
-
-                    this.SendCommand(this.getCommandID("play convert sound"));
-                }
-            } else if (name == "mat_wood" && getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("storage pickup time")) {
-                if (this.getTeamNum() == 0 && builders_blue.length > 0) { // BLUE TEAM
-                    for (int i = 0; i < builders_blue.length; ++i) {
-                        CPlayer@ p = builders_blue[i];
-                        if (p is null) continue;
-
-                        getRules().add_s32("personalwood_" + p.getUsername(), wood_count / builders_blue.length);
-                        getRules().Sync("personalwood_" + p.getUsername(), true);
-                        //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
-
-                        this.server_PutOutInventory(item);
-                        item.server_Die();
-                    }
+                this.server_PutOutInventory(item);
+                item.server_Die();
 
                 this.SendCommand(this.getCommandID("play convert sound"));
-                } else if (this.getTeamNum() == 1 && builders_red.length > 0) { // RED TEAM
-                    for (int i = 0; i < builders_red.length; ++i) {
-                        CPlayer@ p = builders_red[i];
-                        if (p is null) continue;
+            } else if (name == "mat_wood" &&
+                    item.get_s32("storage pickup time") != -1 &&
+                    getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("storage pickup time")) {
+                getRules().add_s32("teamwood" + this.getTeamNum(), wood_count);
+                getRules().Sync("teamwood" + this.getTeamNum(), true);
+                //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
 
-                        getRules().add_s32("personalwood_" + p.getUsername(), wood_count / builders_red.length);
-                        getRules().Sync("personalwood_" + p.getUsername(), true);
-                        //inv.server_RemoveItems("mat_wood", wood_count); // dont working with onRemoveFromInventory hook???
-
-                        this.server_PutOutInventory(item);
-                        item.server_Die();
-                    }
+                this.server_PutOutInventory(item);
+                item.server_Die();
 
                 this.SendCommand(this.getCommandID("play convert sound"));
-                }
             }
         }
     }

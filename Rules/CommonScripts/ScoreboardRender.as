@@ -31,7 +31,7 @@ bool mouseWasPressed2 = false;
 
 const string OLD_PLAYER_STATS_CORE = "player stats core";
 
-const string mod_version = "v2.0.1";
+const string mod_version = "v2.1";
 
 class OldPlayerStatsCore {
 	dictionary stats;
@@ -132,7 +132,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		GUI::DrawText(getTranslatedString("Tier"), Vec2f(br.x - tier_start, tl.y), SColor(0xffffffff));
 	}*/
 
-	GUI::DrawText(Names::matssection, Vec2f(br.x - 680, tl.y), SColor(0xffffffff));
+	//GUI::DrawText(Names::matssection, Vec2f(br.x - 600, tl.y), SColor(0xffffffff));
 
 	tl.y += stepheight * 0.5f;
 
@@ -633,14 +633,6 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		//GUI::DrawText("" + assists, Vec2f(br.x - 120, tl.y), kdr_color);
 		//GUI::DrawText("" + formatFloat(kills / Maths::Max(f32(deaths), 1.0f), "", 0, 2), Vec2f(br.x - 50, tl.y), kdr_color);
 
-		// matetials section
-		GUI::DrawText(getRules().get_s32("personalwood_" + username) + " ", Vec2f(br.x - 605, tl.y), SColor(0xffffffff));
-		GUI::DrawText("" " | ", Vec2f(br.x - 638, tl.y), SColor(0xffffffff));
-		GUI::DrawText(getRules().get_s32("personalstone_" + username) + " ", Vec2f(br.x - 670, tl.y), SColor(0xffffffff));
-
-		// icons for mats
-		GUI::DrawIcon("Materials.png", 25, Vec2f(16, 16), Vec2f(br.x - 625, tl.y), 0.50f, 0); // wood
-		GUI::DrawIcon("Materials.png", 24, Vec2f(16, 16), Vec2f(br.x - 688, tl.y), 0.50f, 0); // stone
 
 	}
 
@@ -809,6 +801,33 @@ void onRenderScoreboard(CRules@ this) {
 	drawManualPointer(screenMidX, tl.y + 50);
 
 	///////////////////////////////////////////////
+	// matetials section
+
+	// BLUE TEAM
+	if (bluz_pane_tl.x != 0) {
+		GUI::DrawText(getRules().get_s32("teamwood" + 0) + " ", Vec2f(bluz_pane_tl.x + 368, bluz_pane_tl.y + 23), SColor(0xffffffff));
+		GUI::DrawText("" " | ", Vec2f(bluz_pane_tl.x + 335, bluz_pane_tl.y + 22), SColor(0xffffffff));
+		GUI::DrawText(getRules().get_s32("teamstone" + 0) + " ", Vec2f(bluz_pane_tl.x + 290, bluz_pane_tl.y + 23), SColor(0xffffffff));
+
+		// icons for mats
+		GUI::DrawIcon("Materials.png", 25, Vec2f(16, 16), Vec2f(bluz_pane_tl.x + 350, bluz_pane_tl.y + 23), 0.50f, 0); // wood
+		GUI::DrawIcon("Materials.png", 24, Vec2f(16, 16), Vec2f(bluz_pane_tl.x + 272, bluz_pane_tl.y + 23), 0.50f, 0); // stone
+	}
+
+	// RED TEAM
+	if (redz_pane_tl.x != 0) {
+		GUI::DrawText(getRules().get_s32("teamwood" + 1) + " ", Vec2f(redz_pane_tl.x + 368, redz_pane_tl.y + 23), SColor(0xffffffff));
+		GUI::DrawText("" " | ", Vec2f(redz_pane_tl.x + 335, redz_pane_tl.y + 22), SColor(0xffffffff));
+		GUI::DrawText(getRules().get_s32("teamstone" + 1) + " ", Vec2f(redz_pane_tl.x + 290, redz_pane_tl.y + 23), SColor(0xffffffff));
+
+		// icons for mats
+		GUI::DrawIcon("Materials.png", 25, Vec2f(16, 16), Vec2f(redz_pane_tl.x + 350, redz_pane_tl.y + 23), 0.50f, 0); // wood
+		GUI::DrawIcon("Materials.png", 24, Vec2f(16, 16), Vec2f(redz_pane_tl.x + 272, redz_pane_tl.y + 23), 0.50f, 0); // stone
+	}
+	///////////////////////////////////////////////
+
+
+	///////////////////////////////////////////////
 	// Player card section
 	///////////////////////////////////////////////
 
@@ -878,7 +897,7 @@ void onRenderScoreboard(CRules@ this) {
 	ScoreboardField(
 		Vec2f(screenWidth - tl.x - 200, 115 - scrollOffset),
 		Vec2f(screenWidth - tl.x,       115 - scrollOffset + 40),
-		Descriptions::currentversiontext + mod_version + "\n(3.4)"
+		Descriptions::currentversiontext + mod_version + "\n(3.5)"
 	);
 	LinkButton(
 		Vec2f(screenWidth - tl.x - 275, 115 - scrollOffset),

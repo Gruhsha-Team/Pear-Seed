@@ -38,6 +38,7 @@ void onInit(CBlob@ this)
 
 void onTick(CBlob@ this)
 {
+	CRules@ rules = getRules();
 	AttachmentPoint@ point = this.getAttachments().getAttachmentPointByName("PICKUP");
 
 	CBlob@ holder = point.getOccupied();

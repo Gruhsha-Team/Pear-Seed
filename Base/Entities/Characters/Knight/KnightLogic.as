@@ -11,7 +11,6 @@
 #include "StandardControlsCommon.as";
 #include "HolidaySprites.as";
 #include "BindingsCommon.as"
-#include "TranslationsSystem.as";
 
 //attacks limited to the one time per-actor before reset.
 
@@ -75,7 +74,12 @@ void onInit(CBlob@ this)
 	states.push_back(ResheathState(KnightStates::resheathing_slash, KnightVars::resheath_slash_time));
 
 	this.set("knightStates", @states);
-	this.set_s32("currentKnightState", 0);
+	
+	if (this.exists("currentKnightState"))
+		knight.state = this.get_s32("currentKnightState");
+	else 
+		this.set_s32("currentKnightState", 0);
+	
 
 	this.set_f32("gib health", -1.5f);
 	addShieldVars(this, SHIELD_BLOCK_ANGLE, 2.0f, 5.0f);
@@ -92,10 +96,11 @@ void onInit(CBlob@ this)
 	this.set("onCycle handle", @controls_cycle);
 
 	this.addCommandID("activate/throw bomb");
-	this.addCommandID("drop mats");
 
 	this.push("names to activate", "keg");
 	this.push("names to activate", "fumokeg");
+	this.push("names to activate", "hazelnut");
+	this.push("names to activate", "hazelnutshell");
 	this.push("names to activate", "satchel");
 
 	this.set_u8("bomb type", 255);
@@ -127,23 +132,23 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 
 }
 
-
-void RunStateMachine(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
-{
+void HandleSyncedState(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
+{	
 	KnightState@[]@ states;
 	if (!this.get("knightStates", @states))
 	{
 		return;
 	}
 
-	s32 currentStateIndex = this.get_s32("currentKnightState");
-
-	if (getNet().isClient())
+	if (isClient())
 	{
 		if (this.exists("serverKnightState"))
 		{
+			s32 currentStateIndex = this.get_s32("currentKnightState");
 			s32 serverStateIndex = this.get_s32("serverKnightState");
+
 			this.set_s32("serverKnightState", -1);
+			
 			if (serverStateIndex != -1 && serverStateIndex != currentStateIndex)
 			{
 				KnightState@ serverState = states[serverStateIndex];
@@ -160,7 +165,6 @@ void RunStateMachine(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
 								serverState.stateEnteredTime = getGameTime();
 								serverState.StateEntered(this, knight, serverState.getStateValue());
 								this.set_s32("currentKnightState", serverStateIndex);
-								currentStateIndex = serverStateIndex;
 							}
 
 						}
@@ -173,14 +177,24 @@ void RunStateMachine(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
 					serverState.stateEnteredTime = getGameTime();
 					serverState.StateEntered(this, knight, serverState.getStateValue());
 					this.set_s32("currentKnightState", serverStateIndex);
-					currentStateIndex = serverStateIndex;
 				}
 
 			}
+
 		}
 	}
+}
 
 
+void RunStateMachine(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
+{
+	KnightState@[]@ states;
+	if (!this.get("knightStates", @states))
+	{
+		return;
+	}
+
+	s32 currentStateIndex = this.get_s32("currentKnightState");
 
 	u8 state = knight.state;
 	KnightState@ currentState = states[currentStateIndex];
@@ -201,7 +215,7 @@ void RunStateMachine(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
 				nextState.stateEnteredTime = getGameTime();
 				nextState.StateEntered(this, knight, currentState.getStateValue());
 				this.set_s32("currentKnightState", nextStateIndex);
-				if (getNet().isServer() && knight.state >= KnightStates::sword_drawn && knight.state <= KnightStates::sword_power_super)
+				if (isServer() && knight.state >= KnightStates::shielding && knight.state <= KnightStates::sword_power_super)
 				{
 					this.set_s32("serverKnightState", nextStateIndex);
 					this.Sync("serverKnightState", true);
@@ -210,7 +224,6 @@ void RunStateMachine(CBlob@ this, KnightInfo@ knight, RunnerMoveVars@ moveVars)
 				if (tickNext)
 				{
 					RunStateMachine(this, knight, moveVars);
-
 				}
 				break;
 			}
@@ -246,8 +259,13 @@ void onTick(CBlob@ this)
 		knight.doubleslash = false;
 		hud.SetCursorFrame(0);
 		this.set_s32("currentKnightState", 0);
-		this.set_s32("serverKnightState", -1);
 		return;
+	}
+
+	if (!knocked)
+	{
+		HandleSyncedState(this, knight, moveVars);
+		RunStateMachine(this, knight, moveVars);
 	}
 
 	Vec2f pos = this.getPosition();
@@ -308,17 +326,10 @@ void onTick(CBlob@ this)
 		knight.slideTime = 0;
 		knight.doubleslash = false;
 		this.set_s32("currentKnightState", 0);
-		this.set_s32("serverKnightState", -1);
 
 		pressed_a1 = false;
 		pressed_a2 = false;
 		walking = false;
-
-	}
-	else
-	{
-		RunStateMachine(this, knight, moveVars);
-
 	}
 
 	//throwing bombs
@@ -1442,42 +1453,6 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 		}
 		SetFirstAvailableBomb(this);
 	}
-	else if (cmd == this.getCommandID("drop mats") && isServer())
-	{
-		u16 id;
-		if (!params.saferead_u16(id)) return;
-
-		CBlob@ player = getBlobByNetworkID(id);
-		if (player is null) return;
-
-		if (player.getPlayer() is null) return;
-
-		if (player.getPlayer().isMyPlayer()) {
-			player.ClearGridMenus();
-		}
-
-        if (getRules().get_s32("personalstone_" + player.getPlayer().getUsername()) > 50) {
-            int team_stone = getRules().get_s32("personalstone_" + player.getPlayer().getUsername());
-
-            CBlob@ stone = server_CreateBlob("mat_stone", player.getPlayer().getTeamNum(), player.getPosition());
-            stone.server_SetQuantity(50);
-
-            getRules().sub_s32("personalstone_" + player.getPlayer().getUsername(), stone.getQuantity());
-            getRules().Sync("personalstone_" + player.getPlayer().getUsername(), true);
-        }
-        else if (getRules().get_s32("personalstone_" + player.getPlayer().getUsername()) <= 50) { return; } // we dont have material to spawn, lol
-
-        if (getRules().get_s32("personalwood_" + player.getPlayer().getUsername()) > 50) {
-            int team_wood = getRules().get_s32("personalwood_" + player.getPlayer().getUsername());
-
-            CBlob@ wood = server_CreateBlob("mat_wood", player.getPlayer().getTeamNum(), player.getPosition());
-            wood.server_SetQuantity(50);
-
-            getRules().sub_s32("personalwood_" + player.getPlayer().getUsername(), wood.getQuantity());
-            getRules().Sync("personalwood_" + player.getPlayer().getUsername(), true);
-        }
-        else if (getRules().get_s32("personalwood_" + player.getPlayer().getUsername()) <= 50) { return; } // we dont have material to spawn, lol
-	}
 	else if (isServer())
 	{
 		for (uint i = 0; i < bombTypeNames.length; i++)
@@ -1551,9 +1526,12 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 
 			if (b !is null)
 			{
-				if (b.hasTag("ignore sword")) continue;
-				if (!canHit(this, b)) continue;
-				if (knight_has_hit_actor(this, b)) continue;
+				if (b.hasTag("ignore sword") 
+				    || !canHit(this, b)
+				    || knight_has_hit_actor(this, b)) 
+				{
+					continue;
+				}
 
 				Vec2f hitvec = hi.hitpos - pos;
 
@@ -1601,8 +1579,10 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 
 							if (isServer() && this.getPlayer() !is null)
 							{
-								getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), quantity);
-								getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
+								u8 team = this.getPlayer().getTeamNum();
+
+								getRules().add_s32("teamwood" + team, quantity);
+								getRules().Sync("teamwood" + team, true);
 							}
 							/*CBlob@ wood = server_CreateBlobNoInit("mat_wood");
 							if (wood !is null)
@@ -1737,8 +1717,10 @@ void DoAttack(CBlob@ this, f32 damage, f32 aimangle, f32 arcdegrees, u8 type, in
 
 										if (isServer() && this.getPlayer() !is null)
 										{
-											getRules().add_s32("personalstone_" + this.getPlayer().getUsername(), quantity);
-											getRules().Sync("personalstone_" + this.getPlayer().getUsername(), true);
+											u8 team = this.getPlayer().getTeamNum();
+
+											getRules().add_s32("teamstone" + team, quantity);
+											getRules().Sync("teamstone" + team, true);
 										}
 
 										/*CBlob@ ore = server_CreateBlobNoInit("mat_stone");
@@ -2022,25 +2004,6 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 					button.SetSelected(1);
 				}
 			}
-		}
-	}
-
-	const u8 GRID_SIZE = 48;
-	const u8 GRID_PADDING = 12;
-	const Vec2f TOOL_POS = menu.getUpperLeftPosition() - Vec2f(GRID_PADDING, 0) + Vec2f(-1, 1) * GRID_SIZE / 2;
-
-	CGridMenu@ tool = CreateGridMenu(TOOL_POS, this, Vec2f(1, 1), "");
-	if (tool !is null)
-	{
-		tool.SetCaptionEnabled(false);
-
-		CBitStream params;
-		params.write_u16(this.getNetworkID());
-
-		CGridButton@ clear = tool.AddButton("$DROP_BUILDER_MATS$", "", this.getCommandID("drop mats"), Vec2f(1, 1), params);
-		if (clear !is null)
-		{
-			clear.SetHoverText(Descriptions::dropmatsbutton);
 		}
 	}
 }

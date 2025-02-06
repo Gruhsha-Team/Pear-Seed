@@ -114,7 +114,10 @@ void onCollision( CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f poin
 
 	if (solid)
 	{
-		f32 max_hits = this.getOldVelocity().Length();
+		f32 max_hits = this.getOldVelocity().Length()*2;
+		bool wooden = getMap().isTileWood(this.get_s32("tile_frame"));
+		if (wooden) max_hits /= 2;
+
 		//
 		{
 			HitInfo@[] hitInfos;
@@ -190,8 +193,11 @@ void onCollision( CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f poin
 	}
 
 	if (blob is null) return;
-		
+
 	if (this.getOldVelocity().Length()<2) return;
+		
+	//checking if we did hit the blob within 15 last ticks
+	if (getGameTime()-this.get_u32("last_hit_tick") < 15 && blob.getNetworkID() == this.get_u32("last_hit_blob")) return;
 
 	if (blob.hasTag("player") && blob.getPosition().y < this.getPosition().y && this.getVelocity().y>=0) return;
 
@@ -219,6 +225,9 @@ void onCollision( CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f poin
 		if (wooden) tile_damage /= 2;
 		
 		this.server_Hit(blob, point1, this.getOldVelocity(), tile_damage, GruhshaHitters::tile_entity, true);
+
+		this.set_u32("last_hit_tick", getGameTime());
+		this.set_u32("last_hit_blob", blob.getNetworkID());
 
 		if (hitting_important_thing)
 		{

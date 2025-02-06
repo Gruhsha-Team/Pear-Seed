@@ -286,7 +286,7 @@ shared class CTFSpawns : RespawnSystem
 
 	void AddPlayerToSpawn(CPlayer@ player)
 	{
-		s32 tickspawndelay = s32(getTicksASecond() * 6);
+		s32 tickspawndelay = s32(getTicksASecond() * 8);
 
 		CTFPlayerInfo@ info = cast < CTFPlayerInfo@ > (core.getInfoFromPlayer(player));
 

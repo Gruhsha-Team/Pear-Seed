@@ -1,6 +1,6 @@
 // MaterialConverter.as
 
-s32 convert_time_inventory = 15;
+s32 convert_time_inventory = 10;
 s32 convert_time_carried = 5;
 
 ///////////////////////////////////////////////
@@ -28,15 +28,19 @@ void onTick(CBlob@ this)
                 printf("Wood amount in inventory is " + wood_count);
             }*/
 
-            if (name == "mat_stone" && getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("pickup time")) {
-                getRules().add_s32("personalstone_" + this.getPlayer().getUsername(), stone_count);
-                getRules().Sync("personalstone_" + this.getPlayer().getUsername(), true);
+            if (name == "mat_stone" &&
+                    item.get_s32("pickup time") != -1 &&
+                    getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("pickup time")) {
+                getRules().add_s32("teamstone" + this.getTeamNum(), stone_count);
+                getRules().Sync("teamstone" + this.getTeamNum(), true);
                 inv.server_RemoveItems("mat_stone", stone_count);
 
                 this.SendCommand(this.getCommandID("play convert sound"));
-            } else if (name == "mat_wood" && getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("pickup time")) {
-                getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), wood_count);
-                getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
+            } else if (name == "mat_wood" &&
+                    item.get_s32("pickup time") != -1 &&
+                    getGameTime() > convert_time_inventory * getTicksASecond() + item.get_s32("pickup time")) {
+                getRules().add_s32("teamwood" + this.getTeamNum(), wood_count);
+                getRules().Sync("teamwood" + this.getTeamNum(), true);
                 inv.server_RemoveItems("mat_wood", wood_count);
 
                 this.SendCommand(this.getCommandID("play convert sound"));
@@ -50,9 +54,10 @@ void onTick(CBlob@ this)
             u16 stone_count = carried.getQuantity();
             //printf("Stone amount in inventory is " + stone_count);
 
-            if (getGameTime() > convert_time_carried * getTicksASecond() + carried.get_s32("attach time")) {
-                getRules().add_s32("personalstone_" + this.getPlayer().getUsername(), stone_count);
-                getRules().Sync("personalstone_" + this.getPlayer().getUsername(), true);
+            if (carried.get_s32("attach time") != -1 &&
+                getGameTime() > convert_time_carried * getTicksASecond() + carried.get_s32("attach time")) {
+                getRules().add_s32("teamstone" + this.getTeamNum(), stone_count);
+                getRules().Sync("teamstone" + this.getTeamNum(), true);
                 carried.server_Die();
 
                 this.SendCommand(this.getCommandID("play convert sound"));
@@ -61,9 +66,10 @@ void onTick(CBlob@ this)
             u16 wood_count = carried.getQuantity();
            // printf("Wood amount in inventory is " + wood_count);
 
-            if (getGameTime() > convert_time_carried * getTicksASecond() + carried.get_s32("attach time")) {
-                getRules().add_s32("personalwood_" + this.getPlayer().getUsername(), wood_count);
-                getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
+            if (carried.get_s32("attach time") != -1 &&
+                getGameTime() > convert_time_carried * getTicksASecond() + carried.get_s32("attach time")) {
+                getRules().add_s32("teamwood" + this.getTeamNum(), wood_count);
+                getRules().Sync("teamwood" + this.getTeamNum(), true);
                 carried.server_Die();
 
                 this.SendCommand(this.getCommandID("play convert sound"));
@@ -166,8 +172,8 @@ void onRemoveFromInventory(CBlob@ this, CBlob@ blob) {
 void onDie(CBlob@ this)
 {
 	if (isServer()) {
-        if (this.hasTag("dead") && getRules().get_s32("personalstone_" + this.getPlayer().getUsername()) > 0) {
-            int team_stone = getRules().get_s32("personalstone_" + this.getPlayer().getUsername());
+        if (this.hasTag("dead") && getRules().get_s32("teamstone" + this.getTeamNum()) > 0) {
+            int team_stone = getRules().get_s32("teamstone" + this.getTeamNum());
 
             CBlob@ stone = server_CreateBlob("mat_stone", this.getPlayer().getTeamNum(), this.getPosition());
             stone.server_SetQuantity(XORRandom(team_stone / 10));
@@ -180,13 +186,13 @@ void onDie(CBlob@ this)
                 stone.AddForce(force);
             }
 
-            getRules().sub_s32("personalstone_" + this.getPlayer().getUsername(), stone.getQuantity());
-            getRules().Sync("personalstone_" + this.getPlayer().getUsername(), true);
+            getRules().sub_s32("teamstone" + this.getTeamNum(), stone.getQuantity());
+            getRules().Sync("teamstone" + this.getTeamNum(), true);
         }
-        else if (this.hasTag("dead") && getRules().get_s32("personalstone_" + this.getPlayer().getUsername()) <= 0) { return; } // we dont have material to spawn, lol
+        else if (this.hasTag("dead") && getRules().get_s32("teamstone" + this.getTeamNum()) <= 0) { return; } // we dont have material to spawn, lol
 
-        if (this.hasTag("dead") && getRules().get_s32("personalwood_" + this.getPlayer().getUsername()) > 0) {
-            int team_wood = getRules().get_s32("personalwood_" + this.getPlayer().getUsername());
+        if (this.hasTag("dead") && getRules().get_s32("teamwood" + this.getTeamNum()) > 0) {
+            int team_wood = getRules().get_s32("teamwood" + this.getTeamNum());
 
             CBlob@ wood = server_CreateBlob("mat_wood", this.getPlayer().getTeamNum(), this.getPosition());
             wood.server_SetQuantity(XORRandom(team_wood / 10));
@@ -199,9 +205,9 @@ void onDie(CBlob@ this)
                 wood.AddForce(force);
             }
 
-            getRules().sub_s32("personalwood_" + this.getPlayer().getUsername(), wood.getQuantity());
-            getRules().Sync("personalwood_" + this.getPlayer().getUsername(), true);
+            getRules().sub_s32("teamwood" + this.getTeamNum(), wood.getQuantity());
+            getRules().Sync("teamwood" + this.getTeamNum(), true);
         }
-        else if (this.hasTag("dead") && getRules().get_s32("personalwood_" + this.getPlayer().getUsername()) <= 0) { return; } // we dont have material to spawn, lol
+        else if (this.hasTag("dead") && getRules().get_s32("teamwood" + this.getTeamNum()) <= 0) { return; } // we dont have material to spawn, lol
 	}
 }

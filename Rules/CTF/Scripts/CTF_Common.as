@@ -1,18 +1,21 @@
 // spawn resources
-const u32 materials_wait = 25; //seconds between free mats
-const u32 materials_wait_warmup = 40; //seconds between free mats
+const u32 materials_wait = 30; //seconds between free mats
+const u32 materials_wait_longer = 70; //seconds between free mats
+const u32 materials_wait_warmup = 45; //seconds between free mats
 
 const int warmup_wood_amount = 500;
 const int warmup_stone_amount = 500;
 
-const int matchtime_wood_amount = 225;
-const int matchtime_stone_amount = 60;
+const int matchtime_wood_amount = 250;
+const int matchtime_stone_amount = 75;
 
+////////////////////////////////////////////
 // Reducing resupplies stuff
 const u32 lower_mats_timer = 1800; // 30 min
 
-const int lower_wood = 100;
-const int lower_stone = 30;
+const int lower_wood = 150;
+const int lower_stone = 50;
+///////////////////////////////////////////
 
 //property
 const string SPAWN_ITEMS_TIMER_BUILDER = "CTF SpawnItems Builder:";

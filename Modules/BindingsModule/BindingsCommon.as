@@ -18,7 +18,8 @@ string[] page_texts =
 	Names::buildernmb,
 	Names::quartersnmb,
 	Names::vehiclenmb,
-	Names::boatnmb
+	Names::boatnmb,
+	Names::edmenu
 };
 
 string[][] button_texts =
@@ -85,9 +86,11 @@ string[][] button_texts =
 		Names::stickybombnmb,
 		Names::goldenminenmb,
 		Names::icebombnmb,
-		Names::slideminenmb
+		Names::slideminenmb,
 		//Names::boosternmb,
-		//Names::fumokegnmb
+		//Names::fumokegnmb,
+		"Hazelnut"
+		//Names::hazelnutnmb
 	},
 	{							// ARCHER SHOP
 		Names::arrowsnmb,
@@ -130,6 +133,14 @@ string[][] button_texts =
 		Names::dinghynmb,
 		Names::longboatnmb,
 		Names::warboatnmb
+	},
+	{
+		Names::edmodifier,
+		Names::edonceaction,
+		Names::edmode,
+		Names::eddestroy,
+		Names::edplace,
+		Names::edcopy
 	}
 };
 
@@ -199,9 +210,10 @@ string[][] button_file_names =
 		"k_sticky",
 		"k_icebomb",
 		"k_goldmine",
-		"k_slidemine"
+		"k_slidemine",
 		//"k_booster",
-		//"k_fumokeg"
+		//"k_fumokeg",
+		"k_hazelnut"
 	},
 	{
 		"a_arrows",
@@ -244,6 +256,14 @@ string[][] button_file_names =
 		"boat_dinghy",
 		"boat_longboat",
 		"boat_warboat"
+	},
+	{
+		"ed_modifier",
+		"ed_once_action",
+		"ed_mode",
+		"ed_destroying",
+		"ed_placing",
+		"ed_copy"
 	}
 };
 
@@ -254,7 +274,6 @@ string[][] setting_texts =
 		Names::grapplewhilecharging,
 		Names::switchclasschanginginshop,
 		Names::cyclewithitem,
-		//Names::pickupsystem,
 		Names::drillknight,
 		Names::drillbuilder,
 		Names::drillarcher,
@@ -271,14 +290,13 @@ string[][] setting_file_names =
 		"grapple_with_charging",
 		"disable_class_change_in_shops",
 		"cycle_with_item",
-		//"item_pickup",
 		"pickdrill_knight",
 		"pickdrill_builder",
 		"pickdrill_archer",
 		"pickbomb_builder",
 		"pickbomb_archer",
 		"nomenubuying",
-		"nomenubuying_b",
+		"nomenubuying_b"
 	}
 };
 
@@ -297,10 +315,6 @@ string[][][] setting_options =
 			Descriptions::universalno, // 10	CYCLE WITH ITEM IN HAND
 			Descriptions::universalyes // 20
 		},
-		//{
-		//	Descriptions::universalold, // 10	ITEM PICKUP SYSTEM
-		//	Descriptions::universalnew // 20
-		//},
 		{
 			Descriptions::universalno, // 10	DRILL AUTOPICKUP FOR KNIGHT
 			Descriptions::universalyes // 20
@@ -347,10 +361,6 @@ string[][][] setting_option_names =
 			"no", // 10    CYCLE WITH ITEM IN HAND
 			"yes" // 20
 		},
-		//{
-		//	"legacy", // 10    ITEM PICKUP SYSTEM
-		//	"new" // 20
-		//},
 		{
 			"no", // 10    DRILL AUTOPICKUP FOR KNIGHT
 			"yes" // 20
@@ -388,9 +398,7 @@ string[][] vsetting_texts =
 	{
 		Names::blockbar,
 		Names::shownomenubuyingpan,
-		Names::dsewnmb,
 		Names::camerasw,
-		//Names::visualitempick,
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
@@ -400,7 +408,8 @@ string[][] vsetting_texts =
 		Names::annoyingnature,
 		Names::annoyingtags,
 		Names::customdpsounds,
-		Names::customboomeffects
+		Names::customboomeffects,
+		"Snow Render Type"
 	}
 };
 
@@ -409,9 +418,7 @@ string[][] vsetting_file_names =
 	{
 		"blockbar_hud",
 		"shownomenupanel",
-		"dse_while_using_nomenu_buying",
 		"camera_sway",
-		//"visual_item_pick",
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
@@ -421,7 +428,8 @@ string[][] vsetting_file_names =
 		"annoying_nature",
 		"annoying_tags",
 		"custom_death_and_pain_sounds",
-		"custom_boom_effects"
+		"custom_boom_effects",
+		"snow_type"
 	}
 };
 
@@ -437,20 +445,12 @@ string[][][] vsetting_options =
 			Descriptions::universalyes // 20
 		},
 		{
-			Descriptions::universalno, // 10	DONT SHOW EMOTES WHILE USING NOMENU BUYING
-			Descriptions::universalyes // 20
-		},
-		{
 			"1", // 1							CAMERA SWAY
 			"2", // 2
 			"3", // 3
 			"4", // 4
 			"5" // 5
 		},
-		//{
-		////	Descriptions::universaloff,       // VISUAL ITEM PICKING
-		//	Descriptions::universalon
-		//},
 		{
 			Descriptions::universaloff,       // BODY TILTING
 			Descriptions::universalon
@@ -490,6 +490,13 @@ string[][][] vsetting_options =
 		{
 			Descriptions::universaloff,       // CUSTOM BOOM EFFECTS
 			Descriptions::universalon
+		},
+		{
+			"Vanilla",
+			//Descriptions::universalvanilla,       // SNOW RENDERING TYPE
+			"Sparse",
+			//Descriptions::snowsparse,
+			Descriptions::universaloff
 		}
 	}
 };
@@ -506,20 +513,12 @@ string[][][] vsetting_option_names =
 			"yes" // 20
 		},
 		{
-			"no", // 10    DONT SHOW EMOTES WHILE USING NOMENU BUYING
-			"yes" // 20
-		},
-		{
 			"1", // 1	   CAMERA SWAY
 			"2", // 2
 			"3", // 3
 			"4", // 4
 			"5" // 5
 		},
-		//{
-		//	"off",       // VISUAL ITEM PICKING
-		//	"on"
-		//},
 		{
 			"off",       // BODY TILTING
 			"on"
@@ -541,6 +540,10 @@ string[][][] vsetting_option_names =
 			"on"
 		},
 		{
+			"off",       // DRILLZONE BORDERS
+			"on"
+		},
+		{
 			"off",       // BUSHES & LEAFS MUTE
 			"on"
 		},
@@ -555,6 +558,11 @@ string[][][] vsetting_option_names =
 		{
 			"off",       // CUSTOM BOOM EFFECTS
 			"on"
+		},
+		{
+			"vanilla",
+			"sparse",
+			"disabled"
 		}
 	}
 };
@@ -1854,7 +1862,7 @@ class ClickableButtonGUI
 		GUI::SetFont("menu");
 
 		Vec2f start_offset = Vec2f(50, 600);
-		Vec2f start_offset_p = Vec2f(70, 550);
+		Vec2f start_offset_p = Vec2f(40, 550);
 
 		closebutton.Render(m_clickable_origin + Vec2f(1000 - 40, 0), Vec2f(40, 40));
 
@@ -1877,7 +1885,7 @@ class ClickableButtonGUI
 
 			if (i == 5)
 			{
-				start_offset_p = Vec2f(70, 600);
+				start_offset_p = Vec2f(40, 600);
 			}
 		}
 
@@ -1925,7 +1933,7 @@ class ClickableButtonGUI
 		u8 scale = screen_height / 720.0;
 
 		Vec2f start_offset = Vec2f(50, 600);
-		Vec2f start_offset_p = Vec2f(70, 550);
+		Vec2f start_offset_p = Vec2f(40, 550);
 
 		closebutton.Update(m_clickable_origin + Vec2f(1000 - 40, 0), Vec2f(40, 40));
 
@@ -1948,7 +1956,7 @@ class ClickableButtonGUI
 
 			if (i == 5)
 			{
-				start_offset_p = Vec2f(70, 600);
+				start_offset_p = Vec2f(40, 600);
 			}
 		}
 
@@ -2085,8 +2093,8 @@ string getKeyName(u32 i, bool short=false)
 		case EKEY_CODE::KEY_RSHIFT: return short ? "s" : "RSHIFT";
 		case EKEY_CODE::KEY_LCONTROL: return short ? "c" : "LCONTROL";
 		case EKEY_CODE::KEY_RCONTROL: return short ? "c" : "RCONTROL";
-		case EKEY_CODE::KEY_LMENU: return short ? "a" : "L ALT";
-		case EKEY_CODE::KEY_RMENU: return short ? "a" : "R ALT";
+		case EKEY_CODE::KEY_LMENU: return short ? "a" : "LALT";
+		case EKEY_CODE::KEY_RMENU: return short ? "a" : "RALT";
 		case EKEY_CODE::KEY_PLUS: return "+";
 		case EKEY_CODE::KEY_COMMA: return ",";
 		case EKEY_CODE::KEY_MINUS: return "-";

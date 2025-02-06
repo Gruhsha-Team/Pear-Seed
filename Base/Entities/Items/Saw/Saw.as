@@ -3,6 +3,7 @@
 #include "Hitters.as"
 #include "GenericButtonCommon.as"
 #include "ParticleSparks.as"
+#include "TreeCommon.as"  // Waffle: Need tree vars
 
 const string toggle_id = "toggle_power";
 const string toggle_id_client = "toggle_power_client";
@@ -105,24 +106,6 @@ void Blend(CBlob@ this, CBlob@ tobeblended)
 		return;
 	}
 
-    CPlayer@ player = null;
-
-    CPlayer@[] builders_blue;
-    CPlayer@[] builders_red;
-
-    // calculating amount of players in classes
-    for (u32 i = 0; i < getPlayersCount(); i++) {
-        CPlayer@ p = getPlayer(i);
-		if (p is null) continue;
-
-        if (getPlayer(i).getBlob() is null) continue;
-
-        if (getPlayer(i).getBlob().getName() == "builder") {
-            if (getPlayer(i).getTeamNum() == 0) builders_blue.push_back(p);
-            else if (getPlayer(i).getTeamNum() == 1) builders_red.push_back(p);
-        }
-    }
-
 	tobeblended.Tag("sawed");
 
 	if ((tobeblended.getName() == "waterbomb" || tobeblended.getName() == "bomb") && tobeblended.hasTag("activated"))
@@ -134,28 +117,14 @@ void Blend(CBlob@ this, CBlob@ tobeblended)
 	{
 		if (isServer())
 		{
-			if (this.getTeamNum() == 0 && builders_blue.length > 0) { // BLUE TEAM
-				for (int i = 0; i < builders_blue.length; ++i) {
-					CPlayer@ p = builders_blue[i];
-					if (p is null) continue;
+			if (this is null) return;
 
-					if (p !is null)
-					{
-						getRules().add_s32("personalwood_" + p.getUsername(), 50 / 2);
-						getRules().Sync("personalwood_" + p.getUsername(), true);
-					}
-				}
-			} else if (this.getTeamNum() == 1 && builders_red.length > 0) { // RED TEAM
-				for (int i = 0; i < builders_red.length; ++i) {
-					CPlayer@ p = builders_red[i];
-					if (p is null) continue;
+			u8 team = this.getTeamNum();
 
-					if (p !is null)
-					{
-						getRules().add_s32("personalwood_" + p.getUsername(), 50 / 2);
-						getRules().Sync("personalwood_" + p.getUsername(), true);
-					}
-				}
+			if (this !is null)
+			{
+				getRules().add_s32("teamwood" + team, 50);
+				getRules().Sync("teamwood" + team, true);
 			}
 		}
 
@@ -409,16 +378,16 @@ void onInit(CSprite@ this)
 	}
 }
 
-void onTick(CBlob@ blob)
+void onTick(CBlob@ this)
 {
-	CSprite@ sprite = blob.getSprite();
+	CSprite@ sprite = this.getSprite();
 	if (sprite is null) return;
 
-	sprite.SetZ(blob.isAttached() ? 10.0f : -10.0f);
+	sprite.SetZ(this.isAttached() ? 10.0f : -10.0f);
 
 	//spin saw blade
 	CSpriteLayer@ chop = sprite.getSpriteLayer("chop");
-	if (chop !is null && getSawOn(blob))
+	if (chop !is null && getSawOn(this))
 	{
 		chop.SetFacingLeft(false);
 
@@ -426,5 +395,32 @@ void onTick(CBlob@ blob)
 		chop.RotateBy(30.0f, around);
 	}
 
-	UpdateSprite(blob);
+	UpdateSprite(this);
+
+	// Waffle: Automatically chop trees behind the saw if they're fully grown
+	if (this.getTickSinceCreated() % 15 == 0 && !this.isAttached() && getSawOn(this))
+	{
+		CMap@ map = getMap();
+		if (map is null)
+		{
+			return;
+		}
+
+		CBlob@[] overlapping;
+		Vec2f offset = Vec2f(this.getWidth(), this.getHeight()) / 3;
+		map.getBlobsInBox(this.getPosition() - offset, this.getPosition() + offset, overlapping);
+		for (u16 i = 0; i < overlapping.length(); i++)
+		{
+			CBlob@ blob = overlapping[i];
+			if (blob !is null && blob.hasTag("tree"))
+			{
+				TreeVars vars;
+				blob.get("TreeVars", vars);
+				if (vars.max_height == vars.height && !blob.exists("cut_down_time"))
+				{
+					this.server_Hit(blob, blob.getPosition(), blob.getPosition() - this.getPosition(), 0.5f, Hitters::saw);
+				}
+			}
+		}
+	}
 }

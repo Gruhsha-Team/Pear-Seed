@@ -12,8 +12,7 @@
 #include "RedBarrierCommon.as";
 #include "StandardControlsCommon.as";
 #include "HolidaySprites.as";
-#include "BindingsCommon.as";
-#include "TranslationsSystem.as";
+#include "BindingsCommon.as"
 
 const int FLETCH_COOLDOWN = 45;
 const int PICKUP_COOLDOWN = 15;
@@ -79,17 +78,15 @@ void onInit(CBlob@ this)
 		this.addCommandID("pick " + bombTypeNames[i]);
 	}
 
-	this.addCommandID("drop mats");
-
 	this.getCurrentScript().runFlags |= Script::tick_not_attached;
 	this.getCurrentScript().removeIfTag = "dead";
 
 	// [modded] for ability to lit kegs
 	this.push("names to activate", "keg");
 	this.push("names to activate", "fumokeg");
+	this.push("names to activate", "hazelnut");
+	this.push("names to activate", "hazelnutshell");
 	this.push("names to activate", "satchel");
-
-	AddIconToken("$DROP_BUILDER_MATS$", "MenuItems.png", Vec2f(32, 32), 4);
 }
 
 void onSetPlayer(CBlob@ this, CPlayer@ player)
@@ -352,7 +349,8 @@ void ManageGrapple(CBlob@ this, ArcherInfo@ archer)
 				}
 
 				if (b !is null)
-					b.AddForce(-force * (b.getMass() / this.getMass()));
+					if (b.getConfig() != "bomber")
+						b.AddForce(-force * (b.getMass() / this.getMass()));
 
 			}
 		}
@@ -959,6 +957,18 @@ bool checkGrappleStep(CBlob@ this, ArcherInfo@ archer, CMap@ map, const f32 dist
 
 				return true;
 			}
+			else if (b.getConfig() == "bomber") 
+			{
+				archer.grapple_ratio = Maths::Max(0.2, Maths::Min(archer.grapple_ratio, b.getDistanceTo(this) / archer_grapple_length));
+
+				archer.grapple_id = b.getNetworkID();
+				if (canSend(this))
+				{
+					SyncGrapple(this);
+				}
+
+				return true;
+			}
 		}
 	}
 
@@ -1518,42 +1528,6 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 		}
 		SetFirstAvailableBomb(this);
 	}
-	else if (cmd == this.getCommandID("drop mats") && isServer())
-	{
-		u16 id;
-		if (!params.saferead_u16(id)) return;
-
-		CBlob@ player = getBlobByNetworkID(id);
-		if (player is null) return;
-
-		if (player.getPlayer() is null) return;
-
-		if (player.getPlayer().isMyPlayer()) {
-			player.ClearGridMenus();
-		}
-
-        if (getRules().get_s32("personalstone_" + player.getPlayer().getUsername()) > 50) {
-            int team_stone = getRules().get_s32("personalstone_" + player.getPlayer().getUsername());
-
-            CBlob@ stone = server_CreateBlob("mat_stone", player.getPlayer().getTeamNum(), player.getPosition());
-            stone.server_SetQuantity(50);
-
-            getRules().sub_s32("personalstone_" + player.getPlayer().getUsername(), stone.getQuantity());
-            getRules().Sync("personalstone_" + player.getPlayer().getUsername(), true);
-        }
-        else if (getRules().get_s32("personalstone_" + player.getPlayer().getUsername()) <= 50) { return; } // we dont have material to spawn, lol
-
-        if (getRules().get_s32("personalwood_" + player.getPlayer().getUsername()) > 50) {
-            int team_wood = getRules().get_s32("personalwood_" + player.getPlayer().getUsername());
-
-            CBlob@ wood = server_CreateBlob("mat_wood", player.getPlayer().getTeamNum(), player.getPosition());
-            wood.server_SetQuantity(50);
-
-            getRules().sub_s32("personalwood_" + player.getPlayer().getUsername(), wood.getQuantity());
-            getRules().Sync("personalwood_" + player.getPlayer().getUsername(), true);
-        }
-        else if (getRules().get_s32("personalwood_" + player.getPlayer().getUsername()) <= 50) { return; } // we dont have material to spawn, lol
-	}
 }
 
 //bomb management
@@ -1755,25 +1729,6 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 					button.SetSelected(1);
 				}
 			}
-		}
-	}
-
-	const u8 GRID_SIZE = 48;
-	const u8 GRID_PADDING = 12;
-	const Vec2f TOOL_POS = menu.getUpperLeftPosition() - Vec2f(GRID_PADDING, 0) + Vec2f(-1, 1) * GRID_SIZE / 2;
-
-	CGridMenu@ tool = CreateGridMenu(TOOL_POS, this, Vec2f(1, 1), "");
-	if (tool !is null)
-	{
-		tool.SetCaptionEnabled(false);
-
-		CBitStream params;
-		params.write_u16(this.getNetworkID());
-
-		CGridButton@ clear = tool.AddButton("$DROP_BUILDER_MATS$", "", this.getCommandID("drop mats"), Vec2f(1, 1), params);
-		if (clear !is null)
-		{
-			clear.SetHoverText(Descriptions::dropmatsbutton);
 		}
 	}
 }

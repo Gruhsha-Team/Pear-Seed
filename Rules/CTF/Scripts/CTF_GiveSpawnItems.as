@@ -76,10 +76,9 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 		}
 	}
 
-	if (name == "builder")
-	{
-		if (gametime > getCTFTimer(this, p, "builder"))
-		{
+	if (name == "builder") {
+		if (gametime > getCTFTimer(this, p, "builder")) {
+			u8 team = p.getTeamNum();
 
 			int wood_amount = matchtime_wood_amount;
 			int stone_amount = matchtime_stone_amount;
@@ -96,25 +95,11 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 				stone_amount = lower_stone;
 			}
 
-			if (this.get_s32("personalwood_" + p.getUsername()) < 2000)
-			{
-				this.add_s32("personalwood_" + p.getUsername(), wood_amount);
-				this.Sync("personalwood_" + p.getUsername(), true);
-			}
-			else if (this.get_s32("personalwood_" + p.getUsername()) >= 2000)
-			{
-				return; // potential abuse fix
-			}
+			this.add_s32("teamwood" + team, wood_amount);
+			this.Sync("teamwood" + team, true);
 
-			if (this.get_s32("personalstone_" + p.getUsername()) < 1000)
-			{
-				this.add_s32("personalstone_" + p.getUsername(), stone_amount);
-				this.Sync("personalstone_" + p.getUsername(), true);
-			}
-			else if (this.get_s32("personalstone_" + p.getUsername()) >= 1000)
-			{
-				return; // potential abuse fix
-			}
+			this.add_s32("teamstone" + team, stone_amount);
+			this.Sync("teamstone" + team, true);
 
 			SetCTFTimer(this, p, gametime + (this.isWarmup() ? materials_wait_warmup : materials_wait)*getTicksASecond(), "builder");
 		}
@@ -132,24 +117,19 @@ void Reset(CRules@ this)
 
 	if (!isServer()) return;
 
-	for (uint i = 0; i < getPlayersCount(); ++i)
-	{
-		CPlayer@ p = getPlayer(i);
-		if (p is null) continue;
+	this.set_s32("teamwood" + 0, 0);
+	this.Sync("teamwood" + 0, true);
+	this.set_s32("teamstone" + 0, 0);
+	this.Sync("teamstone" + 0, true);
+	//this.set_s32("teamgold" + 0, 0);
+	//this.Sync("teamgold" + 0, true);
 
-		this.set_s32("personalwood_" + p.getUsername(), 0);
-		this.Sync("personalwood_" + p.getUsername(), true);
-
-		this.set_s32("personalstone_" + p.getUsername(), 0);
-		this.Sync("personalstone_" + p.getUsername(), true);
-	}
-}
-
-void onPlayerLeave( CRules@ this, CPlayer@ player )
-{
-	if (!isServer()) return;
-
-	ResetPlayerMats(this, player, player.getTeamNum());
+	this.set_s32("teamwood" + 1, 0);
+	this.Sync("teamwood" + 1, true);
+	this.set_s32("teamstone" + 1, 0);
+	this.Sync("teamstone" + 1, true);
+	//this.set_s32("teamgold" + 1, 0);
+	//this.Sync("teamgold" + 1, true);
 }
 
 void onRestart(CRules@ this)
@@ -162,25 +142,6 @@ void onInit(CRules@ this)
 	Reset(this);
 }
 
-void onPlayerChangedTeam(CRules@ this, CPlayer@ player, u8 oldteam, u8 newteam)
-{
-	ResetPlayerMats(this, player, oldteam);
-}
-
-// and give to team
-void ResetPlayerMats(CRules@ this, CPlayer@ player, u8 team)
-{
-	if (this is null) return;
-	if (!isServer()) return;
-	if (player is null) return;
-
-	this.set_s32("personalwood_" + player.getUsername(), 0);
-	this.Sync("personalwood_" + player.getUsername(), true);
-
-	this.set_s32("personalstone_" + player.getUsername(), 0);
-	this.Sync("personalstone_" + player.getUsername(), true);
-}
-
 void onTick(CRules@ this)
 {
 	if (!isServer())
@@ -188,24 +149,33 @@ void onTick(CRules@ this)
 
 	s32 gametime = getGameTime();
 
-	if ((gametime % 15) != 5)
-		return;
+	if (this.getCurrentState() == WARMUP) {
+		if (getGameTime() == 60) {
+			this.set_s32("teamwood" + 0, 6000);
+			this.Sync("teamwood" + 0, true);
+			this.set_s32("teamwood" + 1, 6000);
+			this.Sync("teamwood" + 1, true);
 
-	if (this.isWarmup()) 
-	{
-		// during building time, give everyone resupplies no matter where they are
-		for (int i = 0; i < getPlayerCount(); i++) 
-		{
-			CPlayer@ player = getPlayer(i);
-			CBlob@ blob = player.getBlob();
-			if (blob !is null) 
-			{
-				doGiveSpawnMats(this, player, blob);
-			}
+			this.set_s32("teamstone" + 0, 4500);
+			this.Sync("teamstone" + 0, true);
+			this.set_s32("teamstone" + 1, 4500);
+			this.Sync("teamstone" + 1, true);
 		}
-	}
-	else
-	{
+
+		u32 pog = 30 * 179;
+
+		if (getGameTime() == pog && this.hasTag("offi match")) {
+			this.set_s32("teamwood" + 0, 1000);
+			this.Sync("teamwood" + 0, true);
+			this.set_s32("teamwood" + 1, 1000);
+			this.Sync("teamwood" + 1, true);
+
+			this.set_s32("teamstone" + 0, 400);
+			this.Sync("teamstone" + 0, true);
+			this.set_s32("teamstone" + 1, 400);
+			this.Sync("teamstone" + 1, true);
+		}
+	} else {
 		CBlob@[] spots;
 		getBlobsByName(base_name(),   @spots);
 		getBlobsByName("outpost",	@spots);
@@ -213,8 +183,7 @@ void onTick(CRules@ this)
 		getBlobsByName("buildershop", @spots);
 		getBlobsByName("archershop",  @spots);
 		// getBlobsByName("knightshop",  @spots);
-		for (uint step = 0; step < spots.length; ++step)
-		{
+		for (uint step = 0; step < spots.length; ++step) {
 			CBlob@ spot = spots[step];
 			if (spot is null) continue;
 
@@ -224,8 +193,7 @@ void onTick(CRules@ this)
 			string name = spot.getName();
 			bool isShop = (name.find("shop") != -1);
 
-			for (uint o_step = 0; o_step < overlapping.length; ++o_step)
-			{
+			for (uint o_step = 0; o_step < overlapping.length; ++o_step) {
 				CBlob@ overlapped = overlapping[o_step];
 				if (overlapped is null) continue;
 				
@@ -233,26 +201,34 @@ void onTick(CRules@ this)
 				CPlayer@ p = overlapped.getPlayer();
 				if (p is null) continue;
 
+				CBlob@ player_blob = p.getBlob();
+				if (player_blob is null) continue;
+
+				u8 team = player_blob.getTeamNum();
+
 				string class_name = overlapped.getName();
 				
 				if (isShop && name.find(class_name) == -1) continue; // NOTE: builder doesn't get wood+stone at archershop, archer doesn't get arrows at buildershop
 
-				doGiveSpawnMats(this, p, overlapped);
+				if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
+					doGiveSpawnMats(this, p, overlapped);
 			}
 		}
 	}
 
-
-	if (this.getCurrentState() == GAME) // automatic resupplies for builders
-	{
-		for (int i = 0; i < getPlayerCount(); i++)
-		{
+	if (this.getCurrentState() == GAME) { // automatic resupplies for builders
+		for (int i = 0; i < getPlayerCount(); i++) {
 			CPlayer@ player = getPlayer(i);
-			CBlob@ blob = player.getBlob();
+			if (player is null) continue;
 
-			if (blob !is null && blob.getConfig() == "builder")
-			{
-				doGiveSpawnMats(this, player, blob);
+			CBlob@ blob = player.getBlob();
+			if (blob is null) return;
+
+			u8 team = blob.getTeamNum();
+
+			if (blob !is null && blob.getConfig() == "builder") {
+				if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
+					doGiveSpawnMats(this, player, blob);
 			}
 		}
 	}
@@ -261,15 +237,6 @@ void onTick(CRules@ this)
 // Reset timer in case player who joins has an outdated timer
 void onNewPlayerJoin(CRules@ this, CPlayer@ player)
 {
-	if (isServer())
-	{
-		this.set_s32("personalwood_" + player.getUsername(), 0);
-		this.Sync("personalwood_" + player.getUsername(), true);
-
-		this.set_s32("personalstone_" + player.getUsername(), 0);
-		this.Sync("personalstone_" + player.getUsername(), true);
-	}
-
 	s32 next_add_time = getGameTime() + (this.isWarmup() ? materials_wait_warmup : materials_wait) * getTicksASecond();
 
 	if (next_add_time < getCTFTimer(this, player, "builder") || next_add_time < getCTFTimer(this, player, "archer"))

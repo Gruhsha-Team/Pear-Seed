@@ -35,7 +35,7 @@ string getButtonRequirementsText(CBitStream& inout bs, bool missing)
 			text += getTranslatedString(friendlyName);
 			text += quantityColor;
 			// text += " required.";
-			text += "\n";
+			text += "\n\n";
 		}
 		else if (requiredType == "tech" && missing)
 		{
@@ -55,7 +55,7 @@ string getButtonRequirementsText(CBitStream& inout bs, bool missing)
 		}
 		else if (requiredType == "coin")
 		{
-			text += getTranslatedString("{COINS_QUANTITY} $COIN$ required\n").replace("{COINS_QUANTITY}", "" + quantity);
+			text += getTranslatedString("{COINS_QUANTITY} $COIN$ required\n\n").replace("{COINS_QUANTITY}", "" + quantity);
 		}
 		else if (requiredType == "hurt")
 		{
@@ -73,7 +73,21 @@ string getButtonRequirementsText(CBitStream& inout bs, bool missing)
 			text += "At least " + quantity + " " + friendlyName + " required. \n";
 			text += quantityColor;
 		}
-
+		else if (requiredType == "builder")
+		{
+			text += quantityColor;
+			text += "You should be a builder ";
+			text += "builderfleximage";
+			text += " \n\n";
+			text += quantityColor;
+		}
+		else if (requiredType == "buy delay" && missing)
+		{
+			text += quantityColor;
+			text += "You must wait before buy next " + friendlyName + "!";
+			text += " \n\n";
+			text += quantityColor;
+		}
 	}
 
 	return text;
@@ -165,21 +179,29 @@ bool hasRequirements(CInventory@ inv1, CInventory@ inv2, CBitStream &inout bs, C
 					const u16 left = getRules().get_u16("barrier_x1");
 					const u16 right = getRules().get_u16("barrier_x2");
 
-					string needed = "personalwood_";
-					if (blobName == "mat_stone") needed = "personalstone_";
+					u8 team = player1.getTeamNum();
+
+					string needed = "teamwood";
+					if (blobName == "mat_stone") needed = "teamstone";
 
 					// dynamic requirements for building
 					if (player1.getBlob().getPosition().x >= left && player1.getBlob().getPosition().x <= right)
 					{
-						if (getRules().get_s32(needed + player1.getUsername()) < quantity * 1.25)
-						{
-							AddRequirement(missingBs, req, blobName, friendlyName, quantity);
-							has = false;
+						if (getRules().hasTag("sudden death")) {
+							if (getRules().get_s32(needed + team) < quantity * 1.35) {
+								AddRequirement(missingBs, req, blobName, friendlyName, quantity);
+								has = false;
+							}
+						} else {
+							if (getRules().get_s32(needed + team) < quantity * 1.2) {
+								AddRequirement(missingBs, req, blobName, friendlyName, quantity);
+								has = false;
+							}
 						}
 					}
 					else
 					{
-						if (getRules().get_s32(needed + player1.getUsername()) < quantity)
+						if (getRules().get_s32(needed + team) < quantity)
 						{
 							AddRequirement(missingBs, req, blobName, friendlyName, quantity);
 							has = false;
@@ -252,8 +274,31 @@ bool hasRequirements(CInventory@ inv1, CInventory@ inv2, CBitStream &inout bs, C
 				has = false;
 			}
 		}
-	}
+		else if (req == "builder")
+		{
+			CPlayer@ player1 = inv1 !is null ? inv1.getBlob().getPlayer() : null;
+			if (player1 !is null)
+			{
+				if (player1.getBlob().getName() != "builder" && player1.getUsername() != getRules().get_string("team_" + player1.getTeamNum() + "_leader"))
+				{
+					AddRequirement(missingBs, req, blobName, friendlyName, quantity);
+					has = false;
+				}
 
+			}
+		}
+		else if (req == "buy delay")
+		{
+			CBlob@ blob = inv1 !is null ? inv1.getBlob() : null;
+			if (blob !is null && 
+				blob.exists("bought_item_" + blobName) &&
+				(getGameTime() < blob.get_s32("bought_item_" + blobName) + (60 * getTicksASecond())))
+			{
+				AddRequirement(missingBs, req, blobName, friendlyName);
+				has = false;
+			}
+		}
+	}
 	missingBs.ResetBitIndex();
 	bs.ResetBitIndex();
 	return has;
@@ -282,22 +327,28 @@ void server_TakeRequirements(CInventory@ inv1, CInventory@ inv2, CBitStream &ino
 		{
 			if (blobName == "mat_wood" || blobName == "mat_stone")
 			{
-				const u16 left = getRules().get_u16("barrier_x1");
-				const u16 right = getRules().get_u16("barrier_x2");
-
 				CPlayer@ player1 = inv1 !is null ? inv1.getBlob().getPlayer() : null;
 
 				if (player1 !is null && isServer())
 				{
-					string needed = "personalwood_";
-					if (blobName == "mat_stone") needed = "personalstone_";
+					const u16 left = getRules().get_u16("barrier_x1");
+					const u16 right = getRules().get_u16("barrier_x2");
 
-					if (player1.getBlob().getPosition().x >= left && player1.getBlob().getPosition().x <= right) {
-						getRules().sub_s32(needed + player1.getUsername(), quantity * 1.25);
-						getRules().Sync(needed + player1.getUsername(), true);
+					u8 team = player1.getTeamNum();
+
+					string needed = "teamwood";
+					if (blobName == "mat_stone") needed = "teamstone";
+
+					// dynamic requirements for building
+					if (player1.getBlob().getPosition().x >= left && player1.getBlob().getPosition().x <= right && !getRules().hasTag("sudden death")) {
+						getRules().sub_s32(needed + team, quantity * 1.2);
+						getRules().Sync(needed + team, true);
+					} else if (player1.getBlob().getPosition().x >= left && player1.getBlob().getPosition().x <= right && getRules().hasTag("sudden death")) {
+						getRules().sub_s32(needed + team, quantity * 1.35);
+						getRules().Sync(needed + team, true);
 					} else {
-						getRules().sub_s32(needed + player1.getUsername(), quantity);
-						getRules().Sync(needed + player1.getUsername(), true);
+						getRules().sub_s32(needed + team, quantity);
+						getRules().Sync(needed + team, true);
 					}
 				}
 			}
@@ -330,6 +381,15 @@ void server_TakeRequirements(CInventory@ inv1, CInventory@ inv2, CBitStream &ino
 				taken = quantity - taken;
 				taken = Maths::Min(player2.getCoins(), quantity);
 				player2.server_setCoins(player2.getCoins() - taken);
+			}
+		}
+		else if (req == "buy delay")
+		{
+			CBlob@ blob = inv1 !is null ? inv1.getBlob() : null;
+			if (blob !is null)
+			{
+				blob.set_s32("bought_item_" + blobName, getGameTime());
+				blob.Sync("bought_item_" + blobName, true);
 			}
 		}
 	}

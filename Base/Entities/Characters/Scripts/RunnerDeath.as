@@ -9,6 +9,9 @@ const f32 HEAVY_CARRIED_BLOB_VEL_SCALE = 0.6;
 
 void onInit(CBlob@ this)
 {
+	if (this.hasTag("dead"))
+		this.Untag("player");
+
 	this.set_f32("hit dmg modifier", 0.0f);
 	this.set_f32("hit dmg modifier", 0.0f);
 	this.getCurrentScript().tickFrequency = 0; // make it not run ticks until dead
@@ -228,5 +231,15 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 	{
 		this.set_string("death_sound", "mm_clocktower_bell_boosted.ogg");
 		this.set_string("death_sound_short", "mm_clocktower_bell_boosted.ogg");
+	}
+	else if (player.getUsername() == "kusaka79")
+	{
+		this.set_string("death_sound", "v1_d_long.ogg");
+		this.set_string("death_sound_short", "v1_d_short.ogg");
+	}
+	else if (player.getUsername() == "arsenpip")
+	{
+		this.set_string("death_sound", "aidic_death_long.ogg");
+		this.set_string("death_sound_short", "aidic_death_short.ogg");
 	}
 }

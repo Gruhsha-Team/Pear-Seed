@@ -242,6 +242,8 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
         m_pos.y = Maths::Floor(m_pos.y);
         m_pos = (m_pos * map.tilesize) + Vec2f(map.tilesize / 2, map.tilesize / 2);
 
+		Vec2f[] already_hit_offsets;
+
 		//hit map if we're meant to
 		if (map_damage_radius > 0.1f)
 		{
@@ -281,6 +283,11 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
 						}
 
 						f32 dist = offset.Length();
+
+						//had to do this hack, because vanilla algorythm hits certain tiles twice (kag god)
+						if (already_hit_offsets.find(offset) < 0)
+							already_hit_offsets.push_back(offset);
+						else continue;
 
 						if (dist < map_damage_radius)
 						{
@@ -375,7 +382,7 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
 											
 											if (collapse_checker !is null)
 											{
-												collapse_checker.set_f32("expl_radius", radius);
+												collapse_checker.set_f32("expl_radius", this.get_f32("map_damage_radius"));
 												if (killer !is null)
 												{
 													collapse_checker.SetDamageOwnerPlayer(killer);
@@ -416,14 +423,20 @@ void Explode(CBlob@ this, f32 radius, f32 damage)
 														f32 exp_dot = explosion_dir.x*ds_dir.x + explosion_dir.y*ds_dir.y;
 
 														f32 angle_factor_account = exp_dot >= 0.87 ? 180 : 0;
+
+														Vec2f tile_vel = Vec2f(-(this.get_f32("map_damage_radius"))/3.5, 0).RotateBy(-(pos-tpos).getAngle()+angle_factor_account);
+														f32 tile_vellen = tile_vel.Length();
+														tile_vel.Normalize();
+														tile_vel *= Maths::Min(tile_vellen, 14);
 														
-														tileblob.setVelocity(Vec2f(-radius/3.5, 0).RotateBy(-(pos-tpos).getAngle()+angle_factor_account));
+														tileblob.setVelocity(tile_vel);
 														tileblob.set_s32("tile_frame", type_to_spawn);
 													}
+													
+													Material::fromTile(this, type_to_spawn, 1.0f*(idx+1));
 													break;
 												}
 
-												Material::fromTile(this, map.getTile(tpos).type, 1.0f);
 											}
 										}
 									}
@@ -881,21 +894,13 @@ void kiwiExplosionEffects(CBlob@ this)
 	//this.SetMinimapVars("kiwi_minimap_icons.png", 14, Vec2f(8, 8));
 	//this.SetMinimapOutsideBehaviour(CBlob::minimap_none);
 
-	if (this.getConfig() == "stickybomb") return;
+	//if (this.getConfig() == "stickybomb") return;
 	
 	f32 radius = this.get_f32("map_damage_radius")*0.75;
+	radius = Maths::Min(40, radius);
 	
-	int flares = this.exists("custom flare amount")?this.get_s32("custom flare amount"):3;
+	int flares = this.exists("custom flare amount")?this.get_s32("custom flare amount"):radius/6;
 	if (!this.exists("custom_explosion_pos")) this.set_Vec2f("custom_explosion_pos", this.getPosition());
-	
-	if (isServer() && false)
-	for (int idx = 0; idx < flares; ++idx) {
-		CBlob@ flare = server_CreateBlob("napalm", this.getTeamNum(), this.get_Vec2f("custom_explosion_pos")+Vec2f(0, -4));
-		if (flare is null) continue;
-		flare.set_f32("particle_scale", 1.5f);
-		flare.setVelocity(getRandomVelocity(90, (8+XORRandom(14)), 10));
-		flare.SetDamageOwnerPlayer(this.getDamageOwnerPlayer());
-	}
 	
 	if (isServer())
 	for (int idx = 0; idx < flares; ++idx)
@@ -915,7 +920,7 @@ void kiwiExplosionEffects(CBlob@ this)
 		Vec2f pos = this.getPosition();
 		CMap@ map = getMap();
 		
-		MakeBangEffect(this, "kaboom", radius/15);
+		MakeBangEffect(this, "kaboom", Maths::Max(16, radius)/15);
 		//Sound::Play("handgrenade_blast2", this.getPosition(), 2, 1.0f + XORRandom(2)*0.1);
 		u8 particle_amount = radius/6;
 		for (int i = 0; i < particle_amount; i++)

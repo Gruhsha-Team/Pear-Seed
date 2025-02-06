@@ -54,6 +54,8 @@ namespace Material
 			this.server_SetQuantity(sum);
 			blob.Tag("AdminAlertIgnore");
 			blob.Sync("AdminAlertIgnore", true);
+
+			blob.server_SetQuantity(0);
 			blob.server_Die();
 		}
 		else
@@ -70,6 +72,8 @@ namespace Material
 		if (this.getName() != blob.getName()) return false;
 
 		if (this is blob) return false;
+
+		if (blob.getQuantity() == 0) return false;
 
 		// Materials in-use are supposed
 		// to have a fixed quantity
@@ -103,15 +107,17 @@ namespace Material
 			if (player is null) return;
 			if (!isServer()) return;
 
+			u8 team = player.getTeamNum();
+
 			if (name == "mat_stone")
 			{
-				getRules().add_s32("personalstone_" + player.getUsername(), quantity);
-				getRules().Sync("personalstone_" + player.getUsername(), true);
+				getRules().add_s32("teamstone" + team, quantity);
+				getRules().Sync("teamstone" + team, true);
 			}
 			else if (name == "mat_wood")
 			{
-				getRules().add_s32("personalwood_" + player.getUsername(), quantity);
-				getRules().Sync("personalwood_" + player.getUsername(), true);
+				getRules().add_s32("teamwood" + team, quantity);
+				getRules().Sync("teamwood" + team, true);
 			}
 
 			return;
