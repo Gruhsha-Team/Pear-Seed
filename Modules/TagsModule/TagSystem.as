@@ -684,6 +684,14 @@ bool playerAllowedToUse(string username) {
         return true;
     } else if (username == "Asu") {
         return true;
+    } else if (username == "Akrim") {
+        return true;
+    } else if (username == "useless0") {
+        return true;
+    } else if (username == "TheSyncRow") {
+        return true;
+    } else if (username == "Okam") {
+        return true;
     }
 
     return false;
