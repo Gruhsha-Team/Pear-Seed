@@ -164,7 +164,7 @@ void onTick(CRules@ this)
 
 		u32 pog = 30 * 179;
 
-		if (getGameTime() == pog && this.hasTag("offi match")) {
+		if (getGameTime() == pog) {
 			this.set_s32("teamwood" + 0, 1000);
 			this.Sync("teamwood" + 0, true);
 			this.set_s32("teamwood" + 1, 1000);
@@ -211,6 +211,10 @@ void onTick(CRules@ this)
 				if (isShop && name.find(class_name) == -1) continue; // NOTE: builder doesn't get wood+stone at archershop, archer doesn't get arrows at buildershop
 
 				if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
+					doGiveSpawnMats(this, p, overlapped);
+
+				// HACK: fix archer resupply
+				if (player_blob !is null && player_blob.getConfig() == "archer")
 					doGiveSpawnMats(this, p, overlapped);
 			}
 		}
