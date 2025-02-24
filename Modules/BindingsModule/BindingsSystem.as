@@ -289,6 +289,11 @@ void onInit(CRules@ this)
 				sfile2.add_string("annoying_nature", "on");
 			}
 
+			if (!sfile2.exists("annoying_voicelines"))
+			{
+				sfile2.add_string("annoying_voicelines", "on");
+			}
+
 			if (!sfile2.exists("annoying_tags"))
 			{
 				sfile2.add_string("annoying_tags", "on");
@@ -321,6 +326,7 @@ void onInit(CRules@ this)
 			sfile2.add_string("clusterfuck_smoke", "on");
 			sfile2.add_string("drillzone_borders", "on");
 			sfile2.add_string("annoying_nature", "on");
+			sfile2.add_string("annoying_voicelines", "on");
 			sfile2.add_string("annoying_tags", "on");
 			sfile2.add_string("custom_death_and_pain_sounds", "on");
 			sfile2.add_string("custom_boom_effects", "on");

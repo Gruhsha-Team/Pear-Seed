@@ -406,6 +406,7 @@ string[][] vsetting_texts =
 		Names::clusterfuck_smoke,
 		Names::drillzoneborders,
 		Names::annoyingnature,
+		Names::annoyingvoicelines,
 		Names::annoyingtags,
 		Names::customdpsounds,
 		Names::customboomeffects,
@@ -426,6 +427,7 @@ string[][] vsetting_file_names =
 		"clusterfuck_smoke",
 		"drillzone_borders",
 		"annoying_nature",
+		"annoying_voicelines",
 		"annoying_tags",
 		"custom_death_and_pain_sounds",
 		"custom_boom_effects",
@@ -477,6 +479,10 @@ string[][][] vsetting_options =
 		},
 		{
 			Descriptions::universaloff,       // BUSHES & LEAFS MUTE
+			Descriptions::universalon
+		},
+		{
+			Descriptions::universaloff,       // VOICELINES
 			Descriptions::universalon
 		},
 		{
@@ -545,6 +551,10 @@ string[][][] vsetting_option_names =
 		},
 		{
 			"off",       // BUSHES & LEAFS MUTE
+			"on"
+		},
+		{
+			"off",       // VOICELINES
 			"on"
 		},
 		{
