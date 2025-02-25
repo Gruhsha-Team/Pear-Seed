@@ -95,13 +95,15 @@ void doGiveSpawnMats(CRules@ this, CPlayer@ p, CBlob@ b)
 				stone_amount = lower_stone;
 			}
 
-			this.add_s32("teamwood" + team, wood_amount);
-			this.Sync("teamwood" + team, true);
+			if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000) {
+				this.add_s32("teamwood" + team, wood_amount);
+				this.Sync("teamwood" + team, true);
 
-			this.add_s32("teamstone" + team, stone_amount);
-			this.Sync("teamstone" + team, true);
+				this.add_s32("teamstone" + team, stone_amount);
+				this.Sync("teamstone" + team, true);
 
-			SetCTFTimer(this, p, gametime + (this.isWarmup() ? materials_wait_warmup : materials_wait)*getTicksASecond(), "builder");
+				SetCTFTimer(this, p, gametime + (this.isWarmup() ? materials_wait_warmup : materials_wait)*getTicksASecond(), "builder");
+			}
 		}
 	}
 }
@@ -210,12 +212,7 @@ void onTick(CRules@ this)
 				
 				if (isShop && name.find(class_name) == -1) continue; // NOTE: builder doesn't get wood+stone at archershop, archer doesn't get arrows at buildershop
 
-				if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
-					doGiveSpawnMats(this, p, overlapped);
-
-				// HACK: fix archer resupply
-				if (player_blob !is null && player_blob.getConfig() == "archer")
-					doGiveSpawnMats(this, p, overlapped);
+				doGiveSpawnMats(this, p, overlapped);
 			}
 		}
 
@@ -230,8 +227,7 @@ void onTick(CRules@ this)
 			u8 team = blob.getTeamNum();
 
 			if (blob !is null && blob.getConfig() == "builder") {
-				//if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
-					doGiveSpawnMats(this, player, blob);
+				doGiveSpawnMats(this, player, blob);
 			}
 		}
 	}
