@@ -218,15 +218,14 @@ void onTick(CRules@ this)
 					doGiveSpawnMats(this, p, overlapped);
 			}
 		}
-	}
 
-	if (this.getCurrentState() == GAME) { // automatic resupplies for builders
+		// automatic resupplies for builders
 		for (int i = 0; i < getPlayerCount(); i++) {
 			CPlayer@ player = getPlayer(i);
 			if (player is null) continue;
 
 			CBlob@ blob = player.getBlob();
-			if (blob is null) return;
+			if (blob is null) continue;
 
 			u8 team = blob.getTeamNum();
 
