@@ -230,7 +230,7 @@ void onTick(CRules@ this)
 			u8 team = blob.getTeamNum();
 
 			if (blob !is null && blob.getConfig() == "builder") {
-				if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
+				//if (this.get_s32("teamwood" + team) < 3000 && this.get_s32("teamstone" + team) < 2000)
 					doGiveSpawnMats(this, player, blob);
 			}
 		}
