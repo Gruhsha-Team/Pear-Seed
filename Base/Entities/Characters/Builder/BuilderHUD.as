@@ -109,7 +109,9 @@ void onRender(CSprite@ this)
 	}
 
 	// draw class icon
+	GUI::DrawIcon(iconsFilename, 3, Vec2f(16, 32), tl + Vec2f(8 + (slotsSize - 1) * 48, -13), 1.0f);
 
+	// blockbar
 	BuildBlock[][]@ blocks;
     blob.get(blocks_property, @blocks);
     if (blocks is null) return;
