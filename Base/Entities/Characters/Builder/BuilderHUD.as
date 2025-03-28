@@ -122,11 +122,11 @@ void onRender(CSprite@ this)
 
     Vec2f offset = Vec2f(0, 0);
 
-	Vec2f dim = Vec2f(375, 126);
+	Vec2f dim = Vec2f(375, 128);
 
 	if (carried !is null && carried.getName() == "drill")
 	{
-		dim = Vec2f(375, 119);
+		dim = Vec2f(375, 149);
 	}
 
 	if (getRules().get_string("blockbar_hud") == "no") return;
