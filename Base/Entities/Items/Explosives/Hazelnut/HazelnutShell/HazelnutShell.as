@@ -1,14 +1,15 @@
 // Keg logic
 #include "Hitters.as";
+#include "GruhshaHitters.as";
 #include "ActivationThrowCommon.as"
 
 void onInit(CBlob@ this)
 {
 	this.set_f32("explosive_radius", 32.0f);
 	this.set_f32("explosive_damage", 10.0f);
-	this.set_u8("custom_hitter", Hitters::keg);
+	this.set_u8("custom_hitter", GruhshaHitters::hazelnut_shell);
 	this.set_string("custom_explosion_sound", "Entities/Items/Explosives/KegExplosion.ogg");
-	this.set_f32("map_damage_radius", 32.0f);
+	this.set_f32("map_damage_radius", 16.0f); // default radius
 	this.set_f32("map_damage_ratio", 0.8f);
 	this.set_bool("map_damage_raycast", false);
 	this.set_f32("keg_time", 180.0f);  // 180.0f
@@ -16,6 +17,20 @@ void onInit(CBlob@ this)
 	this.set_u16("_keg_carrier_id", 0xffff);
 
 	this.set_f32("important-pickup", 30.0f);
+}
+
+void onDie( CBlob@ this )
+{
+	CPlayer@ owner = this.getDamageOwnerPlayer();
+	if (owner is null) 
+	{
+		if (g_debug == 1) printf("kernel has no owner set");
+		return;
+	}
+	else
+	{
+		if (g_debug == 1) printf("kernel owner username: "+owner.getUsername());
+	}
 }
 
 //sprite update
@@ -26,22 +41,44 @@ void onTick(CSprite@ this)
 
 	s32 timer = blob.get_s32("explosion_timer") - getGameTime();
 
-	if (timer < 0)
-	{
+	if (timer < 0) {
 		return;
 	}
 }
 
 void onTick(CBlob@ this)
 {
-	if (this.isInFlames() && !this.hasTag("exploding") && isServer())
-	{
+	bool isSuddenDeath = getRules().hasTag("sudden death");
+
+	if (this.isInFlames() && !this.hasTag("exploding") && isServer()) {
 		server_Activate(this);
+	}
+
+	// increase map damage radius with time of life after 15 ticks since blob created.
+	// TODO: need to watch the power for a few rounds.
+	if (this.hasTag("exploding")) {
+		if (!isSuddenDeath) {
+			if (this.getTickSinceCreated() > 15 && this.get_f32("map_damage_radius") < 36.0f) {
+				if (getGameTime() % 5 == 0)
+					this.add_f32("map_damage_radius", 2.0f);
+
+				//printf("My map damage is " + this.get_f32("map_damage_radius"));
+			}
+		} else if (isSuddenDeath) {
+			if (this.getTickSinceCreated() > 15 && this.get_f32("map_damage_radius") < 72.0f) {
+				if (getGameTime() % 2 == 0)
+					this.add_f32("map_damage_radius", 2.0f);
+
+				//printf("My map damage is " + this.get_f32("map_damage_radius"));
+			}
+		}
 	}
 }
 
 void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint)
 {
+	if (!attached.hasTag("player")) return;
+
 	s32 timer = this.get_s32("explosion_timer") - getGameTime();
 	if (timer > 60 || timer < 0 || this.getDamageOwnerPlayer() is null) // don't change keg ownership for final 2 seconds of fuse
 	{
@@ -56,7 +93,7 @@ void onAttach(CBlob@ this, CBlob@ attached, AttachmentPoint @attachedPoint)
 
 bool doesCollideWithBlob( CBlob@ this, CBlob@ blob )
 {
-	return this.getConfig()!=blob.getConfig();
+	return false;
 }
 
 void onCollision( CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f point1, Vec2f point2 )
@@ -70,6 +107,7 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 {
 	if (getNet().isServer() &&
 	        !isExplosionHitter(customData) &&
+			!isCustomExplosionHitter(customData) &&
 	        (hitterBlob is null || hitterBlob.getTeamNum() != this.getTeamNum()))
 	{
 		u16 id = this.get_u16("_keg_carrier_id");

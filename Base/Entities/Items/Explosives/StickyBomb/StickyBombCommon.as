@@ -1,6 +1,7 @@
 // Bomb logic
 
 #include "Hitters.as"
+#include "GruhshaHitters.as";
 
 void SetupBomb(CBlob@ this, const int fuseTicks, const f32 explRadius, const f32 explosive_damage, const f32 map_damage_radius, const f32 map_damage_ratio, const bool map_damage_raycast)
 {
@@ -34,20 +35,9 @@ bool UpdateBomb(CBlob@ this)
 	else
 	{
 		SColor lightColor;
-		const u8 hitter = this.get_u8("custom_hitter");
 
-		if (hitter == Hitters::water)
-		{
-			this.getSprite().SetEmitSound("WaterSparkle.ogg");
-			this.getSprite().SetEmitSoundPaused(false);
-			lightColor = SColor(255, 44, 175, 222);
-			this.SetLight(false);
-		}
-		else
-		{
-			lightColor = SColor(255, 255, Maths::Min(255, 2 * timer), 0);
-			this.SetLightColor(lightColor);
-		}
+		lightColor = SColor(255, 255, Maths::Min(255, 2 * timer), 0);
+		this.SetLightColor(lightColor);
 
 		if (XORRandom(2) == 0)
 		{

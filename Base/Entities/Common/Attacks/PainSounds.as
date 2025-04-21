@@ -69,8 +69,8 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 	// Custom pain sounds
 	if (player.getUsername() == "TerminalHash")
 	{
-		this.set_string("pain_sound", "ebanrot1.ogg");
-		this.set_string("pain_sound_short", "oi2.ogg");
+		this.set_string("pain_sound", "th_pain_long.ogg");
+		this.set_string("pain_sound_short", "th_pain_short.ogg");
 	}
 	else if (player.getUsername() == "vladkvs193")
 	{
@@ -86,5 +86,10 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 	{
 		this.set_string("pain_sound", "aidic_pain_long.ogg");
 		this.set_string("pain_sound_short", "aidic_pain_short.ogg");
+	}
+	else if (player.getUsername() == "H1996R")
+	{
+		this.set_string("pain_sound", "hahalios_pain_long.ogg");
+		this.set_string("pain_sound_short", "hahalios_pain_short.ogg");
 	}
 }

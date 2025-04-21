@@ -192,8 +192,19 @@ class KillFeed
 				case Hitters::saw:				hitterIcon = "$killfeed_saw$"; break;
 
 				// Custom hitters
+				// Special
 				case GruhshaHitters::tile_entity:		hitterIcon = "$killfeed_tile_entity$"; break;
+
+				// Mines
 				case GruhshaHitters::slide_mine:		hitterIcon = "$killfeed_slide_mine$"; break;
+				case GruhshaHitters::golden_mine:		hitterIcon = "$killfeed_golden_mine$"; break;
+
+				// Bombs
+				case GruhshaHitters::sticky_bomb:		hitterIcon = "$killfeed_sticky_bomb$"; break;
+
+				// Kegs
+				case GruhshaHitters::hazelnut_shell:	hitterIcon = "$killfeed_hazelnut_shell$"; break;
+				case GruhshaHitters::fumo_keg:			hitterIcon = "$killfeed_fumo_keg$"; break;
 
 				default: 						hitterIcon = "$killfeed_fall$";
 			}
@@ -286,6 +297,10 @@ void onInit(CRules@ this)
 	// Custom hitters
 	AddIconToken("$killfeed_tile_entity$", "GUI/KillfeedIcons.png", Vec2f(32, 16), 24);
 	AddIconToken("$killfeed_slide_mine$", "GUI/KillfeedIcons.png", Vec2f(32, 16), 25);
+	AddIconToken("$killfeed_golden_mine$", "GUI/KillfeedIcons.png", Vec2f(32, 16), 26);
+	AddIconToken("$killfeed_sticky_bomb$", "GUI/KillfeedIcons.png", Vec2f(32, 16), 27);
+	AddIconToken("$killfeed_hazelnut_shell$", "GUI/KillfeedIcons.png", Vec2f(32, 16), 28);
+	AddIconToken("$killfeed_fumo_keg$", "GUI/KillfeedIcons.png", Vec2f(32, 16), 29);
 }
 
 void onPlayerDie(CRules@ this, CPlayer@ victim, CPlayer@ killer, u8 customdata)
@@ -345,6 +360,11 @@ void onPlayerDie(CRules@ this, CPlayer@ victim, CPlayer@ killer, u8 customdata)
 						bs.write_u8(kill_count);
 						this.SendCommand(this.getCommandID("interrupt message"), bs);
 
+						if (this.hasTag("track_stats"))
+						{
+							tcpr("MultiKillInterrupt " + killer.getUsername() + " " + victim.getUsername() + " " + kill_count + " " + getGameTime());
+						}
+
 						victim.set_u8("killstreak", 0);
 					}
 				}
@@ -395,6 +415,11 @@ void onTick(CRules@ this)
 					bs.write_u16(player_netid);
 					bs.write_u8(kill_count);
 					this.SendCommand(this.getCommandID("killstreak message"), bs);
+
+					if (this.hasTag("track_stats"))
+					{
+						tcpr("MultiKill " + player.getUsername() + " " + kill_count + " " + getGameTime());
+					}
 
 					player.set_u8("killstreak", 0);
 				}

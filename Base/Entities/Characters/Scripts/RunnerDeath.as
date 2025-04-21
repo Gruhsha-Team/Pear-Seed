@@ -219,8 +219,8 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 	}
 	else if (player.getUsername() == "TerminalHash")
 	{
-		this.set_string("death_sound", "th_long.ogg");
-		this.set_string("death_sound_short", "th_short.ogg");
+		this.set_string("death_sound", "th_death_long.ogg");
+		this.set_string("death_sound_short", "th_death_short.ogg");
 	}
 	else if (player.getUsername() == "vladkvs193")
 	{
@@ -241,5 +241,10 @@ void onSetPlayer(CBlob@ this, CPlayer@ player)
 	{
 		this.set_string("death_sound", "aidic_death_long.ogg");
 		this.set_string("death_sound_short", "aidic_death_short.ogg");
+	}
+	else if (player.getUsername() == "H1996R")
+	{
+		this.set_string("death_sound", "hahalios_death_long.ogg");
+		this.set_string("death_sound_short", "hahalios_death_short.ogg");
 	}
 }

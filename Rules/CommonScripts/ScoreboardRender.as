@@ -31,7 +31,7 @@ bool mouseWasPressed2 = false;
 
 const string OLD_PLAYER_STATS_CORE = "player stats core";
 
-const string mod_version = "v2.2";
+const string mod_version = "v2.2.1";
 
 class OldPlayerStatsCore {
 	dictionary stats;
@@ -256,33 +256,42 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		}
 
 		// head icon
-		string headTexture = "Heads.png";
-		int headIndex = 32*4;
+		int headIndex = 0;
+		string headTexture = "";
 		int teamIndex = p.getTeamNum();
+		SColor head_col(0xffffffff);
 		Vec2f headOffset = Vec2f(22, -12);
 		float headScale = 1.0f;
-		SColor headColor(0xFFFFFFFF);
 
-		// show normally colored head for specs, they're never alive
-		if (team !is null && dead)
-		{
-			headColor = 0xFF808080;
-		}
+		SColor dead_col(0xff4f3030);
+		bool player_dead = false;
 
 		if (b !is null) {
 			headIndex = b.get_s32("head index");
 			headTexture = b.get_string("head texture");
-			teamIndex = b.get_s32("head team");
-		} else if (p.exists("head index")) {
-			// HACK: no better infrastructure to know a player's head when
-			// they're dead
-			headIndex = p.get_s32("head index");
-			headTexture = p.get_string("head texture");
+			teamIndex = b.getTeamNum();
+			
+			if (b.hasTag("dead") || b.hasTag("halfdead"))
+			{
+				head_col = dead_col;
+				player_dead = true;
+			}
 		} else {
-			headColor = 0x00000000;
+			if (teamIndex!=getRules().getSpectatorTeamNum())
+			{
+				head_col = dead_col;
+				player_dead = true;
+			}
+
+			//there's no need to call all the calculations when we can just ask player blob what their head is
+			headIndex = getHeadSpecs(p, headTexture);
 		}
 
-		GUI::DrawIcon(headTexture, headIndex, Vec2f(16, 16), tl + headOffset, headScale, headScale, teamIndex, headColor);
+		//head_col = SColor(0xffaa0000);
+
+		if (headTexture != "") {
+			GUI::DrawIcon(headTexture, headIndex + (player_dead?2:0), Vec2f(16, 16), tl + headOffset, headScale, headScale, teamIndex, head_col);
+		}
 
 		//have to calc this from ticks
 		s32 ping_in_ms = s32(p.getPing() * 1000.0f / 30.0f);
@@ -917,38 +926,16 @@ void onRenderScoreboard(CRules@ this) {
 
 void onTick(CRules@ this)
 {
-
-	if (!isPlayerListShowing() && hovered_card>-1)
-	{
+	if (!isPlayerListShowing() && hovered_card>-1) {
 		hovered_card = -1; //deactivate any cards
 	}
 
-	if (this.getCurrentState() == GAME)
-	{
+	if (this.getCurrentState() == GAME) {
 		this.add_u32("match_time", 1);
 
-		if (isServer() && this.get_u32("match_time") % (10 * getTicksASecond()) == 0)
-		{
+		if (isServer() && this.get_u32("match_time") % (10 * getTicksASecond()) == 0) {
 			this.Sync("match_time", true);
 		}
-	}
-
-	// plain stupidity to track player heads even when dead
-	const int playerCount = getPlayersCount();
-	for (int i = 0; i < playerCount; ++i)
-	{
-		CPlayer@ p = getPlayer(i);
-		if (p is null) { continue; }
-
-		CBlob@ b = p.getBlob();
-		if (b is null) { continue; }
-
-		const int headIndex = b.get_s32("head index");
-		const string headTexture = b.get_string("head texture");
-		const int teamIndex = b.get_s32("head team");
-		p.set_s32("head index", headIndex);
-		p.set_string("head texture", headTexture);
-		p.set_s32("head team", teamIndex);
 	}
 }
 

@@ -402,7 +402,6 @@ string[][] vsetting_texts =
 		Names::bodytilt,
 		Names::headrotating,
 		Names::clusterfuck,
-		Names::clusterfuck_blood,
 		Names::clusterfuck_smoke,
 		Names::drillzoneborders,
 		Names::annoyingnature,
@@ -410,7 +409,8 @@ string[][] vsetting_texts =
 		Names::annoyingtags,
 		Names::customdpsounds,
 		Names::customboomeffects,
-		"Snow Render Type"
+		"Snow Render Type",
+		"Player Kill Sounds"
 	}
 };
 
@@ -423,7 +423,6 @@ string[][] vsetting_file_names =
 		"body_tilting",
 		"head_rotating",
 		"clusterfuck",
-		"clusterfuck_blood",
 		"clusterfuck_smoke",
 		"drillzone_borders",
 		"annoying_nature",
@@ -431,7 +430,8 @@ string[][] vsetting_file_names =
 		"annoying_tags",
 		"custom_death_and_pain_sounds",
 		"custom_boom_effects",
-		"snow_type"
+		"snow_type",
+		"killsounds_toggle"
 	}
 };
 
@@ -463,10 +463,6 @@ string[][][] vsetting_options =
 		},
 		{
 			Descriptions::universaloff,       // CLUSTERFUCK
-			Descriptions::universalon
-		},
-		{
-			Descriptions::universaloff,       // CLUSTERFUCK BLOOD
 			Descriptions::universalon
 		},
 		{
@@ -503,7 +499,11 @@ string[][][] vsetting_options =
 			"Sparse",
 			//Descriptions::snowsparse,
 			Descriptions::universaloff
-		}
+		},
+		{
+			Descriptions::universaloff,       // KILLSOUNDS
+			Descriptions::universalon
+		},
 	}
 };
 
@@ -538,10 +538,6 @@ string[][][] vsetting_option_names =
 			"on"
 		},
 		{
-			"off",       // CLUSTERFUCK BLOOD
-			"on"
-		},
-		{
 			"off",       // CLUSTERFUCK SMOKE
 			"on"
 		},
@@ -573,7 +569,11 @@ string[][][] vsetting_option_names =
 			"vanilla",
 			"sparse",
 			"disabled"
-		}
+		},
+		{
+			"off",       // KILLSOUNDS
+			"on"
+		},
 	}
 };
 
