@@ -917,7 +917,9 @@ bool checkGrappleStep(CBlob@ this, ArcherInfo@ archer, CMap@ map, const f32 dist
 
 		archer.grapple_ratio = Maths::Max(0.2, Maths::Min(archer.grapple_ratio, dist / archer_grapple_length));
 
-		archer.grapple_pos.y = Maths::Max(0.0, archer.grapple_pos.y);
+		// Only limit grapple to top of map if it's a cave map
+		CRules@ rules = getRules();
+		archer.grapple_pos.y = rules is null || rules.get_bool("collide with ceiling") ? Maths::Max(0.0, archer.grapple_pos.y) : archer.grapple_pos.y;
 
 		if (canSend(this) || isServer()) SyncGrapple(this);
 
@@ -1178,17 +1180,23 @@ void ShootArrow(CBlob@ this)
 
 	f32 arrowspeed;
 
+	s32 shoot_velocity = ArcherParams::shoot_max_vel;
+
+	if (this.hasTag("icy")) {
+		shoot_velocity = ArcherParams::shoot_max_vel_icy;
+	}
+
 	if (charge_time < MIDSHOT_CHARGE)
 	{
-		arrowspeed = ArcherParams::shoot_max_vel * (1.0f / 3.0f);
+		arrowspeed = shoot_velocity * (1.0f / 3.0f);
 	}
 	else if (charge_time < FULLSHOT_CHARGE)
 	{
-		arrowspeed = ArcherParams::shoot_max_vel * (4.0f / 5.0f);
+		arrowspeed = shoot_velocity * (4.0f / 5.0f);
 	}
 	else
 	{
-		arrowspeed = ArcherParams::shoot_max_vel;
+		arrowspeed = shoot_velocity;
 	}
 
 	Vec2f offset(this.isFacingLeft() ? 2 : -2, -2);

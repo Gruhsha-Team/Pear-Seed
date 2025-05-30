@@ -435,6 +435,8 @@ class TagBuilder : ChatCommand
 
 		rules.set_string("team_" + player.getTeamNum() + "_builder", tagged_player.getUsername());
 		rules.Sync("team_" + player.getTeamNum() + "_builder", true);
+
+		printf("[CAPTAINS SYSTEM] " + player.getUsername() + " was tagged " + tagged_player.getUsername() + " as builder in team " + player.getTeamNum());
 	}
 }
 
@@ -510,6 +512,48 @@ class UpdateMats : ChatCommand
 			rules.set_s32("teamstone" + TEAM, STONE);
 			rules.Sync("teamstone" + TEAM, true);
 		}
+	}
+}
+
+class TeamRandomizer : ChatCommand
+{
+	TeamRandomizer()
+	{
+		super("teamrandom", "Make teams with random");
+		AddAlias("random");
+		AddAlias("rand");
+	}
+
+	bool canPlayerExecute(CPlayer@ player)
+	{
+		return (
+			ChatCommand::canPlayerExecute(player) &&
+			!ChatCommands::getManager().whitelistedClasses.empty()
+		);
+	}
+
+	void Execute(string[] args, CPlayer@ player)
+	{
+		CRules@ rules = getRules();
+
+		RulesCore@ core;
+		rules.get("core", @core);
+
+		for (int i = 0; i < getPlayerCount(); i++) 
+		{
+			CPlayer@ p = getPlayer(i);
+			if (p is null) continue;
+
+			u8 team = XORRandom(2);
+			u8 playersinteam = getPlayerCount();
+			if (CountPlayersInTeam(team) > playersinteam)
+				if (team == 1) team = 0;
+			else team = 1;
+
+			core.ChangePlayerTeam(p, team);
+		}
+
+		server_AddToChat("Teams randomized, have fun!", SColor(0xff474ac6));
 	}
 }
 

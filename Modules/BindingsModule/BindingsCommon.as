@@ -410,7 +410,8 @@ string[][] vsetting_texts =
 		Names::customdpsounds,
 		Names::customboomeffects,
 		"Snow Render Type",
-		"Player Kill Sounds"
+		"Player Kill Sounds",
+		"Misc Custom Sounds"
 	}
 };
 
@@ -431,7 +432,8 @@ string[][] vsetting_file_names =
 		"custom_death_and_pain_sounds",
 		"custom_boom_effects",
 		"snow_type",
-		"killsounds_toggle"
+		"killsounds_toggle",
+		"misc_custom_toggle"
 	}
 };
 
@@ -504,6 +506,10 @@ string[][][] vsetting_options =
 			Descriptions::universaloff,       // KILLSOUNDS
 			Descriptions::universalon
 		},
+		{
+			Descriptions::universaloff,       // MISC CUSTOM SOUNDS
+			Descriptions::universalon
+		}
 	}
 };
 
@@ -574,6 +580,10 @@ string[][][] vsetting_option_names =
 			"off",       // KILLSOUNDS
 			"on"
 		},
+		{
+			"off",       // MISC CUSTOM SOUNDS
+			"on"
+		}
 	}
 };
 
