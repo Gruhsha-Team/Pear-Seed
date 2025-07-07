@@ -237,6 +237,7 @@ void onNewPlayerJoin(CRules@ this, CPlayer@ player)
 		SetCTFTimer(this, player, 0, "builder");
 	else
 		SetCTFTimer(this, player, this.get_s32("nextresuply"), "builder");
+
 	if (next_add_time < getCTFTimer(this, player, "builder") || next_add_time < getCTFTimer(this, player, "archer"))
 	{
 		SetCTFTimer(this, player, getGameTime(), "archer");

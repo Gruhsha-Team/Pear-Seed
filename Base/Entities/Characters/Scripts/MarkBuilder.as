@@ -9,7 +9,10 @@ void onRender(CRules@ this)
 	const float base_brightness = Maths::Abs(Maths::Sin((ticks_since_pressed - update_latency) / 20.0f));
 
 	CMap@ map = getMap();
+	if (map is null) return;
+
 	CPlayer@ me = getLocalPlayer();
+	if (me is null) return;
 
 	if (b_KeyPressed("mark_team_builder"))
 	{
@@ -37,6 +40,22 @@ void onRender(CRules@ this)
 					}
 				}
 			}
+		}
+	}
+
+	CBlob@ myblob = me.getBlob();
+	if (myblob is null) return;
+
+	if (me !is null && myblob !is null) {
+		int bobr = 70;
+
+		if (myblob.hasTag("icy")) {
+			GUI::DrawIcon("Sprites/HUD/DebuffIcons.png", 0, Vec2f(17, 19), Vec2f(myblob.getInterpolatedScreenPos().x - 15, myblob.getInterpolatedScreenPos().y - bobr), 1.0f, 255);
+			bobr += 40;
+		}
+
+		if (myblob.hasTag("broken shield")) {
+			GUI::DrawIcon("Sprites/HUD/DebuffIcons.png", 1, Vec2f(17, 19), Vec2f(myblob.getInterpolatedScreenPos().x - 15, myblob.getInterpolatedScreenPos().y - bobr), 1.0f, me.getTeamNum());
 		}
 	}
 }

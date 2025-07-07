@@ -31,7 +31,7 @@ bool mouseWasPressed2 = false;
 
 const string OLD_PLAYER_STATS_CORE = "player stats core";
 
-const string mod_version = "v2.2.2";
+const string mod_version = "v2.3";
 
 class OldPlayerStatsCore {
 	dictionary stats;
@@ -606,6 +606,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		s32 assists = p.getAssists();
 		f32 dmgdeal = getRules().get_f32("damage_impact_" + p.getUsername());
 		f32 kpm = getKPM(p);
+		f32 coins = p.getCoins();
 
 		if (old_stats)
 		{
@@ -633,6 +634,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 			}
 		}
 
+		GUI::DrawText("" + coins, Vec2f(br.x - 570, tl.y), SColor(0xffffffff));
 		GUI::DrawText("" + username, Vec2f(br.x - 470, tl.y), namecolour);
 		GUI::DrawText("" + ping_in_ms, Vec2f(br.x - 330, tl.y), SColor(0xffffffff));
 		GUI::DrawText("" + kills, Vec2f(br.x - 260, tl.y), kdr_color);
@@ -642,6 +644,7 @@ float drawScoreboard(CPlayer@ localPlayer, CPlayer@[] players, Vec2f tl, CTeam@ 
 		//GUI::DrawText("" + assists, Vec2f(br.x - 120, tl.y), kdr_color);
 		//GUI::DrawText("" + formatFloat(kills / Maths::Max(f32(deaths), 1.0f), "", 0, 2), Vec2f(br.x - 50, tl.y), kdr_color);
 
+		GUI::DrawIcon("coins.png", 1, Vec2f(16, 16), Vec2f(br.x - 595, tl.y - 8), 1.0f, 0);
 
 	}
 

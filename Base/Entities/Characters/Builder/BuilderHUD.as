@@ -6,6 +6,7 @@
 #include "CommonBuilderBlocks.as";
 //#include "/Entities/Common/GUI/ActorHUDStartPos.as";
 #include "MaterialIndicatorHUD.as";
+#include "BuffTracker.as";
 #include "pathway.as";
 
 const string iconsFilename = "Entities/Characters/Builder/BuilderIcons.png";
@@ -95,6 +96,9 @@ void onRender(CSprite@ this)
 
 	// draw mats ui
 	DrawPersonalMats();
+
+	// draw buff tracker
+	DrawBuffs();
 
 	// draw coins
 
