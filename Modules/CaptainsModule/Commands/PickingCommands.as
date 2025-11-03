@@ -61,11 +61,11 @@ class AppointCommand : ChatCommand
 			CPlayer@ red_leader = getPlayerByNamePart(RED_LEADER_NAME);
 
 			if (blue_leader is null) {
-				error("[CAPTAINS SYSTEM] blue leader doesn't not exists! try again");
+				error("[CAPTAINS SYSTEM] blue leader doesn't exists! try again");
 				return;
 			}
 			if (red_leader is null) {
-				error("[CAPTAINS SYSTEM] red leader doesn't not exists! try again");
+				error("[CAPTAINS SYSTEM] red leader doesn't exists! try again");
 				return;
 			}
 
@@ -440,6 +440,63 @@ class TagBuilder : ChatCommand
 	}
 }
 
+class AppointBuilders : ChatCommand
+{
+	AppointBuilders()
+	{
+		super("setbuilders", "Choose players, what will be builder in match");
+		SetUsage("<blue builder> <red builder>");
+	}
+
+	bool canPlayerExecute(CPlayer@ player)
+	{
+		return (
+			ChatCommand::canPlayerExecute(player) &&
+			!ChatCommands::getManager().whitelistedClasses.empty()
+		);
+	}
+
+	void Execute(string[] args, CPlayer@ player)
+	{
+		CRules@ rules = getRules();
+
+		if (args.size() < 1) return;
+
+		const string BLUE_BUILDER_NAME = args[0];
+		const string RED_BUILDER_NAME = args[1];
+
+		CPlayer@ blue_builder = getPlayerByNamePart(BLUE_BUILDER_NAME);
+		CPlayer@ red_builder = getPlayerByNamePart(RED_BUILDER_NAME);
+
+		if (blue_builder is null) {
+			error("[CAPTAINS SYSTEM] blue builder doesn't exists! try again");
+			return;
+		}
+		if (red_builder is null) {
+			error("[CAPTAINS SYSTEM] red builder doesn't exists! try again");
+			return;
+		}
+
+		// if admin accidentally wrote the same player's name twice
+		if (blue_builder.getUsername() == red_builder.getUsername() || red_builder.getUsername() == blue_builder.getUsername())
+		{
+			error("[CAPTAINS SYSTEM] One player cannot be a builder in two teams at the same time!");
+			return;
+		}
+
+		if (blue_builder !is null && red_builder !is null) {
+			rules.set_string("team_" + 0 + "_builder", blue_builder.getUsername());
+			rules.set_string("team_" + 1 + "_builder", red_builder.getUsername());
+			rules.Sync("team_" + 0 + "_builder", true);
+			rules.Sync("team_" + 1 + "_builder", true);
+		}
+
+		if (isServer()) server_AddToChat("Builders in that match: " + blue_builder.getUsername() + " for BLUE and " + red_builder.getUsername() + " for RED!", SColor(0xff474ac6));
+
+		printf("[CAPTAINS SYSTEM] Builders is set! Blue builder is " + rules.get_string("team_0_builder") + " red builder is " + rules.get_string("team_1_builder"));
+	}
+}
+
 class ToggleEditor : ChatCommand
 {
 	ToggleEditor()
@@ -557,11 +614,11 @@ class TeamRandomizer : ChatCommand
 	}
 }
 
-class BindingsMenu : ChatCommand
+class BrokeResupplies : ChatCommand
 {
-	BindingsMenu()
+	BrokeResupplies()
 	{
-		super("bindings", "Show mod bindings menu");
+		super("fuckres", "Broke resupplies, allowing them to arrive after the death of each player on the team");
 	}
 
 	bool canPlayerExecute(CPlayer@ player)
@@ -576,17 +633,11 @@ class BindingsMenu : ChatCommand
 	{
 		CRules@ rules = getRules();
 
-		if (player.isMyPlayer())
-		{
-			rules.set_bool("bindings_open", !rules.get_bool("bindings_open"));
+		rules.Tag("fucked resupplies");
 
-			ResetRuleBindings();
-			LoadFileBindings();
-
-			ResetRuleSettings();
-			LoadFileSettings();
-		}
-
-		//printf("Boolean no_class_change_on_shop is " + rules.get_bool("no_class_change_on_shop"));
+		if (rules.hasTag("fucked resupplies"))
+			server_AddToChat("Infinity resupplies is on!", SColor(0xff474ac6));
+		else
+			server_AddToChat("Infinity resupplies is off!", SColor(0xff474ac6));
 	}
 }

@@ -110,6 +110,10 @@ void onInit(CRules@ this)
 		if (!file.exists("kfc_pear$2")) file.add_s32("kfc_pear$2", -1);
 		if (!file.exists("kfc_sleep$1")) file.add_s32("kfc_sleep$1", 54);
 		if (!file.exists("kfc_sleep$2")) file.add_s32("kfc_sleep$2", -1);
+		if (!file.exists("kfc_bison$1")) file.add_s32("kfc_bison$1", 55);
+		if (!file.exists("kfc_bison$2")) file.add_s32("kfc_bison$2", -1);
+		if (!file.exists("kfc_shark$1")) file.add_s32("kfc_shark$1", 56);
+		if (!file.exists("kfc_shark$2")) file.add_s32("kfc_shark$2", -1);
 
 		// vehicle shop
 		if (!file.exists("vehicle_catapult$1")) file.add_s32("vehicle_catapult$1", 49);
@@ -132,14 +136,6 @@ void onInit(CRules@ this)
 		if (!file.exists("boat_longboat$2")) file.add_s32("boat_longboat$2", -1);
 		if (!file.exists("boat_warboat$1")) file.add_s32("boat_warboat$1", 51);
 		if (!file.exists("boat_warboat$2")) file.add_s32("boat_warboat$2", -1);
-
-		// HACK: checking sv_deltapos_modifier for >1
-		/*if (!file.exists("sv_deltapos_modifier_check")) {
-			file.add_s32("sv_deltapos_modifier_check", sv_deltapos_modifier);
-		} else { // if player updated this parameter, update entry to new number
-			file.remove("sv_deltapos_modifier_check");
-			file.add_s32("sv_deltapos_modifier_check", sv_deltapos_modifier);
-		}*/
 
 		if(!file.saveFile(BINDINGSFILE + ".cfg"))
 		{
@@ -208,6 +204,11 @@ void onInit(CRules@ this)
 			{
 				sfile.add_string("nomenubuying_b", "no");
 			}
+			
+			if (!sfile.exists("tag_packs"))
+			{
+				sfile.add_string("tag_packs", "first");
+			}
 		}
 		else // default settings
 		{
@@ -221,6 +222,7 @@ void onInit(CRules@ this)
 			sfile.add_string("pickbomb_archer", "yes");
 			sfile.add_string("nomenubuying", "no");
 			sfile.add_string("nomenubuying_b", "no");
+			sfile.add_string("tag_packs", "first");
 
 			printf("Creating local settings file with default values for Gruhsha.");
 		}
@@ -267,11 +269,6 @@ void onInit(CRules@ this)
 			if (!sfile2.exists("clusterfuck"))
 			{
 				sfile2.add_string("clusterfuck", "on");
-			}
-
-			if (!sfile2.exists("clusterfuck_blood"))
-			{
-				sfile2.add_string("clusterfuck_blood", "on");
 			}
 
 			if (!sfile2.exists("clusterfuck_smoke"))
@@ -332,7 +329,6 @@ void onInit(CRules@ this)
 			sfile2.add_string("body_tilting", "on");
 			sfile2.add_string("head_rotating", "on");
 			sfile2.add_string("clusterfuck", "on");
-			sfile2.add_string("clusterfuck_blood", "on");
 			sfile2.add_string("clusterfuck_smoke", "on");
 			sfile2.add_string("drillzone_borders", "on");
 			sfile2.add_string("annoying_nature", "on");
@@ -409,10 +405,6 @@ void onTick(CRules@ this)
 	{
 		ResetRuleVSettings();
 		LoadFileVSettings();
-	}
-
-	if (getGameTime() % 60 == 0) {
-		CheckOneValue();
 	}
 
 	if (controls !is null)

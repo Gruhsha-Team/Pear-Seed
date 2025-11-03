@@ -68,7 +68,10 @@ string[][] button_texts =
 		Names::putitemcommand,
 		Names::blockrotatecommand,
 		Names::activateorthrowbomb,
-		Names::showinvkey
+		Names::showinvkey,
+		"Toggle Camera Mode",
+		"Voiceline Wheel",
+		"Dash"
 	},
 	{
 		"Go away"								// TECHNICAL LINE DONT TOUCH PLEASE
@@ -192,7 +195,10 @@ string[][] button_file_names =
 		"put_item",
 		"blob_rotate",
 		"bomb_key",
-		"showinv"
+		"showinv",
+		"cameramode",
+		"voicelinewheel",
+		"dash_keybind"
 	},
 	{
 		"go away"								// TECHNICAL LINE DONT TOUCH PLEASE
@@ -280,7 +286,8 @@ string[][] setting_texts =
 		Names::bombbuilder,
 		Names::bombarcher,
 		Names::nomenubuyingset,
-		Names::nomenubuyingboldarset
+		Names::nomenubuyingboldarset,
+		"Tag Sound Pack"
 	}
 };
 
@@ -296,7 +303,8 @@ string[][] setting_file_names =
 		"pickbomb_builder",
 		"pickbomb_archer",
 		"nomenubuying",
-		"nomenubuying_b"
+		"nomenubuying_b",
+		"tag_packs"
 	}
 };
 
@@ -342,6 +350,10 @@ string[][][] setting_options =
 		{
 			Descriptions::universalno, // 10	NO MENU BUYING (BOLDAR)
 			Descriptions::universalyes // 20
+		},
+		{
+			"Default",				   // 10	TAG PACKS
+			"Kayf-Life"				   // 20
 		}
 	}
 };
@@ -388,6 +400,10 @@ string[][][] setting_option_names =
 		{
 			"no", // 10    NO MENU BUYING (BOLDAR)
 			"yes" // 20
+		},
+		{
+			"first",
+			"second"
 		}
 	}
 };
@@ -497,7 +513,7 @@ string[][][] vsetting_options =
 		},
 		{
 			"Vanilla",
-			//Descriptions::universalvanilla,       // SNOW RENDERING TYPE
+			//Descriptions::universalvanilla, // SNOW RENDERING TYPE
 			"Sparse",
 			//Descriptions::snowsparse,
 			Descriptions::universaloff
@@ -844,31 +860,6 @@ void ResetRuleVSettings()
 		for (int g=0; g<vsetting_texts[i].length; ++g)
 		{
 			rules.set_string(vsetting_file_names[i][g], "null");
-		}
-	}
-}
-
-void CheckOneValue() {
-	ConfigFile file;
-
-	string file_entry1 = "sv_deltapos_modifier_check";
-	if (file.loadFile(BINDINGSDIR + BINDINGSFILE))
-	{
-		if (file.exists(file_entry1)) {
-			// else parameter is > 1 - update config string
-			if (sv_deltapos_modifier > file.read_f32("sv_deltapos_modifier_check")) {
-				file.add_s32("sv_deltapos_modifier_check", sv_deltapos_modifier);
-			}
-
-			CBitStream params;
-
-			if (file.read_f32("sv_deltapos_modifier_check") > 1) {
-				params.write_u8(1);
-			} else {
-				params.write_u8(0);
-			}
-
-			getRules().SendCommand(getRules().getCommandID("lagswitch check"), params);
 		}
 	}
 }

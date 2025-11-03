@@ -8,11 +8,9 @@
 #include "DoorCommon.as";
 #include "FireplaceCommon.as";
 #include "ActivationThrowCommon.as"
+#include "ParticlesCommon.as"
 #include "PlacementCommon.as";
 #include "HolidayCommon.as";
-#include "HolidaySprites.as";
-
-string gibs_file_name;
 
 const s32 bomb_fuse = 120;
 const f32 arrowMediumSpeed = 8.0f;
@@ -36,8 +34,6 @@ void onInit(CBlob@ this)
 	consts.bullet = false;
 	consts.net_threshold_multiplier = 4.0f;
 	this.Tag("projectile");
-
-	gibs_file_name = isAnyHoliday() ? getHolidayVersionFileName("GenericGibs") : "GenericGibs.png";
 
 	//dont collide with top of the map
 	this.SetMapEdgeFlags(CBlob::map_collide_left | CBlob::map_collide_right);
@@ -117,7 +113,7 @@ void onInit(CBlob@ this)
 		Animation@ anim = sprite.addAnimation("bomb arrow halloween", 0, false);
 		anim.AddFrame(18);
 		anim.AddFrame(19);
-		if (arrowType == ArrowType::bomb && getRules().get_string(holiday_prop) == "Halloween")
+		if (arrowType == ArrowType::bomb && getHoliday() == HOLIDAY_CHRISTMAS)
 			sprite.SetAnimation(anim);
 	}
 
@@ -125,7 +121,7 @@ void onInit(CBlob@ this)
 		Animation@ anim = sprite.addAnimation("bomb arrow christmas", 0, false);
 		anim.AddFrame(20);
 		anim.AddFrame(21);
-		if (arrowType == ArrowType::bomb && getRules().get_string(holiday_prop) == "Christmas")
+		if (arrowType == ArrowType::bomb && getHoliday() == HOLIDAY_CHRISTMAS)
 			sprite.SetAnimation(anim);
 	}
 }
@@ -282,24 +278,44 @@ void onTick(CBlob@ this)
 	{
 		const s32 gametime = getGameTime();
 
-		if (gametime % 6 == 0)
+		Vec2f offset = Vec2f(this.getWidth(), 0.0f);
+
+		float flame_frequency = this.getVelocity().Length() > 2.0f ? 1 : 6;
+
+		Random r(XORRandom(9999));
+
+		if (gametime % flame_frequency == 0)
 		{
 			this.getSprite().SetAnimation("fire");
 
-			Vec2f offset = Vec2f(this.getWidth(), 0.0f);
 			offset.RotateBy(-angle);
-			makeFireParticle(this.getPosition() + offset, 4);
+			offset += (Vec2f(r.NextFloat(), r.NextFloat()) - Vec2f(0.5, 0.5)) * 6.0f;
 
-			if (!this.isInWater())
+			CParticle@ fire = makeFireParticle(this.getPosition() + offset, 4);
+			if (fire is null) return;
+
+			fire.velocity = -this.getVelocity() * 0.06f - Vec2f(0.0f, 0.8f + r.NextFloat() * 0.4f);
+			fire.gravity = Vec2f(0.0f, 0.0f);
+
+			if (this.getVelocity().Length() > 2.0f)
 			{
-				this.SetLight(true);
-				this.SetLightColor(SColor(255, 250, 215, 178));
-				this.SetLightRadius(20.5f);
+				offset += (Vec2f(r.NextFloat(), r.NextFloat()) - Vec2f(0.5, 0.5)) * 6.0f;
+				CParticle@ fire2 = makeFireParticle(Vec2f_lerp(this.getOldPosition(), this.getPosition(), 0.5f) + offset, 4);
+				if (fire2 is null) return;
+
+				fire.velocity = -Vec2f_lerp(this.getOldVelocity(), this.getOldVelocity(), 0.5f)  * 0.06f - Vec2f(0.0f, 0.8f + r.NextFloat() * 0.4f);
+				fire.gravity = Vec2f(0.0f, 0.0f);
 			}
-			else
+
+			if (this.isInWater())
 			{
 				turnOffFire(this);
 			}
+		}
+
+		if (gametime % 1 == 0)
+		{
+			CParticle@ light = MakeBasicLightParticle(this.getPosition() + offset, Vec2f(0.0f, -0.9f), SColor(255, 100, 25, 0), 0.92f, 0.2f, 30);
 		}
 	}
 }
@@ -727,7 +743,7 @@ void ArrowHitMap(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, u8 c
 	}
 	else if (arrowType == ArrowType::fire)
 	{
-		this.server_Die();
+		this.server_SetTimeToDie(FIRE_IGNITE_TIME);
 	}
 
 	//kill any grain plants we shot the base of
@@ -855,7 +871,7 @@ void onDie(CBlob@ this)
 		{
 			Vec2f vel = this.getVelocity();
 			makeGibParticle(
-				gibs_file_name, pos, vel,
+				"GenericGibs.png", pos, vel,
 				1, _gib_r.NextRanged(4) + 4,
 				Vec2f(8, 8), 2.0f, 20, "/thud",
 				this.getTeamNum()

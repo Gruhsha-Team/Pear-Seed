@@ -9,7 +9,6 @@
 #include "Help.as";
 #include "Requirements.as"
 #include "StandardControlsCommon.as";
-#include "HolidaySprites.as";
 #include "BindingsCommon.as"
 
 //attacks limited to the one time per-actor before reset.
@@ -319,6 +318,20 @@ void onTick(CBlob@ this)
 		}
 	}
 
+	// disable attacks after dashing and when player still in air
+	if (inair) {
+		if (this.hasTag("disabled attacks")) {
+			knight.state = KnightStates::normal; //cancel any attacks or shielding
+			knight.swordTimer = 0;
+			knight.slideTime = 0;
+			knight.doubleslash = false;
+			this.set_s32("currentKnightState", 0);
+
+			pressed_a1 = false;
+			pressed_a2 = false;
+		}
+	}
+
 	if (knocked)
 	{
 		knight.state = KnightStates::normal; //cancel any attacks or shielding
@@ -412,7 +425,7 @@ void onTick(CBlob@ this)
 						const string itemname = item.getName();
 						if (!holding && bombTypeNames[bombType] == itemname)
 						{
-							if (bombType >= 5)
+							if (bombType >= 4)
 							{
 								this.server_Pickup(item);
 								client_SendThrowOrActivateCommand(this);
@@ -552,6 +565,16 @@ void onTick(CBlob@ this)
 		knight_clear_actor_limits(this);
 	}
 
+	// timer for broken shield
+	if (this.hasTag("broken shield")) {
+		this.sub_s32("broken shield timer", 1);
+		this.Sync("broken shield timer", true);
+
+		if (this.get_s32("broken shield timer") <= 0) {
+			this.Untag("broken shield");
+			this.Sync("broken shield", true);
+		}
+	}
 }
 
 bool getInAir(CBlob@ this)
@@ -711,13 +734,13 @@ class ShieldGlideState : KnightState
 				knight.state = KnightStates::sword_drawn;
 				return true;
 			}
-			else if (!this.isKeyPressed(key_action2))
+			else if (!this.isKeyPressed(key_action2) || this.hasTag("disabled attacks"))
 			{
 				knight.state = KnightStates::normal;
 				return false;
 			}
 		}
-		else if (!this.isKeyPressed(key_action2))
+		else if (!this.isKeyPressed(key_action2) || this.hasTag("disabled attacks"))
 		{
 			knight.state = KnightStates::normal;
 			return false;
@@ -727,7 +750,7 @@ class ShieldGlideState : KnightState
 		bool forcedrop = getForceDrop(this, moveVars);
 
 		bool inair = getInAir(this);
-		if (inair && !this.isInWater())
+		if (inair && !this.isInWater() || !this.hasTag("disabled attacks"))
 		{
 			Vec2f vec;
 			const int direction = this.getAimDirection(vec);
@@ -1041,7 +1064,6 @@ class CutState : KnightState
 		{
 			knight.state = KnightStates::normal;
 			return false;
-
 		}
 
 		this.Tag("prevent crouch");
@@ -1434,7 +1456,8 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.Tag("splash ray cast");
 					}
 				}
-				else if (bombType == 4)
+				// reserved slot for future
+				/*else if (bombType == 4)
 				{
 					CBlob @blob = server_CreateBlob("booster", this.getTeamNum(), this.getPosition());
 					if (blob !is null)
@@ -1448,7 +1471,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.set_string("custom_explosion_sound", "/GlassBreak2");
 						blob.set_u8("custom_hitter", Hitters::water);
 					}
-				}
+				}*/
 			}
 		}
 		SetFirstAvailableBomb(this);
@@ -1959,18 +1982,14 @@ void Callback_PickBomb(CBitStream@ params)
 	blob.SendCommand(blob.getCommandID("pick " + matname));
 }
 
-string icons_file_name;
-
 // bomb pick menu
 void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 {
-	icons_file_name = isAnyHoliday() ? getHolidayVersionFileName("KnightIcons") : "KnightIcons.png";
-
-	AddIconToken("$Bomb$", icons_file_name, Vec2f(16, 32), 0, this.getTeamNum());
-	AddIconToken("$WaterBomb$", icons_file_name, Vec2f(16, 32), 2, this.getTeamNum());
+	AddIconToken("$Bomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 0, this.getTeamNum());
+	AddIconToken("$WaterBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 2, this.getTeamNum());
 	AddIconToken("$StickyBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
 	AddIconToken("$IceBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 6, this.getTeamNum());
-	AddIconToken("$Booster$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
+	//AddIconToken("$Booster$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
 
 	if (bombTypeNames.length == 0)
 	{
