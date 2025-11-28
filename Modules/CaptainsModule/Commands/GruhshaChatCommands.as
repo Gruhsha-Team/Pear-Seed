@@ -22,4 +22,6 @@ void RegisterGruhshaChatCommands(ChatCommandManager@ manager)
 	manager.RegisterCommand(UpdateMats());
 	manager.RegisterCommand(TeamRandomizer());
 	manager.RegisterCommand(BrokeResupplies());
+	manager.RegisterCommand(RememberTime());
+	manager.RegisterCommand(BindingsMenu());
 }

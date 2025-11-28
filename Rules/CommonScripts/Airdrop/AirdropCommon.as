@@ -7,27 +7,89 @@ const string PURSE = "coins_carried";
 
 enum                Index
 {
-	FUMOKEG = 0,
+	MAT_WATERARROWS = 0,
+	MAT_FIREARROWS,
+    MAT_BLOCKARROWS,
+    MAT_STONEBLOCKARROWS,
+	MAT_WOOD,
+	MAT_STONE,
+	MAT_GOLD,
+	DRILL,
+	MAT_BOMBS,
+	MAT_WATERBOMBS,
+    MAT_STICKYBOMBS,
+    SATCHEL,
+	MINE,
+	FOOD,
+	PEAR,
 	BISON
 };
 
 const string[]      NAME =
 {
-	"fumokeg",
+	"mat_waterarrows",
+	"mat_firearrows",
+    "mat_blockarrows",
+    "mat_stoneblockarrows",
+	"mat_wood",
+	"mat_stone",
+	"mat_gold",
+	"drill",
+	"mat_bombs",
+	"mat_waterbombs",
+    "mat_stickybombs",
+    "satchel",
+	"mine",
+	"food",
+	"pear",
 	"bison"
 };
 
 const u8[]          WEIGHT =
 {
-	100,                     // mat_waterarrows
-	0
+	30,                     // mat_waterarrows
+	35,                     // mat_firearrows
+	25,                     // mat_blockarrows
+    15,                     // mat_stoneblockarrows
+	50,                     // mat_wood
+	45,                     // mat_stone
+	5,                      // mat_gold
+	45,                     // drill
+	55,                     // mat_bombs
+	35,                     // mat_waterbombs
+    20,                     // mat_stickybombs
+    30,                     // satchel
+	25,                     // mine
+	30,                     // food
+	40,                     // pear
+	5                       // bison
 };
 
 // pre-set 'CLASS' arrays
 // ━━━━━━━━━━━━━━━━━
 const u8[]          INDEX_AIRDROP =
 {
-	FUMOKEG,
+    // Archer items
+	MAT_WATERARROWS,
+	MAT_FIREARROWS,
+    MAT_BLOCKARROWS,
+    MAT_STONEBLOCKARROWS,
+    // Knight items
+    MAT_BOMBS,
+	MAT_WATERBOMBS,
+    MAT_STICKYBOMBS,
+    SATCHEL,
+	MINE,
+    // Tools
+    DRILL,
+    // Mats
+    MAT_WOOD,
+	MAT_STONE,
+	MAT_GOLD,
+    // Other
+    FOOD,
+    PEAR,
+    // Trolling
     BISON
 };
 

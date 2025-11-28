@@ -84,7 +84,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 
 		this.AddForce(Vec2f(0, -800));
 
-		addLoot(this, INDEX_AIRDROP, 1, 0);
+		addLoot(this, INDEX_AIRDROP, 4, 0);
 
 		server_CreateLoot(this, this.getPosition(), caller.getTeamNum());
 

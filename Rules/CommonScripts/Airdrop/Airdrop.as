@@ -6,7 +6,7 @@
 */
 #define SERVER_ONLY
 
-const int airdrop_interval = getTicksASecond() * 60 * 65; // 1 hour 5 minutes
+const int airdrop_interval = getTicksASecond() * 60 * 5; // 5 minutes
 const int crates_to_spawn = 1;
 
 void onInit(CRules@ this) {

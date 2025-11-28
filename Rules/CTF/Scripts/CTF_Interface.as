@@ -187,6 +187,22 @@ void onRender(CRules@ this)
 			GUI::DrawText(spawn_message , Vec2f(getScreenWidth() / 2 - 70, getScreenHeight() / 3 + Maths::Sin(getGameTime() / 3.0f) * 5.0f), SColor(255, 255, 255, 55));
 		}
 	}
+
+	// main panel
+	//GUI::DrawIcon("CTF_Panel.png", 0, Vec2f(76,122), Vec2f(0, 145));
+	GUI::DrawIcon("CTF_NewInterface.png", 0, Vec2f(155,36), Vec2f(5, 5));
+
+	Vec2f state_icon_pos = Vec2f(5, 4);
+
+	// state icons for HUD
+	if (!this.hasTag("sudden death")) {
+		if (this.get_bool("is_warmup"))
+			GUI::DrawIcon("CTF_States.png", 0, Vec2f(32, 32), state_icon_pos, 1.0f);
+		else if (this.isMatchRunning() || this.getCurrentState() == GAME)
+			GUI::DrawIcon("CTF_States.png", 1, Vec2f(32, 32), state_icon_pos, 1.0f);
+		else if (this.getCurrentState() == GAME_OVER)
+			GUI::DrawIcon("CTF_States.png", 3, Vec2f(32, 32), state_icon_pos, 1.0f);
+	}
 }
 
 void onNewPlayerJoin( CRules@ this, CPlayer@ player )

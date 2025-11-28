@@ -633,11 +633,76 @@ class BrokeResupplies : ChatCommand
 	{
 		CRules@ rules = getRules();
 
-		rules.Tag("fucked resupplies");
-
-		if (rules.hasTag("fucked resupplies"))
+		if (!rules.hasTag("fucked resupplies")) {
+			rules.Tag("fucked resupplies");
 			server_AddToChat("Infinity resupplies is on!", SColor(0xff474ac6));
-		else
+		} else {
+			rules.Untag("fucked resupplies");
 			server_AddToChat("Infinity resupplies is off!", SColor(0xff474ac6));
+		}
+	}
+}
+
+class RememberTime : ChatCommand
+{
+	RememberTime()
+	{
+		super("reusetime", "Toggle for save day time of previous match for next matches");
+	}
+
+	bool canPlayerExecute(CPlayer@ player)
+	{
+		return (
+			ChatCommand::canPlayerExecute(player) &&
+			!ChatCommands::getManager().whitelistedClasses.empty()
+		);
+	}
+
+	void Execute(string[] args, CPlayer@ player)
+	{
+		CRules@ rules = getRules();
+
+		if (!rules.hasTag("reuse previous day time")) {
+			rules.Tag("reuse previous day time");
+			rules.set_f32("old day time", getMap().getDayTime());
+			server_AddToChat("Reusing previous day time", SColor(0xff474ac6));
+		} else {
+			rules.Untag("reuse previous day time");
+			server_AddToChat("Using default day time", SColor(0xff474ac6));
+		}
+	}
+}
+
+class BindingsMenu : ChatCommand
+{
+	BindingsMenu()
+	{
+		super("bindings", "Show mod bindings menu");
+	}
+
+	bool canPlayerExecute(CPlayer@ player)
+	{
+		return (
+			ChatCommand::canPlayerExecute(player) &&
+			!ChatCommands::getManager().whitelistedClasses.empty()
+		);
+	}
+
+	void Execute(string[] args, CPlayer@ player)
+	{
+		CRules@ rules = getRules();
+
+		if (player.isMyPlayer())
+		{
+			rules.set_bool("bindings_open", !rules.get_bool("bindings_open"));
+
+			ResetRuleBindings();
+			LoadFileBindings();
+
+			ResetRuleSettings();
+			LoadFileSettings();
+		}
+
+		//printf("Boolean no_class_change_on_shop is " + rules.get_bool("no_class_change_on_shop"));
 	}
 }
