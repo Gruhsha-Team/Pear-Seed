@@ -132,7 +132,7 @@ void onRender(CRules@ this)
 			while (!serialised_team_hud.isBufferEnd())
 			{
 				CTF_HUD hud(serialised_team_hud);
-				Vec2f topLeft = Vec2f(8, 8 + 64 * hud.team_num);
+				Vec2f topLeft = Vec2f(8, 80 + 64 * hud.team_num);
 
 				int step = 0;
 				Vec2f startFlags = Vec2f(0, 8);
