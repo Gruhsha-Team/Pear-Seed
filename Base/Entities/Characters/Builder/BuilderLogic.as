@@ -3,6 +3,7 @@
 #include "Hitters.as";
 #include "BuilderCommon.as";
 #include "ActivationThrowCommon.as"
+#include "BombThrowingCommon.as";
 #include "RunnerCommon.as";
 #include "Help.as";
 #include "Requirements.as"
@@ -132,7 +133,7 @@ void onTick(CBlob@ this)
 						const string itemname = item.getName();
 						if (!holding && bombTypeNames[bombType] == itemname)
 						{
-							if (bombType >= 4)
+							if (bombType >= 5)
 							{
 								this.server_Pickup(item);
 								client_SendThrowOrActivateCommand(this);
@@ -395,7 +396,7 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 	AddIconToken("$WaterBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 2, this.getTeamNum());
 	AddIconToken("$StickyBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
 	AddIconToken("$IceBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 6, this.getTeamNum());
-	//AddIconToken("$Booster$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
+	AddIconToken("$Jarate$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
 
 	if (bombTypeNames.length == 0)
 	{
@@ -1159,10 +1160,9 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.Tag("splash ray cast");
 					}
 				}
-				// reserved slot for future
-				/*else if (bombType == 4)
+				else if (bombType == 4)
 				{
-					CBlob @blob = server_CreateBlob("booster", this.getTeamNum(), this.getPosition());
+					CBlob @blob = server_CreateBlob("jarate", this.getTeamNum(), this.getPosition());
 					if (blob !is null)
 					{
 						TakeItem(this, bombTypeName);
@@ -1173,8 +1173,9 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.set_bool("map_damage_raycast", false);
 						blob.set_string("custom_explosion_sound", "/GlassBreak2");
 						blob.set_u8("custom_hitter", Hitters::water);
+						blob.Tag("splash ray cast");
 					}
-				}*/
+				}
 			}
 		}
 		SetFirstAvailableBomb(this);

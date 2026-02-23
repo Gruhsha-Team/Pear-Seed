@@ -40,15 +40,10 @@ bool UpdateBomb(CBlob@ this)
 		SColor lightColor;
 		const u8 hitter = this.get_u8("custom_hitter");
 
-		if (hitter == Hitters::water || this.getConfig() == "icebomb" || this.getConfig() == "booster")
+		if (hitter == Hitters::water || this.getConfig() == "icebomb" || this.getConfig() == "jarate")
 		{
-			if (this.getConfig() != "booster") {
-				this.getSprite().SetEmitSound("WaterSparkle.ogg");
-				this.getSprite().SetEmitSoundPaused(false);
-			} else {
-				this.getSprite().SetEmitSound("compressedair.ogg");
-				this.getSprite().SetEmitSoundPaused(false);
-			}
+			this.getSprite().SetEmitSound("WaterSparkle.ogg");
+			this.getSprite().SetEmitSoundPaused(false);
 
 			if (this.getConfig() == "waterbomb") {
 			#ifdef STAGING
@@ -57,8 +52,6 @@ bool UpdateBomb(CBlob@ this)
 				else 
 			#endif
 				lightColor = SColor(255, 44, 175, 222);
-			} else if (this.getConfig() == "booster") {
-				this.SetLight(false);
 			} else {
 				lightColor = SColor(255, 44, 175, 222);
 			}
@@ -71,7 +64,7 @@ bool UpdateBomb(CBlob@ this)
 			this.SetLightColor(lightColor);
 		}
 
-		if (XORRandom(2) == 0 && this.getConfig() != "booster")
+		if (XORRandom(2) == 0)
 		{
 			sparks(this.getPosition(), this.getAngleDegrees(), 3.5f + (XORRandom(10) / 5.0f), lightColor);
 		}

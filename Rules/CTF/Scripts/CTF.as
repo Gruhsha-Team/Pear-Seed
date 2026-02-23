@@ -765,9 +765,6 @@ void onRestart(CRules@ this)
 void onInit(CRules@ this)
 {
 	Reset(this);
-
-	const int restart_after = (!this.hasTag("tutorial") ? 30 : 5) * 30;
-	this.set_s32("restart_rules_after_game_time", restart_after);
 }
 
 // had to add it here for tutorial cause something didnt work in the tutorial script

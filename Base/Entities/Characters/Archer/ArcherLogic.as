@@ -2,6 +2,7 @@
 
 #include "ArcherCommon.as"
 #include "ActivationThrowCommon.as"
+#include "BombThrowingCommon.as";
 #include "KnockedCommon.as"
 #include "Hitters.as"
 #include "Requirements.as"
@@ -12,6 +13,8 @@
 #include "RedBarrierCommon.as";
 #include "StandardControlsCommon.as";
 #include "BindingsCommon.as"
+
+const int BACKSTAB_RADIUS = 9.0f;
 
 const int FLETCH_COOLDOWN = 45;
 const int PICKUP_COOLDOWN = 15;
@@ -111,21 +114,18 @@ void ManageGrapple(CBlob@ this, ArcherInfo@ archer)
 		&& !archer.grappling
 		&& this.isOnGround()
 		&& !this.isKeyPressed(key_action1)
-		&& !this.wasKeyPressed(key_action1))
-	{
+		&& !this.wasKeyPressed(key_action1)) {
 		Vec2f aimpos = this.getAimPos();
+
 		CBlob@[] blobs;
-		if(getMap().getBlobsInRadius(aimpos, 8.0f, blobs))
-		{
-			for (int i = 0; i < blobs.size(); i++)
-			{
+		if (getMap().getBlobsInRadius(aimpos, 8.0f, blobs)) {
+			for (int i = 0; i < blobs.size(); i++) {
 				CBlob@ target = blobs[i];
 				string name = target.getName();
 
 				if (target !is null
 					&& (target.hasTag("tree") || name == "log" || name == "mat_wood")
-					&& Vec2f(target.getPosition() - pos).Length() <= 24.0f)
-				{
+					&& Vec2f(target.getPosition() - pos).Length() <= 24.0f) {
 					this.set_u16("stabHitID",  target.getNetworkID());
 					charge_state = ArcherParams::stabbing;
 					archer.charge_time = 0;
@@ -135,7 +135,32 @@ void ManageGrapple(CBlob@ this, ArcherInfo@ archer)
 					break;
 				}
 			}
+		}
 
+		// backstab knocked players
+		CBlob@[] overlapping;
+		if (getMap().getBlobsInRadius(this.getPosition(), BACKSTAB_RADIUS, overlapping)) {
+			for (int i = 0; i < overlapping.length; ++i) {
+				// dont count our player
+				if (overlapping[i].isMyPlayer()) continue;
+				// dont count our teammates
+				if (overlapping[i].getTeamNum() == this.getTeamNum()) continue;
+
+				CBlob@ player_target = overlapping[i];
+				string name = player_target.getConfig();
+
+				if (player_target !is null
+						&& (name == "knight" || name == "archer" || name == "builder" ||
+						name == "crusher" || name == "rogue" || name == "flail") && isKnocked(player_target)) {
+						this.set_u16("backstabHitID",  player_target.getNetworkID());
+						charge_state = ArcherParams::stabbing;
+						archer.charge_time = 0;
+						archer.stab_delay = 0;
+						sprite.SetEmitSoundPaused(true);
+						archer.charge_state = charge_state;
+					break;
+				}
+			}
 		}
 	}
 
@@ -366,10 +391,7 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 	if (isServer() && !ismyplayer)
 	{
 		CPlayer@ p = this.getPlayer();
-		if (p !is null)
-		{
-			responsible = p.isBot();
-		}
+		responsible = p is null || p.isBot();
 	}
 	//
 	CSprite@ sprite = this.getSprite();
@@ -445,7 +467,10 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 		          !this.isKeyPressed(key_action1) &&
 		          this.wasKeyPressed(key_action1)))
 		{
-			ClientFire(this, charge_time, charge_state);
+			if (responsible)
+			{
+				ClientFire(this, charge_time, charge_state);
+			}
 
 			charge_state = ArcherParams::legolas_charging;
 			charge_time = ArcherParams::shoot_period - ArcherParams::legolas_charge_time;
@@ -603,43 +628,46 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 		{
 			if (charge_state < ArcherParams::fired)
 			{
-				ClientFire(this, charge_time, charge_state);
+				if (responsible)
+				{
+					ClientFire(this, charge_time, charge_state);
+				}
 				charge_time = ArcherParams::fired_time;
 				charge_state = ArcherParams::fired;
 			}
 			else if(charge_state == ArcherParams::stabbing)
 			{
 				archer.stab_delay++;
-				if (archer.stab_delay == STAB_DELAY)
-				{
+				if (archer.stab_delay == STAB_DELAY) {
 					// hit tree and get an arrow
 					CBlob@ stabTarget = getBlobByNetworkID(this.get_u16("stabHitID"));
-					if (stabTarget !is null)
-					{
-						if (stabTarget.getName() == "mat_wood")
-						{
+					if (stabTarget !is null) {
+						if (stabTarget.getName() == "mat_wood") {
 							u16 quantity = stabTarget.getQuantity();
-							if (quantity > 4)
-							{
+							if (quantity > 4) {
 								stabTarget.server_SetQuantity(quantity-4);
-							}
-							else
-							{
+							} else {
 								stabTarget.server_Die();
-
 							}
+
 							fletchArrow(this);
-						}
-						else
-						{
+						} else {
 							this.server_Hit(stabTarget, stabTarget.getPosition(), Vec2f_zero, 0.25f,  Hitters::stab);
-
 						}
-
 					}
-				}
-				else if(archer.stab_delay >= STAB_TIME)
-				{
+
+					// backstab knocked player
+					CBlob@ backstabTarget = getBlobByNetworkID(this.get_u16("backstabHitID"));
+					if (backstabTarget !is null && isKnocked(backstabTarget) && !backstabTarget.hasTag("dead")) {
+						// HACK: dont gib the players in one backstab
+						int damaga = 6.0f;
+						if (backstabTarget.getConfig() == "builder" || backstabTarget.getConfig() == "rogue") damaga = 3.0f;
+						else if (backstabTarget.getConfig() == "flail") damaga = 8.0f;
+
+						this.server_Hit(backstabTarget, backstabTarget.getPosition(), Vec2f_zero, damaga,  Hitters::stab);
+						this.getSprite().PlaySound("backstab.ogg", 2.0);
+					}
+				} else if(archer.stab_delay >= STAB_TIME) {
 					charge_state = ArcherParams::not_aiming;
 				}
 			}
@@ -744,7 +772,7 @@ void ManageBow(CBlob@ this, ArcherInfo@ archer, RunnerMoveVars@ moveVars)
 						const string itemname = item.getName();
 						if (!holding && bombTypeNames[bombType] == itemname)
 						{
-							if (bombType >= 4)
+							if (bombType >= 5)
 							{
 								this.server_Pickup(item);
 								client_SendThrowOrActivateCommand(this);
@@ -998,13 +1026,18 @@ bool canSend(CBlob@ this)
 void ClientFire(CBlob@ this, s8 charge_time, u8 charge_state)
 {
 	//time to fire!
-	if (canSend(this))  // client-logic
+	if (!isServer())  // client-logic
 	{
 		CBitStream params;
 		params.write_s8(charge_time);
 		params.write_u8(charge_state);
 
 		this.SendCommand(this.getCommandID("request shoot"), params);
+	}
+	
+	if (isServer())
+	{
+		ShootArrow(this, charge_time, charge_state);
 	}
 }
 
@@ -1016,7 +1049,7 @@ CBlob@ getPickupArrow(CBlob@ this)
 		for (uint i = 0; i < blobsInRadius.length; i++)
 		{
 			CBlob @b = blobsInRadius[i];
-			if (b.getName() == "arrow")
+			if (b.getName() == "arrow" && b.getShape().isStatic())
 			{
 				return b;
 			}
@@ -1160,7 +1193,7 @@ void onSwitch(CBitStream@ params)
 	}
 }
 
-void ShootArrow(CBlob@ this)
+void ShootArrow(CBlob@ this, s8 charge_time, u8 charge_state)
 {
 	ArcherInfo@ archer;
 	if (!this.get("archerInfo", @archer))
@@ -1168,14 +1201,14 @@ void ShootArrow(CBlob@ this)
 		return;
 	}
 
+	archer.charge_time = charge_time;
+	archer.charge_state = charge_state;
+
 	u8 arrow_type = archer.arrow_type;
 
 	if (arrow_type >= arrowTypeNames.length) return;
 
 	if (!hasArrows(this, arrow_type)) return; 
-	
-	s8 charge_time = archer.charge_time;
-	u8 charge_state = archer.charge_state;
 
 	f32 arrowspeed;
 
@@ -1309,13 +1342,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 		u8 charge_state;
 		if (!params.saferead_u8(charge_state)) { return; }
 
-		ArcherInfo@ archer;
-		if (!this.get("archerInfo", @archer)) { return; }
-
-		archer.charge_time = charge_time;
-		archer.charge_state = charge_state;
-
-		ShootArrow(this);
+		ShootArrow(this, charge_time, charge_state);
 	}
 	else if (cmd == this.getCommandID("arrow sync") && isServer())
 	{
@@ -1333,19 +1360,13 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 
 		if (arrow !is null/* || spriteArrow*/)
 		{
-			if (arrow !is null)
-			{
-				ArcherInfo@ archer;
-				if (!this.get("archerInfo", @archer))
-				{
-					return;
-				}
-				const u8 arrowType = archer.arrow_type;
-				if (arrowType == ArrowType::bomb)
-				{
-					arrow.setPosition(this.getPosition());
-					return;
-				}
+			ArcherInfo@ archer;
+			if (!this.get("archerInfo", @archer)) { return; }
+
+			const u8 arrowType = archer.arrow_type;
+			if (arrowType == ArrowType::bomb) {
+				arrow.setPosition(this.getPosition());
+				return;
 			}
 
 			CBlob@ mat_arrows = server_CreateBlobNoInit('mat_arrows');
@@ -1516,10 +1537,9 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.Tag("splash ray cast");
 					}
 				}
-				// reserved slot for future
-				/*else if (bombType == 4)
+				else if (bombType == 4)
 				{
-					CBlob @blob = server_CreateBlob("booster", this.getTeamNum(), this.getPosition());
+					CBlob @blob = server_CreateBlob("jarate", this.getTeamNum(), this.getPosition());
 					if (blob !is null)
 					{
 						TakeItem(this, bombTypeName);
@@ -1530,8 +1550,9 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 						blob.set_bool("map_damage_raycast", false);
 						blob.set_string("custom_explosion_sound", "/GlassBreak2");
 						blob.set_u8("custom_hitter", Hitters::water);
+						blob.Tag("splash ray cast");
 					}
-				}*/
+				}
 			}
 		}
 		SetFirstAvailableBomb(this);
@@ -1646,7 +1667,7 @@ void onCreateInventoryMenu(CBlob@ this, CBlob@ forBlob, CGridMenu @gridmenu)
 	AddIconToken("$WaterBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 2, this.getTeamNum());
 	AddIconToken("$StickyBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 5, this.getTeamNum());
 	AddIconToken("$IceBomb$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 6, this.getTeamNum());
-	//AddIconToken("$Booster$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
+	AddIconToken("$Jarate$", "Entities/Characters/Knight/KnightIcons.png", Vec2f(16, 32), 8, this.getTeamNum());
 	
 	if (arrowTypeNames.length == 0)
 	{
@@ -1838,9 +1859,16 @@ void onAddToInventory(CBlob@ this, CBlob@ blob)
 
 void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitBlob, u8 customData)
 {
-	if (customData == Hitters::stab)
-	{
-		fletchArrow(this);
+	CBlob@ stabTarget = getBlobByNetworkID(this.get_u16("stabHitID"));
+	if (stabTarget is null) return;
+
+	//printf("onhitblob " + hitBlob.getName());
+
+	// dont fletch arrows from players and their corpses xd
+	if (customData == Hitters::stab) {
+		if (stabTarget !is null) {
+			fletchArrow(this);
+		}
 	}
 }
 

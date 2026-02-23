@@ -10,7 +10,7 @@
 #include "pathway.as";
 
 const string iconsFilename = "Entities/Characters/Builder/BuilderIcons.png";
-const int slotsSize = 6;
+const int slotsSize = 7;
 
 void onInit(CSprite@ this)
 {
@@ -103,12 +103,10 @@ void onRender(CSprite@ this)
 	// draw coins
 
 	const int coins = player !is null ? player.getCoins() : 0;
-	DrawCoinsOnHUD(blob, coins, tl, slotsSize - 2);
+	DrawCoinsOnHUD(blob, coins, tl, slotsSize - 1);
 
 	// draw resupply icon
-
-	if (shouldRenderResupplyIndicator(blob))
-	{
+	if (shouldRenderResupplyIndicator(blob)) {
 		DrawResupplyOnHUD(blob, tl + Vec2f(8 + (slotsSize) * 40, -4));
 	}
 
@@ -143,6 +141,10 @@ void onRender(CSprite@ this)
 	selected_i = blob.get_u8("bunnie_tile");
 	
 	u8 blocks_quantity = 11;
+	
+	if (getRules().get_string("internal_game_mode") == "tavern") {
+		blocks_quantity = 2;
+	}
 
 	for (int i = 0; i < blocks_quantity; ++i)
 	{

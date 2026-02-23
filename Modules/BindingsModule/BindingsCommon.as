@@ -90,7 +90,7 @@ string[][] button_texts =
 		Names::goldenminenmb,
 		Names::icebombnmb,
 		Names::slideminenmb,
-		//Names::boosternmb,
+		"Jarate",
 		//Names::fumokegnmb,
 		"Hazelnut"
 		//Names::hazelnutnmb
@@ -217,7 +217,7 @@ string[][] button_file_names =
 		"k_icebomb",
 		"k_goldmine",
 		"k_slidemine",
-		//"k_booster",
+		"k_jarate",
 		//"k_fumokeg",
 		"k_hazelnut"
 	},
@@ -1262,7 +1262,7 @@ class ClickableButtonFour
 				if (this.m_state == ClickableButtonStates::Selected || this.m_state == ClickableButtonStates::SelectedHovered) this.m_state = ClickableButtonStates::Hovered;
 				if (this.m_state == ClickableButtonStates::Hovered || this.m_state == ClickableButtonStates::None) this.m_state = ClickableButtonStates::SelectedHovered;
 
-				Sound::Play("buttonclick.ogg");
+				Sound::Play("nh_button3.ogg");
 
 				getRules().set_bool("bindings_open", false);
 
@@ -1596,7 +1596,7 @@ class ClickableButtonTwo
 				if (this.m_state == ClickableButtonStates::Selected || this.m_state == ClickableButtonStates::SelectedHovered) this.m_state = ClickableButtonStates::Hovered;
 				if (this.m_state == ClickableButtonStates::Hovered || this.m_state == ClickableButtonStates::None) this.m_state = ClickableButtonStates::SelectedHovered;
 
-				Sound::Play("buttonclick.ogg");
+				Sound::Play("nh_button2.ogg");
 
 				if (!deselect_instantly)
 				{

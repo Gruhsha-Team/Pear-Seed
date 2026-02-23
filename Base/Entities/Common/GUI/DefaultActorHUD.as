@@ -85,6 +85,8 @@ void onRender(CSprite@ this)
 
 	if (blob is null)
 		return;
+	
+	CPlayer@ player = blob.getPlayer();
 
 	Vec2f dim = Vec2f(402, 64);
 	Vec2f ul(getHUDX() - dim.x / 2.0f, getHUDY() - dim.y + 12);
@@ -94,7 +96,7 @@ void onRender(CSprite@ this)
 	u8 bar_width_in_slots = blob.get_u8("gui_HUD_slots_width");
 	f32 width = bar_width_in_slots * 40.0f;
 
-	// additional space for drawing resupply icon
+	// additional space for drawing resupply and coin icons
 	u32 offset = (shouldRenderResupplyIndicator(blob) ? 80 : 40);
 	u32 width_offset = (shouldRenderResupplyIndicator(blob) ? 1 * 40.0f : 0);
 

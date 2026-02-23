@@ -10,22 +10,20 @@ void onInit(CBlob@ this)
 {
 	this.set_u16("explosive_parent", 0);
 	this.getShape().getConsts().net_threshold_multiplier = 2.0f;
-	if (this.getConfig() == "waterbomb")
-	{
+
+	if (this.getConfig() == "waterbomb") {
+		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
+	} else if (this.getConfig() == "icebomb") {
+		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
+	} else if (this.getConfig() == "elasticbomb") {
+		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
+		this.getShape().setElasticity(1.0);
+	} else if (this.getConfig() == "jarate") {
+		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
+	} else {
 		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
 	}
-	else if (this.getConfig() == "icebomb")
-	{
-		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
-	}
-	else if (this.getConfig() == "booster")
-	{
-		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
-	}
-	else
-	{
-		SetupBomb(this, bomb_fuse, 48.0f, 3.0f, 24.0f, 0.5f, true);
-	}
+
 	this.Tag("activated"); // make it lit already and throwable
 	this.SetMapEdgeFlags(CBlob::map_collide_left | CBlob::map_collide_right);
 }
@@ -100,7 +98,7 @@ bool doesCollideWithBlob(CBlob@ this, CBlob@ blob)
 		const u8 hitter = this.get_u8("custom_hitter");
 
 		//all water bombs collide with enemies
-		if (hitter == Hitters::water || this.getConfig() == "icebomb" || this.getConfig() == "booster")
+		if (hitter == Hitters::water || this.getConfig() == "icebomb" || this.getConfig() == "jarate")
 			return blob.getTeamNum() != this.getTeamNum();
 
 		//collide with shielded enemies

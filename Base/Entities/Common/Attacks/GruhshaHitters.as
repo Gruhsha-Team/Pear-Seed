@@ -8,7 +8,7 @@ namespace GruhshaHitters {
 		golden_mine = 52,
 		sticky_bomb = 53,
 		ice = 54,
-		booster = 55,
+		booster = 55,			// unused, dont touch
 		hazelnut_shell = 56,
 		fumo_keg = 57,
 

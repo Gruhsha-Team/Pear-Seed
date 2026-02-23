@@ -176,7 +176,7 @@ void drawSettingsButton()
 		{
 			if (controls.mousePressed1) {
 				if (!mouseWasPressed1) {
-					Sound::Play("ButtonClick.ogg");
+					Sound::Play("nh_button1.ogg");
 					getRules().set_bool("bindings_open", true);
 					mouseWasPressed1 = true;
 				}
