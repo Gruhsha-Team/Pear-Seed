@@ -79,10 +79,10 @@ void onInit(CBlob@ this)
 		AddRequirement(s.requirements, "no more", "slidemine", "Slide Mine", 3);
 		//AddRequirement(s.requirements, "buy delay", "slidemine", "Slide Mine", 30);
 	}
-	/*{ Not need on Pear Seed
-		ShopItem@ s = addShopItem(this, Names::booster, "$booster$", "mat_boosters", Descriptions::boosterdesc, true);
-		AddRequirement(s.requirements, "coin", "", "Coins", 30);
-	}*/
+	{
+		ShopItem@ s = addShopItem(this, "Jarate", "$jarate$", "mat_jarate", "Coated enemies take mini-crits", true);
+		AddRequirement(s.requirements, "coin", "", "Coins", 70);
+	}
 	/*{ No-no-no, fumo keg is exclusive item for Gruhsha CTF
 		ShopItem@ s = addShopItem(this, Names::fumokegname, getTeamIcon("fumokeg", "FumoKegIcon.png", team_num, Vec2f(16, 16), 0), "fumokeg", Descriptions::fumokegdesc, true);
 		AddRequirement(s.requirements, "coin", "", "Coins", CTFCosts::fumokeg);
@@ -94,6 +94,10 @@ void onInit(CBlob@ this)
 		AddRequirement(s.requirements, "coin", "", "Coins", 200);
 		AddRequirement(s.requirements, "no more", "hazelnut", "Hazelnut", 2);
 		//AddRequirement(s.requirements, "buy delay", "hazelnut", "Hazelnut", 60);
+	}
+	{
+		ShopItem@ s = addShopItem(this, "Knight Shield", "$defenceshield$", "defenceshield", "Protects from enemies but short-lived", true);
+		AddRequirement(s.requirements, "coin", "", "Coins", 50);
 	}
 }
 

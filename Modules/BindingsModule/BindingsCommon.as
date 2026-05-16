@@ -71,7 +71,8 @@ string[][] button_texts =
 		Names::showinvkey,
 		"Toggle Camera Mode",
 		"Voiceline Wheel",
-		"Dash"
+		"Dash",
+		"Take Shield (FOR ITEM)"
 	},
 	{
 		"Go away"								// TECHNICAL LINE DONT TOUCH PLEASE
@@ -91,8 +92,9 @@ string[][] button_texts =
 		Names::icebombnmb,
 		Names::slideminenmb,
 		"Jarate",
-		//Names::fumokegnmb,
-		"Hazelnut"
+		Names::fumokegnmb,
+		"Hazelnut",
+		"Knight Shield"
 		//Names::hazelnutnmb
 	},
 	{							// ARCHER SHOP
@@ -198,7 +200,8 @@ string[][] button_file_names =
 		"showinv",
 		"cameramode",
 		"voicelinewheel",
-		"dash_keybind"
+		"dash_keybind",
+		"take_shield_item"
 	},
 	{
 		"go away"								// TECHNICAL LINE DONT TOUCH PLEASE
@@ -218,8 +221,9 @@ string[][] button_file_names =
 		"k_goldmine",
 		"k_slidemine",
 		"k_jarate",
-		//"k_fumokeg",
-		"k_hazelnut"
+		"k_fumokeg",
+		"k_hazelnut",
+		"k_kshield"
 	},
 	{
 		"a_arrows",

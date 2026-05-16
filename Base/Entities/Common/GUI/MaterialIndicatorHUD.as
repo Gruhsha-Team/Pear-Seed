@@ -39,7 +39,7 @@ void DrawPersonalMats()
 
 		SColor dcolor = blue.color;
 
-		if (p.getTeamNum() == 1)
+		if (team == 1)
 		{
 			dcolor = red.color;
 		}
@@ -51,7 +51,7 @@ void DrawPersonalMats()
 		GUI::DrawIcon("mats_ui.png", ul2 + Vec2f(0,-8));
 
 		// editor mode indicator
-		if (getRules().hasTag("editor is active")) {
+		if (getRules().hasTag("editor is active") && (p.isRCON() || p.isMod())) {
 			if (editor_mode) {
 				GUI::DrawIcon("EditorMode_Panel.png", 0, Vec2f(48, 30), ul3 + Vec2f(0,-8));
 			} else {

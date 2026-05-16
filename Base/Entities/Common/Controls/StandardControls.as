@@ -19,6 +19,7 @@ void onInit(CBlob@ this)
 	this.addCommandID("detach");
 	this.addCommandID("switch");
 	this.addCommandID("drill command");
+	this.addCommandID("take shield command");
 
 	this.getCurrentScript().runFlags |= Script::tick_myplayer;
 	this.getCurrentScript().removeIfTag = "dead";
@@ -151,6 +152,43 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream @params)
 			}
 		}
 	}
+	else if (cmd == this.getCommandID("take shield command"))
+	{
+		CBlob@ carried = this.getCarriedBlob();
+
+		CInventory@ inventory = this.getInventory();
+
+		CPlayer@ callerp = getNet().getActiveCommandPlayer();
+		if (callerp is null) return;
+
+		CBlob@ caller = callerp.getBlob();
+		if (caller is null) return;
+
+		if (caller !is this) return;
+
+		CBlob@ ourburga = null;
+
+		if (carried !is null && carried.getName() == "defenceshield") {
+			this.server_PutInInventory(carried);
+			return;
+		}
+
+		for (int i = 0; i < inventory.getItemsCount(); ++i) {
+			if (inventory.getItem(i) !is null) {
+				if (inventory.getItem(i).getName() == "defenceshield") {
+					@ourburga = inventory.getItem(i);
+					this.server_PutOutInventory(ourburga);
+
+					if (carried !is null) {
+						this.server_PutInInventory(carried);
+					}
+
+					this.server_Pickup(ourburga);
+					break;
+				}
+			}
+		}
+	}
 }
 
 bool putInHeld(CBlob@ owner)
@@ -265,6 +303,10 @@ void onTick(CBlob@ this)
 	// drill thing
 	if (b_KeyJustPressed("take_out_drill")) {
 		this.SendCommand(this.getCommandID("drill command"));
+	}
+
+	if (b_KeyJustPressed("take_shield_item")) {
+		this.SendCommand(this.getCommandID("take shield command"));
 	}
 
 	// camera mode toggle

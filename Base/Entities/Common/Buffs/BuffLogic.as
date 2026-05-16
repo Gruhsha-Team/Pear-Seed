@@ -1,14 +1,13 @@
 // BuffLogic.as
 
+#include "BuffCommon.as";
 #include "FireCommon.as";
 #include "JarateHitCommon.as";
 #include "MakeBangEffect.as";
-
-const int icy_state_time = getTicksASecond() * 10; // 10 seconds
-const int peed_state_time = getTicksASecond() * 5; // 5 seconds
+#include "RunnerCommon.as"
 
 void onInit(CBlob@ this) {
-	this.set_s32("icy time", icy_state_time);
+	//this.set_s32("icy time", icy_state_time);
 	this.set_s32("peed time", peed_state_time);
 }
 
@@ -22,14 +21,17 @@ void onTick(CBlob@ this) {
 
         //printf("current time " + this.get_s32("icy time"));
 
-        // Imitation of slow down via player's mass increasing
-        this.SetMass(140.0);
+        // set move vars
+        RunnerMoveVars@ moveVars;
+        if (!this.get("moveVars", @moveVars)) {
+            return;
+        }
+
+        moveVars.walkFactor *= 0.5f;
+        moveVars.jumpFactor *= 0.5f;
     } else if (this.hasTag("icy") && this.get_s32("icy time") <= 0) {
         // Reset timer
-		this.set_s32("icy time", icy_state_time);
-
-        // Restore player's normal mass
-        this.SetMass(68.0);
+		//this.set_s32("icy time", icy_state_time);
 
         // Untag player, he's warmed up
         this.Untag("icy");

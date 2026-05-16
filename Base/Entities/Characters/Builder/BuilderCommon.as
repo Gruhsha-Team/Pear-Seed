@@ -207,5 +207,3 @@ void ClearCarriedBlock(CBlob@ this)
 		carried.server_Die();
 	}
 }
-
-const f32 SHIELD_BLOCK_ANGLE = 175.0f;

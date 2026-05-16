@@ -44,6 +44,9 @@ const f32 max_heatbar_view_range = 65;
 
 const bool show_heatbar_when_idle = false;
 
+// enable that bool, if you using DrillShieldLogic.as and DrillShieldHit.as in blobs
+const bool shield_hp_bar = false;
+
 const string required_class = "builder";
 
 void onInit(CSprite@ this)
@@ -635,7 +638,7 @@ void onRender(CSprite@ this)
 	}
 
 	// drill shield HP indicator
-	if (holderBlob !is null && holderBlob.getConfig() == "builder") {
+	if (holderBlob !is null && (holderBlob.getConfig() == "builder" || holderBlob.getConfig() == "archer") && shield_hp_bar) {
 		if ((hover && inRange) || (holder !is null && holder.isLocal()))
 		{
 			int transparency = 255;

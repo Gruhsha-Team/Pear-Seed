@@ -203,8 +203,13 @@ void onCollision( CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f poin
 	if (blob !is null && blob.getConfig() == "builder") {
 		CBlob@ carried = blob.getCarriedBlob();
 
-		if (carried !is null && carried.getName() == "drill" && !carried.hasTag("no shielding")) {
-			ShieldVars@ shieldVars = getShieldVars(carried);
+		if (carried !is null &&
+			(
+				(carried.getName() == "drill" && !carried.hasTag("no shielding")) ||
+				(carried.getName() == "defenceshield" && blob.hasTag("shielded"))
+			)
+		) {
+			ShieldVars@ shieldVars = getShieldVars(blob);
 			if (shieldVars is null) return;
 
 			Vec2f tileVec = this.getVelocity();
@@ -216,8 +221,13 @@ void onCollision( CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f poin
 			if (dot < -0.71) {
 				Sound::Play("Entities/Characters/Knight/ShieldHit.ogg", this.getPosition());
 				sparks(this.getPosition(), shieldVec.Angle() - 45.0f + XORRandom(90), 1 + XORRandom(6));
-				carried.sub_f32("shield health", 0.5f);
-				carried.Sync("shield health", true);
+				if (carried.getName() == "drill") {
+					carried.sub_f32("shield health", 0.5f);
+					carried.Sync("shield health", true);
+				} else {
+					carried.Damage(0.5f, this);
+				}
+
 				shield_hit = true;
 			}
 		}

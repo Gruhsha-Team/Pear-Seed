@@ -139,19 +139,22 @@ void ManageGrapple(CBlob@ this, ArcherInfo@ archer)
 
 		// backstab knocked players
 		CBlob@[] overlapping;
-		if (getMap().getBlobsInRadius(this.getPosition(), BACKSTAB_RADIUS, overlapping)) {
+		if (getMap().getBlobsInRadius(aimpos, BACKSTAB_RADIUS, overlapping)) {
 			for (int i = 0; i < overlapping.length; ++i) {
 				// dont count our player
 				if (overlapping[i].isMyPlayer()) continue;
 				// dont count our teammates
 				if (overlapping[i].getTeamNum() == this.getTeamNum()) continue;
+				// dont count dead blobs
+				if (overlapping[i].hasTag("dead")) continue;
 
 				CBlob@ player_target = overlapping[i];
 				string name = player_target.getConfig();
 
 				if (player_target !is null
 						&& (name == "knight" || name == "archer" || name == "builder" ||
-						name == "crusher" || name == "rogue" || name == "flail") && isKnocked(player_target)) {
+						name == "crusher" || name == "rogue" || name == "flail") && isKnocked(player_target)
+						&& Vec2f(player_target.getPosition() - pos).Length() <= 20.0f) {
 						this.set_u16("backstabHitID",  player_target.getNetworkID());
 						charge_state = ArcherParams::stabbing;
 						archer.charge_time = 0;
@@ -884,7 +887,7 @@ void onTick(CBlob@ this)
 		if (carried.getName() == "drill") magicdrill = true;
 	}
 
-	if (magicdrill)
+	if (magicdrill || this.hasTag("shielded"))
 	{
 		archer.charge_state = 0;
 		archer.charge_time = 0;
@@ -892,7 +895,7 @@ void onTick(CBlob@ this)
 		getHUD().SetCursorFrame(0);
 	}
 
-	if (isKnocked(this) || this.isInInventory())
+	if (isKnocked(this) || this.isInInventory() || this.hasTag("shielded"))
 	{
 		archer.grappling = false;
 		archer.charge_state = 0;

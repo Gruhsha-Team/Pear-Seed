@@ -16,7 +16,7 @@
  * u8 custom_hitter             - the hitter from Hitters.as to use
  */
 
-
+#include "BuffCommon.as";
 #include "Hitters.as";
 #include "ShieldCommon.as";
 #include "SplashWater.as";
@@ -501,6 +501,9 @@ void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@
 	if (this.getName() == "icebomb") {
 		if (hitBlob !is null && hitBlob.hasTag("player")) {
 			hitBlob.Tag("icy");
+			hitBlob.add_s32("icy time", icy_state_time);
+
+			//prinft("[DEBUG] Player is frozen!");
 			//hitBlob.Sync("icy", true);
 		}
 	}

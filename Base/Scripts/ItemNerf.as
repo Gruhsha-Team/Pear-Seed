@@ -5,7 +5,7 @@ void onAddToInventory( CBlob@ this, CBlob@ blob )
 		if(this.getPlayer() !is null)
 		{
 			// food
-			if(blob.getName() == "food" || blob.getName() == "grain" || blob.getName() == "egg" || blob.getName() == "pear" )
+			if(blob.getName() == "food" || blob.getName() == "grain" || blob.getName() == "egg" || blob.getName() == "pear" || blob.getName() == "defenceshield")
 			{
 				CInventory@ inventory = this.getInventory();
 				int hasitem = 0;
@@ -15,7 +15,7 @@ void onAddToInventory( CBlob@ this, CBlob@ blob )
 				{
 					if (inventory.getItem(i) !is null)
 					{
-						if (inventory.getItem(i).getName() == "food" || inventory.getItem(i).getName() == "grain" || inventory.getItem(i).getName() == "egg" || inventory.getItem(i).getName() == "pear")
+						if (inventory.getItem(i).getName() == "food" || inventory.getItem(i).getName() == "grain" || inventory.getItem(i).getName() == "egg" || inventory.getItem(i).getName() == "pear" || inventory.getItem(i).getName() == "defenceshield")
 						{
 							hasitem += 1;
 							@myitem = inventory.getItem(i);

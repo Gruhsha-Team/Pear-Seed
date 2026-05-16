@@ -2,7 +2,7 @@
 
 #include "BindingsCommon.as"
 
-const bool isDrillShieldIndicatorEnabled = true;
+const bool isDrillShieldIndicatorEnabled = false;
 
 void onRender(CRules@ this)
 {
@@ -81,6 +81,7 @@ void onRender(CRules@ this)
 						drill !is null &&
 						!drill.hasTag("no shielding") &&
 						drill.getConfig() == "drill" &&
+						Vec2f(builder.getPosition() - player.getPosition()).Length() <= 96.0f &&
 						builder !is player) {
 						int bobr = 70;
 						GUI::DrawIcon("ShieldingBuff.png", 0, Vec2f(16, 18), Vec2f(builder.getInterpolatedScreenPos().x - 15, builder.getInterpolatedScreenPos().y - bobr), 1.0f, builder.getTeamNum());

@@ -16,6 +16,9 @@ bool canBlockThisType(u8 type) // this function needs to use a tag on the hitter
 	       type == Hitters::bite ||
 	       type == Hitters::stab ||
 	       type == Hitters::cata_stones ||
+	       type == GruhshaHitters::hammer || // block "jab" from crusher just for balance
+	       type == GruhshaHitters::flail ||
+	       type == GruhshaHitters::knife ||
 	       isCustomExplosionHitter(type) ||
 	       isExplosionHitter(type);
 }
@@ -25,7 +28,7 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 {
 	CBlob@ drilla = this.getCarriedBlob();
 
-	if (drilla !is null && drilla.getConfig() == "drill" && !drilla.hasTag("no shielding")) {
+	if (drilla !is null && drilla.getConfig() == "defenceshield") {
 
 		if (!canBlockThisType(customData) ||
 	        	this is hitterBlob)
@@ -78,6 +81,9 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 				this.set_Vec2f("ShieldWorldPoint", worldPoint);
 			}
 
+			// actually damage the shield blob????
+			drilla.Damage(damage, hitterBlob);
+
 			if (hitterBlob !is null && hitterBlob.getConfig() == "knight") {
 				KnightInfo@ knight;
 				if (!hitterBlob.get("knightInfo", @knight)) {
@@ -90,17 +96,12 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 	    	        		knight.state == KnightStates::sword_cut_mid_down ||
 	    	        		knight.state == KnightStates::sword_cut_up ||
 	    	        		knight.state == KnightStates::sword_cut_down
-	    	    		) &&
-            		!drilla.hasTag("no shielding")
+	    	    		)
 					) {
-						drilla.sub_f32("shield health", 0.2f);
-
 						// knock the player
 						this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
 						setKnocked(this, 15, true);
-				} else if (customData == Hitters::sword && !drilla.hasTag("no shielding")) {
-		    		drilla.sub_f32("shield health", 0.5f);
-
+				} else if (customData == Hitters::sword) {
 					// knock the player
 					this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
 					setKnocked(this, 20, true);
@@ -108,59 +109,45 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 			}
 
     		// every explosion hitter disables shielding mechanic for drill
-    		if (isExplosionHitter(customData) && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 1.0f);
-
+    		if (isExplosionHitter(customData)) {
 				// knock the player
 				if (hitterBlob.getTeamNum() != this.getTeamNum()) {
 					this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-					setKnocked(this, 40, true);
+					setKnocked(this, 25, true);
 				}
     		}
 
-    		if (isCustomExplosionHitter(customData) && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 1.0f);
-
-				// knock the player
-				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-				setKnocked(this, 40, true);
-    		}
-
-    		if (customData == Hitters::builder && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 0.37f);
-
-				// knock the player
-				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-				setKnocked(this, 15, true);
-    		}
-
-    		if (customData == Hitters::arrow && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 0.2f);
-
-				// knock the player
-				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-				setKnocked(this, 15, true);
-   			}
-
-    		if (customData == GruhshaHitters::knife && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 0.1f);
-
-				// knock the player
-				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-				setKnocked(this, 15, true);
-    		}
-
-    		if (customData == GruhshaHitters::flail && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 0.5f);
-
+    		if (isCustomExplosionHitter(customData)) {
 				// knock the player
 				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
 				setKnocked(this, 25, true);
     		}
 
-    		if (customData == Hitters::bite && !drilla.hasTag("no shielding")) {
-        		drilla.sub_f32("shield health", 0.25f);
+    		if (customData == Hitters::builder) {
+				// knock the player
+				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
+				setKnocked(this, 15, true);
+    		}
 
+    		if (customData == Hitters::arrow) {
+				// knock the player
+				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
+				setKnocked(this, 15, true);
+   			}
+
+    		if (customData == GruhshaHitters::knife) {
+				// knock the player
+				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
+				setKnocked(this, 15, true);
+    		}
+
+    		if (customData == GruhshaHitters::flail) {
+				// knock the player
+				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
+				setKnocked(this, 25, true);
+    		}
+
+    		if (customData == Hitters::bite) {
 				// knock the player
 				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
 				setKnocked(this, 15, true);
@@ -187,7 +174,7 @@ void onHealthChange( CBlob@ this, f32 oldHealth )
 {
 	CBlob@ drilla = this.getCarriedBlob();
 
-	if (drilla !is null && !drilla.hasTag("no shielding")) {
+	if (drilla !is null && drilla.getConfig() == "defenceshield") {
 		if (isClient() && (this.hasTag("shieldNoBlock") || this.hasTag("shieldDoesBlock"))) {
 			if (this.getHealth() == oldHealth) {
 				f32 damage = this.get_f32("shieldDamage");

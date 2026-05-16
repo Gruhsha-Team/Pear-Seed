@@ -1,3 +1,9 @@
+// CollapseChecker.as
+
+// initial value is 14, but it was changed to smaller value
+// for balance purposes
+const int tile_vel_cap = 3;
+
 void onInit(CBlob@ this)
 {
 	this.getShape().SetGravityScale(0);
@@ -52,7 +58,7 @@ void onTick(CBlob@ this)
 			Vec2f tile_vel = Vec2f(-radius/3.5, 0).RotateBy(-(pos-tpos).getAngle()+angle_factor_account);
 			f32 tile_vellen = tile_vel.Length();
 			tile_vel.Normalize();
-			tile_vel *= Maths::Min(tile_vellen, 7);
+			tile_vel *= Maths::Min(tile_vellen, tile_vel_cap);
 			
 			e_tile.setVelocity(tile_vel);
 		}

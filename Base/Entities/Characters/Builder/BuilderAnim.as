@@ -148,7 +148,7 @@ void onTick(CSprite@ this)
 		{
 			this.SetAnimation("crouch");
 		}
-		else if (action2 || ((this.isAnimation("strike") || this.isAnimation("chop") || this.isAnimation("strike_fast") 
+		else if (action2 && !blob.hasTag("shielded") || ((this.isAnimation("strike") || this.isAnimation("chop") || this.isAnimation("strike_fast") 
 				|| this.isAnimation("chop_fast")) && !this.isAnimationEnded()))
 		{
 			string attack_anim = blob.get_string("prev_attack_anim");
@@ -319,7 +319,7 @@ void onTick(CSprite@ this)
 	{
 		blob.Tag("dead head");
 	}
-	else if (action2 || blob.isInFlames())
+	else if (action2 && !blob.hasTag("shielded") || blob.isInFlames())
 	{
 		blob.Tag("attack head");
 		blob.Untag("dead head");
