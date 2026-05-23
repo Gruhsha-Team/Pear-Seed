@@ -15,10 +15,7 @@ bool canBlockThisType(u8 type) // this function needs to use a tag on the hitter
 	       type == Hitters::arrow ||
 	       type == Hitters::bite ||
 	       type == Hitters::stab ||
-	       type == Hitters::cata_stones ||
-	       type == GruhshaHitters::hammer || // block "jab" from crusher just for balance
-	       type == GruhshaHitters::flail ||
-	       type == GruhshaHitters::knife ||
+	       type == Hitters::cata_stones
 	       isCustomExplosionHitter(type) ||
 	       isExplosionHitter(type);
 }
@@ -134,18 +131,6 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
 				setKnocked(this, 15, true);
    			}
-
-    		if (customData == GruhshaHitters::knife) {
-				// knock the player
-				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-				setKnocked(this, 15, true);
-    		}
-
-    		if (customData == GruhshaHitters::flail) {
-				// knock the player
-				this.getSprite().PlaySound("/Stun", 1.0f, this.getSexNum() == 0 ? 1.0f : 1.5f);
-				setKnocked(this, 25, true);
-    		}
 
     		if (customData == Hitters::bite) {
 				// knock the player
